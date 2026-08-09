@@ -261,6 +261,10 @@
     #sekme-besirapor table { font-size: 11px !important; }
     #sekme-besirapor th, #sekme-besirapor td { padding: 5px 4px !important; }
     #sekme-besivagon .grid-3 { grid-template-columns: 1fr 1fr !important; }
+    #besi-vagon-icerik [style*="grid-template-columns:34px"] {
+      grid-template-columns: 26px minmax(0,1fr) 42px 42px 46px 46px !important;
+      gap: 2px !important;
+    }
 
     /* Modal tam ekran */
     #satir-modal > div { margin: 0 !important; padding: 0 !important; min-height: 100vh; }
@@ -4267,40 +4271,25 @@ function besiVagonRender() {
   }
 
   let toplamAF = 0, toplamDM = 0, kumulatif = 0;
+  const GRID = 'display:grid;grid-template-columns:34px minmax(0,1fr) 52px 52px 56px 56px;gap:4px;align-items:center';
   const satirHTML = yemSatirlari.map((s,i) => {
     toplamAF += s.afToplam;
     toplamDM += s.dmToplam;
     kumulatif += s.afToplam;
     const ilkMi = i === 0;
     const sonMu = i === yemSatirlari.length - 1;
-    return `<div style="padding:10px 8px;margin-bottom:6px;background:${i%2===0?'var(--bg3)':'var(--bg2)'};border-radius:10px">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
-        <div style="display:flex;flex-direction:column;gap:2px;flex-shrink:0">
-          <button onclick="besiVagonSiraTasi(${s.satirId},-1)" ${ilkMi?'disabled':''}
-            style="width:26px;height:22px;border:none;border-radius:5px;background:${ilkMi?'var(--bg4)':'var(--blue)'};color:${ilkMi?'var(--text4)':'#fff'};font-size:12px;cursor:${ilkMi?'default':'pointer'};display:flex;align-items:center;justify-content:center">▲</button>
-          <button onclick="besiVagonSiraTasi(${s.satirId},1)" ${sonMu?'disabled':''}
-            style="width:26px;height:22px;border:none;border-radius:5px;background:${sonMu?'var(--bg4)':'var(--blue)'};color:${sonMu?'var(--text4)':'#fff'};font-size:12px;cursor:${sonMu?'default':'pointer'};display:flex;align-items:center;justify-content:center">▼</button>
-        </div>
-        <span style="flex:1;font-size:15px;font-weight:600;color:var(--text)">${s.isim}</span>
+    return `<div style="${GRID};padding:7px 6px;background:${i%2===0?'var(--bg3)':'var(--bg2)'};border-radius:6px;margin-bottom:3px">
+      <div style="display:flex;flex-direction:column;gap:1px">
+        <button onclick="besiVagonSiraTasi(${s.satirId},-1)" ${ilkMi?'disabled':''}
+          style="width:16px;height:14px;border:none;border-radius:3px;background:${ilkMi?'var(--bg4)':'var(--blue)'};color:${ilkMi?'var(--text4)':'#fff'};font-size:8px;line-height:1;cursor:${ilkMi?'default':'pointer'};padding:0">▲</button>
+        <button onclick="besiVagonSiraTasi(${s.satirId},1)" ${sonMu?'disabled':''}
+          style="width:16px;height:14px;border:none;border-radius:3px;background:${sonMu?'var(--bg4)':'var(--blue)'};color:${sonMu?'var(--text4)':'#fff'};font-size:8px;line-height:1;cursor:${sonMu?'default':'pointer'};padding:0">▼</button>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;padding-left:34px">
-        <div style="text-align:center">
-          <div class="fs9 c-text3">AF kg/d</div>
-          <div style="font-size:14px;font-weight:700;color:var(--text2)">${s.afTek}</div>
-        </div>
-        <div style="text-align:center">
-          <div class="fs9 c-text3">DM kg/d</div>
-          <div style="font-size:14px;font-weight:700;color:var(--text2)">${s.dmTek}</div>
-        </div>
-        <div style="text-align:center">
-          <div class="fs9 c-text3">${basSayisi} baş</div>
-          <div style="font-size:16px;font-weight:800;color:var(--blue2)">${s.afToplam}</div>
-        </div>
-        <div style="text-align:center">
-          <div class="fs9 c-text3">Cum.</div>
-          <div style="font-size:14px;font-weight:700;color:var(--purple)">${r2(kumulatif)}</div>
-        </div>
-      </div>
+      <div style="font-size:12px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${s.isim}">${s.isim}</div>
+      <div style="text-align:right;font-size:12px;font-weight:600;color:var(--text2)">${s.afTek}</div>
+      <div style="text-align:right;font-size:12px;font-weight:600;color:var(--text2)">${s.dmTek}</div>
+      <div style="text-align:right;font-size:13px;font-weight:800;color:var(--blue2)">${s.afToplam}</div>
+      <div style="text-align:right;font-size:12px;font-weight:600;color:var(--purple)">${r2(kumulatif)}</div>
     </div>`;
   }).join('');
 
@@ -4309,19 +4298,24 @@ function besiVagonRender() {
     : `${toplamMiktar} kg hedef KM × %${intakePct}`;
 
   icerikEl.innerHTML = `
-    <div class="card">
-      <div class="card-title" style="font-size:14px">🚛 Yükleme Listesi — ${carpanEtiket}</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;padding:0 8px 4px 34px">
-        <div class="fs9 c-text4" style="text-align:center">AF kg/d</div>
-        <div class="fs9 c-text4" style="text-align:center">DM kg/d</div>
-        <div class="fs9 c-text4" style="text-align:center">${basSayisi} baş</div>
-        <div class="fs9 c-text4" style="text-align:center">Cum.</div>
+    <div class="card" style="padding:10px 8px">
+      <div class="card-title" style="font-size:13px;padding:0 4px 8px">🚛 Yükleme Listesi — ${carpanEtiket}</div>
+      <div style="${GRID};padding:0 6px 5px">
+        <div></div>
+        <div class="fs9 c-text4" style="font-weight:700">Yem</div>
+        <div class="fs9 c-text4" style="text-align:right;font-weight:700">AF</div>
+        <div class="fs9 c-text4" style="text-align:right;font-weight:700">DM</div>
+        <div class="fs9 c-text4" style="text-align:right;font-weight:700">${basSayisi}baş</div>
+        <div class="fs9 c-text4" style="text-align:right;font-weight:700">Cum.</div>
       </div>
-      <div style="margin-bottom:4px">${satirHTML}</div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 10px;margin-top:6px;
-        background:var(--bg4);border-radius:10px;font-weight:800">
-        <span style="font-size:15px;color:var(--text)">TOPLAM</span>
-        <span style="font-size:19px;color:var(--blue2)">${r2(toplamAF)} kg</span>
+      <div>${satirHTML}</div>
+      <div style="${GRID};padding:8px 6px;margin-top:4px;background:var(--bg4);border-radius:6px;font-weight:800">
+        <div></div>
+        <div style="font-size:13px;color:var(--text)">TOPLAM</div>
+        <div style="text-align:right;font-size:12px;color:var(--text2)">${r3(besiRasyon.toplamDH||0)}</div>
+        <div style="text-align:right;font-size:12px;color:var(--text2)">${r3(km)}</div>
+        <div style="text-align:right;font-size:13px;color:var(--blue2)">${r2(toplamAF)}</div>
+        <div style="text-align:right;font-size:12px;color:var(--purple)">${r2(toplamAF)}</div>
       </div>
     </div>`;
 }
