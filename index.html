@@ -4247,11 +4247,15 @@ function besiVagonRender() {
     if (!s) return null;
     const y = s.ozelYem || YEMLER.find(y => y.id === s.yemId);
     if (!y) return null;
+    const afTek = s.miktar;
+    const dmTek = afTek * (y.KM/100);
     return {
       satirId: s.id,
       isim: y.ozelYem ? `[Özel] ${y.isim}` : y.isim,
-      afTek: s.miktar,
-      afToplam: r2(s.miktar * carpan),
+      afTek: r3(afTek),
+      dmTek: r3(dmTek),
+      afToplam: r2(afTek * carpan),
+      dmToplam: r2(dmTek * carpan),
     };
   }).filter(Boolean);
 
@@ -4262,18 +4266,41 @@ function besiVagonRender() {
     return;
   }
 
-  let toplamAF = 0;
+  let toplamAF = 0, toplamDM = 0, kumulatif = 0;
   const satirHTML = yemSatirlari.map((s,i) => {
     toplamAF += s.afToplam;
-    return `<div draggable="true" data-satir-id="${s.satirId}"
-        ondragstart="besiVagonDragBaslat(event,${s.satirId})"
-        ondragover="event.preventDefault()"
-        ondrop="besiVagonDragBirak(event,${s.satirId})"
-        style="display:flex;align-items:center;gap:10px;padding:12px 10px;margin-bottom:6px;
-          background:${i%2===0?'var(--bg3)':'var(--bg2)'};border-radius:10px;cursor:grab">
-      <span style="color:var(--text4);font-size:16px;flex-shrink:0">⋮⋮</span>
-      <span style="flex:1;font-size:15px;font-weight:600;color:var(--text)">${s.isim}</span>
-      <span style="font-size:18px;font-weight:800;color:var(--blue2);white-space:nowrap">${s.afToplam} kg</span>
+    toplamDM += s.dmToplam;
+    kumulatif += s.afToplam;
+    const ilkMi = i === 0;
+    const sonMu = i === yemSatirlari.length - 1;
+    return `<div style="padding:10px 8px;margin-bottom:6px;background:${i%2===0?'var(--bg3)':'var(--bg2)'};border-radius:10px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+        <div style="display:flex;flex-direction:column;gap:2px;flex-shrink:0">
+          <button onclick="besiVagonSiraTasi(${s.satirId},-1)" ${ilkMi?'disabled':''}
+            style="width:26px;height:22px;border:none;border-radius:5px;background:${ilkMi?'var(--bg4)':'var(--blue)'};color:${ilkMi?'var(--text4)':'#fff'};font-size:12px;cursor:${ilkMi?'default':'pointer'};display:flex;align-items:center;justify-content:center">▲</button>
+          <button onclick="besiVagonSiraTasi(${s.satirId},1)" ${sonMu?'disabled':''}
+            style="width:26px;height:22px;border:none;border-radius:5px;background:${sonMu?'var(--bg4)':'var(--blue)'};color:${sonMu?'var(--text4)':'#fff'};font-size:12px;cursor:${sonMu?'default':'pointer'};display:flex;align-items:center;justify-content:center">▼</button>
+        </div>
+        <span style="flex:1;font-size:15px;font-weight:600;color:var(--text)">${s.isim}</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;padding-left:34px">
+        <div style="text-align:center">
+          <div class="fs9 c-text3">AF kg/d</div>
+          <div style="font-size:14px;font-weight:700;color:var(--text2)">${s.afTek}</div>
+        </div>
+        <div style="text-align:center">
+          <div class="fs9 c-text3">DM kg/d</div>
+          <div style="font-size:14px;font-weight:700;color:var(--text2)">${s.dmTek}</div>
+        </div>
+        <div style="text-align:center">
+          <div class="fs9 c-text3">${basSayisi} baş</div>
+          <div style="font-size:16px;font-weight:800;color:var(--blue2)">${s.afToplam}</div>
+        </div>
+        <div style="text-align:center">
+          <div class="fs9 c-text3">Cum.</div>
+          <div style="font-size:14px;font-weight:700;color:var(--purple)">${r2(kumulatif)}</div>
+        </div>
+      </div>
     </div>`;
   }).join('');
 
@@ -4284,6 +4311,12 @@ function besiVagonRender() {
   icerikEl.innerHTML = `
     <div class="card">
       <div class="card-title" style="font-size:14px">🚛 Yükleme Listesi — ${carpanEtiket}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;padding:0 8px 4px 34px">
+        <div class="fs9 c-text4" style="text-align:center">AF kg/d</div>
+        <div class="fs9 c-text4" style="text-align:center">DM kg/d</div>
+        <div class="fs9 c-text4" style="text-align:center">${basSayisi} baş</div>
+        <div class="fs9 c-text4" style="text-align:center">Cum.</div>
+      </div>
       <div style="margin-bottom:4px">${satirHTML}</div>
       <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 10px;margin-top:6px;
         background:var(--bg4);border-radius:10px;font-weight:800">
@@ -4294,24 +4327,17 @@ function besiVagonRender() {
 }
 
 let besiVagonSira = null;
-let besiVagonDragId = null;
 
-function besiVagonDragBaslat(ev, satirId) {
-  besiVagonDragId = satirId;
-}
-
-function besiVagonDragBirak(ev, hedefId) {
-  ev.preventDefault();
-  if (besiVagonDragId === null || besiVagonDragId === hedefId || !besiVagonSira) return;
-  const kaynakIdx = besiVagonSira.indexOf(besiVagonDragId);
-  const hedefIdx = besiVagonSira.indexOf(hedefId);
-  if (kaynakIdx === -1 || hedefIdx === -1) return;
-  besiVagonSira.splice(kaynakIdx, 1);
-  besiVagonSira.splice(hedefIdx, 0, besiVagonDragId);
-  besiVagonDragId = null;
+function besiVagonSiraTasi(satirId, yon) {
+  if (!besiVagonSira) return;
+  const idx = besiVagonSira.indexOf(satirId);
+  const hedefIdx = idx + yon;
+  if (idx === -1 || hedefIdx < 0 || hedefIdx >= besiVagonSira.length) return;
+  const tmp = besiVagonSira[idx];
+  besiVagonSira[idx] = besiVagonSira[hedefIdx];
+  besiVagonSira[hedefIdx] = tmp;
   besiVagonRender();
 }
-
 
 function besiVagonKopyala() {
   besiRasyonHesapla();
@@ -4333,8 +4359,9 @@ function besiVagonKopyala() {
     const y = s.ozelYem || YEMLER.find(y=>y.id===s.yemId);
     if (!y) return;
     const kgToplam = r2(s.miktar*carpan);
+    const dmToplam = r2(s.miktar*(y.KM/100)*carpan);
     toplam += kgToplam;
-    metin += `  ${y.isim}: ${kgToplam} kg\n`;
+    metin += `  ${y.isim}: AF ${kgToplam} kg (DM ${dmToplam} kg)\n`;
   });
   metin += `\nTOPLAM: ${r2(toplam)} kg\n`;
 
@@ -5453,8 +5480,7 @@ window.onload = function() {
   window.besiRaporKopyala = besiRaporKopyala;
   window.besiVagonRender = besiVagonRender;
   window.besiVagonKopyala = besiVagonKopyala;
-  window.besiVagonDragBaslat = besiVagonDragBaslat;
-  window.besiVagonDragBirak = besiVagonDragBirak;
+  window.besiVagonSiraTasi = besiVagonSiraTasi;
   window.sagmalProfilGoster = sagmalProfilGoster;
   window.besiProfilGoster   = besiProfilGoster;
   window.optKisitInputDegistir = optKisitInputDegistir;
