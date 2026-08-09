@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rasyon Programı — Abalım Tarım</title>
+<title>NUTRIVA — Akıllı Hayvan Besleme Platformu</title>
 <style>
   :root {
     --bg:       #e6fbf8;
@@ -94,6 +94,21 @@
   .btn-primary { background: var(--blue); color: #fff; }
   .btn-outline { background: var(--bg4); border: 1px solid var(--blue); color: var(--blue2); }
   .btn-success { background: linear-gradient(135deg,#0f766e,#0d9488); color: #fff; width: 100%; padding: 13px; font-size: 14px; font-weight: 700; letter-spacing: 0.3px; border-radius: var(--radius); }
+
+  /* GİRİŞ SAYFASI */
+  .giris-kart {
+    background: var(--bg2);
+    border: 1.5px solid var(--border2);
+    border-radius: 14px;
+    padding: 18px 12px;
+    cursor: pointer;
+    transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+  }
+  .giris-kart:hover {
+    border-color: var(--blue);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(13,148,136,0.15);
+  }
   .btn-success:disabled { background: var(--bg4); color: var(--text3); cursor: not-allowed; }
 
   /* ALERT */
@@ -396,11 +411,71 @@ select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
 </head>
 <body>
 
+<!-- ==================== GİRİŞ / KARŞILAMA SAYFASI ==================== -->
+<div id="giris-sayfasi" style="min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse at top,#d1f5ef 0%,#e6fbf8 55%,#f4fdfb 100%);padding:24px">
+  <div style="width:100%;max-width:440px;text-align:center">
+
+    <!-- Logo / marka -->
+    <div style="margin-bottom:6px">
+      <div style="font-size:56px;line-height:1;margin-bottom:14px">🐄</div>
+      <div style="font-size:40px;font-weight:800;letter-spacing:1px;color:var(--blue3);font-family:'Segoe UI',system-ui,sans-serif">
+        NUTRI<span style="color:var(--blue)">VA</span>
+      </div>
+      <div style="font-size:11px;font-weight:700;color:var(--blue2);letter-spacing:2px;text-transform:uppercase;margin-top:10px">
+        Smart Animal Nutrition Platform
+      </div>
+      <div style="font-size:13px;font-weight:600;color:var(--text3);letter-spacing:2.5px;text-transform:uppercase;margin-top:4px">
+        Akıllı Hayvan Besleme Platformu
+      </div>
+    </div>
+
+    <!-- Ayraç -->
+    <div style="width:64px;height:3px;background:var(--blue);border-radius:2px;margin:26px auto"></div>
+
+    <!-- Bilimsel standart rozetleri -->
+    <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:30px">
+      <span style="font-size:11px;font-weight:700;color:var(--blue2);background:var(--bg3);border:1px solid var(--border2);border-radius:20px;padding:5px 12px">NASEM 2021</span>
+      <span style="font-size:11px;font-weight:700;color:var(--blue2);background:var(--bg3);border:1px solid var(--border2);border-radius:20px;padding:5px 12px">CNCPS v6.5</span>
+      <span style="font-size:11px;font-weight:700;color:var(--blue2);background:var(--bg3);border:1px solid var(--border2);border-radius:20px;padding:5px 12px">INRA 2018</span>
+    </div>
+
+    <!-- Hayvan grubu seçim kartları -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+      <button onclick="girisYapAsPar('sagmal')" class="giris-kart">
+        <div style="font-size:32px">🐄</div>
+        <div style="font-size:14px;font-weight:700;color:var(--text);margin-top:8px">Sağmal İnek</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px">Rasyon &amp; Süt Verimi</div>
+      </button>
+      <button onclick="girisYapAsPar('besi')" class="giris-kart">
+        <div style="font-size:32px">🐂</div>
+        <div style="font-size:14px;font-weight:700;color:var(--text);margin-top:8px">Besi Sığırı</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px">Rasyon &amp; Karma Vagon</div>
+      </button>
+    </div>
+
+    <!-- Kayıtlarım kartı -->
+    <button onclick="girisKayitlaraGit()" class="giris-kart" style="width:100%;display:flex;align-items:center;gap:14px;padding:14px 16px;text-align:left">
+      <div style="font-size:28px;flex-shrink:0">💾</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:14px;font-weight:700;color:var(--text)">Kayıtlarım</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px">Daha önce kaydettiğin rasyonları aç</div>
+      </div>
+      <div id="giris-kayit-rozeti" style="flex-shrink:0;background:var(--blue);color:#fff;font-size:12px;font-weight:700;
+        border-radius:20px;padding:4px 10px;min-width:22px;text-align:center">0</div>
+    </button>
+  </div>
+</div>
+
+<!-- ==================== ANA PROGRAM (giriş sonrası görünür) ==================== -->
+<div id="ana-program" style="display:none">
+
 <!-- HEADER -->
 <div class="header">
   <div>
-    <div class="header-title">🐄 RASYON PROGRAMI</div>
-    <div class="header-sub">NASEM 2021 · CNCPS v6.5 · INRA 2018 — Abalım Tarım</div>
+    <div class="header-title" onclick="anaSayfayaDon()" style="cursor:pointer" title="Ana sayfaya dön">🐄 NUTRIVA</div>
+    <div class="header-sub">NASEM 2021 · CNCPS v6.5 · INRA 2018</div>
+
   </div>
   <div class="header-badges">
     <div class="badge"><span>Süt: </span><b id="hdr-sut">35</b><span> kg/gün</span></div>
@@ -1192,6 +1267,8 @@ select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
   </div>
 </div>
 
+</div> <!-- /ana-program -->
+
 <script>
 // ============================================================
 // YEM KÜTÜPHANESİ VERİSİ
@@ -1302,24 +1379,20 @@ const YEMLER = [
 
   {
     id:"KY001",
-    isim:"Buzağı Büyütme Yemi — GÜÇLÜ (08.06.2026)",
+    isim:"Buzağı Büyütme Yemi — GÜÇLÜ (Etiket Analizi güncel)",
     kat:"Karma Yem", alt:"Karma",
-    // NDS: CblL13221940 — Analiz: 08.06.2026
-    KM:90.62, HP:18.76, HY:4.74, HK:7.43,
-    NDF:33.70, ADF:11.06, ADL:2.82, eNDF:0.35,
-    nisasta:28.24, seker:7.49, NFC:38.64,
-    // Protein fraksiyonları (%HP)
-    // Prot.A2=5.7511, B1=9.7322, B2=1.8424, NDIP=3.2764, ADIP=1.434 → %HP (HP%KM=18.7597)
-    PA:30.65,   // 5.7511/18.7597*100
-    PB1:51.88,  // 9.7322/18.7597*100
-    PB2:9.82,   // 1.8424/18.7597*100
-    PB3:17.47,  // NDICP: 3.2764/18.7597*100
-    PC:7.64,    // ADICP: 1.434/18.7597*100
+    // Etiket/garanti analizi (AF): Nem 10.86, Protein 18.73, Ham Selüloz 8.87, Yağ 2.83, Kül 7.54, Nişasta 21.25
+    // KM = 100-10.86 = 89.14 → DM bazına çevrilmiş değerler
+    KM:89.14, HP:21.01, HY:3.17, HK:8.46,
+    NDF:30.32, ADF:9.95, ADL:2.54, eNDF:0.35,
+    nisasta:23.84, seker:6.32, NFC:37.04,
+    // Protein fraksiyonları (%HP) — önceki NDS analizinden oran korunarak taşındı
+    PA:30.65, PB1:51.88, PB2:9.82, PB3:17.47, PC:7.64,
     kd_PB2:5.4289, kd_PB3:5.4289, kp:0.055, dRUP:0.80,
-    RDP_3x:12.308, RUP_3x:6.452,
+    RDP_3x:13.784, RUP_3x:7.226,
     NDFD30:55.0, kd_NDF:5.4289, iNDF:10.0,
-    GE:4.3604, DE:3.0717, NEL:1.7128, NEm:1.8379, NEg:1.2065,
-    UFL:1.008, UFV:0.978, PDIE:118, PDIN:130,
+    GE:3.774, DE:2.6586, NEL:1.4825, NEm:1.5907, NEg:1.0442,
+    UFL:0.8724, UFV:0.8465, PDIE:118, PDIN:130,
     Ca:1.2637, P:1.0285, Mg:0.5007, K:1.3076, Na:0.35, Cl:0.4611, S:0.3275,
     Mn:64.78, Cu:10.38, Fe:255.93, Zn:89.23, I:0.034, Co:0.081, Se:0.334,
     // Absorpsiyon katsayıları
@@ -1327,7 +1400,7 @@ const YEMLER = [
     // Amino asitler %HP
     Lys:2.6966, Met:1.335, His:2.3782, Arg:5.6245, Thr:3.3243,
     Ile:3.5031, Leu:9.0201, Val:5.1456, Phe:4.7101, Trp:1.1776,
-    analiz_tarihi:"08.06.2026",
+    analiz_tarihi:"Etiket analizi (Nem/Protein/HS/Yağ/Kül/Nişasta)",
     fiyat:14.0
   },
 
@@ -4757,6 +4830,7 @@ function kayitlariGetir() {
 function kayitlariYaz(kayitlar) {
   try {
     localStorage.setItem(KAYIT_ANAHTARI, JSON.stringify(kayitlar));
+    if (typeof girisKayitRozetiGuncelle === 'function') girisKayitRozetiGuncelle();
     return true;
   } catch(e) {
     alert('Kayıt hatası: Depolama alanı dolu olabilir.');
@@ -4815,21 +4889,41 @@ function rasyonYukle(kayitId) {
   if (!confirm(`"${kayit.isim}" rasyonunu yüklemek istiyor musunuz?
 Mevcut rasyon değiştirilecek.`)) return;
 
-  // Profili yükle
-  Object.assign(profil, kayit.profil);
+  const isBesi = kayit.grup === 'besi';
 
-  // Profil inputlarını güncelle
-  ['CA','BCS','hedefBCS','laktGun','laktSirasi','gebGun','sutVerimi','sutYag','sutProtein','sutLaktoz'].forEach(k => {
-    const el = document.getElementById('p-' + k.toLowerCase().replace('laktgun','lakt-gun').replace('laktsirasi','lakt-sira').replace('hedefbcs','hbcs').replace('sutveri̇mi','sut').replace('sutverimi','sut').replace('sutyag','yag').replace('sutprotein','prot').replace('sutlaktoz','lakt').replace('gebgun','geb'));
-    if (el) el.value = profil[k] || '';
-  });
+  if (isBesi) {
+    // Besi profilini yükle
+    Object.assign(besiProfil, kayit.profil);
+    const bIrk = document.getElementById('b-irk'); if (bIrk) bIrk.value = besiProfil.irk || 'charolais';
+    const bCa = document.getElementById('b-ca'); if (bCa) bCa.value = besiProfil.ca || '';
+    const bCaHedef = document.getElementById('b-ca-hedef'); if (bCaHedef) bCaHedef.value = besiProfil.caHedef || '';
+    const bGcaa = document.getElementById('b-gcaa'); if (bGcaa) bGcaa.value = besiProfil.gcaa || '';
+    const bCinsiyet = document.getElementById('b-cinsiyet'); if (bCinsiyet) bCinsiyet.value = besiProfil.cinsiyet || 'erkek';
 
-  // Rasyon satırlarını yükle
-  rasyonSatirlari = kayit.rasyonSatirlari.map(s => ({...s}));
-  nextSatirId = Math.max(...rasyonSatirlari.map(s => s.id)) + 1;
+    // Besi rasyon satırlarını yükle
+    besiRasyonSatirlari = kayit.rasyonSatirlari.map(s => ({...s}));
+    besiNextSatirId = Math.max(...besiRasyonSatirlari.map(s => s.id), 0) + 1;
 
-  tumHesapla();
-  sekmeAc('rasyon');
+    // Grubu besi'ye çevir (henüz besi modunda değilsek)
+    if (hayvanGrubu !== 'besi') grupSec('besi');
+    else { besiSayfasiRender(); sekmeAc('besi'); }
+  } else {
+    // Sağmal profilini yükle
+    Object.assign(profil, kayit.profil);
+    ['CA','BCS','hedefBCS','laktGun','laktSirasi','gebGun','sutVerimi','sutYag','sutProtein','sutLaktoz'].forEach(k => {
+      const el = document.getElementById('p-' + k.toLowerCase().replace('laktgun','lakt-gun').replace('laktsirasi','lakt-sira').replace('hedefbcs','hbcs').replace('sutveri̇mi','sut').replace('sutverimi','sut').replace('sutyag','yag').replace('sutprotein','prot').replace('sutlaktoz','lakt').replace('gebgun','geb'));
+      if (el) el.value = profil[k] || '';
+    });
+
+    // Rasyon satırlarını yükle
+    rasyonSatirlari = kayit.rasyonSatirlari.map(s => ({...s}));
+    nextSatirId = Math.max(...rasyonSatirlari.map(s => s.id), 0) + 1;
+
+    // Grubu sağmal'a çevir (henüz sağmal modunda değilsek)
+    if (hayvanGrubu !== 'sagmal') grupSec('sagmal');
+    tumHesapla();
+    sekmeAc('rasyon');
+  }
 
   const b = document.createElement('div');
   b.style.cssText = 'position:fixed;top:16px;right:16px;z-index:9999;padding:10px 18px;background:rgba(74,222,128,0.15);border:1px solid rgba(74,222,128,0.4);border-radius:8px;color:var(--green);font-size:13px;font-weight:600';
@@ -4902,11 +4996,27 @@ function kayitListesiGuncelle() {
     return;
   }
 
-  el.innerHTML = kayitlar.map(k => `
+  el.innerHTML = kayitlar.map(k => {
+    const isBesi = k.grup === 'besi';
+    const ozetKartlari = isBesi ? [
+      {l:'ME',v:(k.ozet.ME||0)+' Mcal',c:'var(--yellow)'},
+      {l:'KM',v:(k.ozet.toplamKM||0)+'kg',c:'var(--blue2)'},
+      {l:'HP',v:'%'+(k.ozet.HP||0),c:'var(--pink)'},
+      {l:'NDF',v:'%'+(k.ozet.NDF||0),c:'var(--teal)'},
+      {l:'Maliyet',v:'₺'+(k.ozet.maliyet||0),c:'var(--teal)'},
+    ] : [
+      {l:'Süt',v:(k.ozet.sutVerimi||0)+'kg',c:'var(--green)'},
+      {l:'KM',v:(k.ozet.toplamKM||0)+'kg',c:'var(--blue2)'},
+      {l:'NEL',v:(k.ozet.NEL||0)+' Mcal',c:'var(--yellow)'},
+      {l:'HP',v:'%'+(k.ozet.HP||0),c:'var(--pink)'},
+      {l:'NDF',v:'%'+(k.ozet.NDF||0),c:'var(--teal)'},
+      {l:'Maliyet',v:'₺'+(k.ozet.maliyet||0),c:'var(--teal)'},
+    ];
+    return `
     <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
         <div>
-          <div style="font-size:13px;font-weight:700;color:var(--text)">${k.isim}</div>
+          <div style="font-size:13px;font-weight:700;color:var(--text)">${isBesi?'🐂':'🐄'} ${k.isim}</div>
           <div style="font-size:10px;color:var(--text3);margin-top:2px">${k.tarih}</div>
           ${k.not ? `<div style="font-size:11px;color:var(--text3);margin-top:3px;font-style:italic">${k.not}</div>` : ''}
         </div>
@@ -4919,14 +5029,7 @@ function kayitListesiGuncelle() {
       </div>
       <!-- Özet -->
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-bottom:8px">
-        ${[
-          {l:'Süt',v:k.ozet.sutVerimi+'kg',c:'var(--green)'},
-          {l:'KM',v:k.ozet.toplamKM+'kg',c:'var(--blue2)'},
-          {l:'NEL',v:k.ozet.NEL+' Mcal',c:'var(--yellow)'},
-          {l:'HP',v:'%'+k.ozet.HP,c:'var(--pink)'},
-          {l:'NDF',v:'%'+k.ozet.NDF,c:'var(--teal)'},
-          {l:'Maliyet',v:'₺'+k.ozet.maliyet,c:'var(--teal)'},
-        ].map(it=>`<div style="background:var(--bg2);border-radius:5px;padding:4px 6px;text-align:center">
+        ${ozetKartlari.map(it=>`<div style="background:var(--bg2);border-radius:5px;padding:4px 6px;text-align:center">
           <div style="font-size:9px;color:var(--text4)">${it.l}</div>
           <div style="font-size:11px;font-weight:700;color:${it.c}">${it.v}</div>
         </div>`).join('')}
@@ -4935,7 +5038,8 @@ function kayitListesiGuncelle() {
         style="width:100%;padding:7px;background:var(--blue);border:none;border-radius:7px;color:#fff;font-size:12px;font-weight:700;cursor:pointer">
         ▶ Rasyonu Yükle
       </button>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
 function kayitOzetGuncelle() {
@@ -5505,6 +5609,64 @@ window.siralamaStfirla = function() {
   degSirasi = ["K.M.","Kaba Yem","Kesif Yem","Kaba:Kesif","HP","Sol Prot/RDP","NEL 3x NRC","Nişasta","aNDFom","Kaba Yem NDF","Kesif NDF","NDF Kaba Payı","peNDF","RDP 3X 1.Düzey","Ham Yağ (EE)","ADF","Lignin (ADL)","NFC","Ca","P","Mg","K","Na","S","Ca:P Oranı","Toplam KM","Maliyet"];
   degerlendirmeSayfasiRender();
 };
+
+// ============================================================
+// GİRİŞ / KARŞILAMA SAYFASI
+// ============================================================
+function girisEkraniniGizle() {
+  const giris = document.getElementById('giris-sayfasi');
+  const ana = document.getElementById('ana-program');
+  if (giris) giris.style.display = 'none';
+  if (ana) ana.style.display = 'block';
+}
+
+// Hayvan grubu seçerek giriş — grupSec() ile ilgili sekmeye yönlendirir
+function girisYapAsPar(grup) {
+  girisEkraniniGizle();
+  if (grup === 'besi') {
+    grupSec('besi');
+  } else {
+    grupSec('sagmal');
+    sekmeAc('profil');
+  }
+}
+
+// Header'daki "NUTRIVA" başlığına tıklanınca ana karşılama sayfasına dön
+function anaSayfayaDon() {
+  const giris = document.getElementById('giris-sayfasi');
+  const ana = document.getElementById('ana-program');
+  if (ana) ana.style.display = 'none';
+  if (giris) giris.style.display = 'flex';
+  girisKayitRozetiGuncelle();
+}
+
+// Ana sayfadaki "Kayıtlarım" kartına tıklanınca doğrudan kayıtlar sekmesine gider
+function girisKayitlaraGit() {
+  girisEkraniniGizle();
+  // Ana program görünür olmalı ki kayıtlar sekmesi erişilebilsin;
+  // henüz bir hayvan grubu seçilmediyse varsayılan sağmal ile aç.
+  if (typeof hayvanGrubu === 'undefined' || !hayvanGrubu) grupSec('sagmal');
+  sekmeAc('kayitlar');
+}
+
+// Giriş sayfasındaki kayıt sayısı rozetini günceller
+function girisKayitRozetiGuncelle() {
+  const rozet = document.getElementById('giris-kayit-rozeti');
+  if (!rozet) return;
+  try {
+    const kayitlar = kayitlariGetir();
+    rozet.textContent = kayitlar.length;
+    rozet.style.background = kayitlar.length > 0 ? 'var(--blue)' : 'var(--text4)';
+  } catch(e) { /* localStorage erişilemezse sessizce geç */ }
+}
+
+window.girisYapAsPar = girisYapAsPar;
+window.anaSayfayaDon = anaSayfayaDon;
+window.girisKayitlaraGit = girisKayitlaraGit;
+window.girisKayitRozetiGuncelle = girisKayitRozetiGuncelle;
+
+// Sayfa ilk açıldığında (giriş ekranındayken) kayıt sayısını göster
+girisKayitRozetiGuncelle();
 </script>
 </body>
 </html>
