@@ -4448,7 +4448,7 @@ function besiVagonRender() {
       satirId: s.id,
       isim: y.ozelYem ? `[Özel] ${y.isim}` : y.isim,
       afTek: r3(afTek),
-      dmTek: r3(dmTek),
+      dmTek: dmTek.toFixed(2).replace('.', ','),
       afToplam: yuvarlaKg(r2(afTek * carpan), adim),
       dmToplam: r2(dmTek * carpan),
     };
