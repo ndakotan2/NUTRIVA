@@ -280,6 +280,11 @@
       grid-template-columns: 24px minmax(0,1fr) 46px 46px 50px 50px !important;
       gap: 3px !important;
     }
+    #sekme-sagmalvagon .grid-4 { grid-template-columns: 1fr 1fr !important; }
+    #sagmalvagon-icerik [style*="grid-template-columns:34px"] {
+      grid-template-columns: 24px minmax(0,1fr) 46px 46px 50px 50px !important;
+      gap: 3px !important;
+    }
 
     /* Modal tam ekran */
     #satir-modal > div { margin: 0 !important; padding: 0 !important; min-height: 100vh; }
@@ -455,7 +460,7 @@ select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
     </div>
 
     <!-- Kayıtlarım kartı -->
-    <button onclick="girisKayitlaraGit()" class="giris-kart" style="width:100%;display:flex;align-items:center;gap:14px;padding:14px 16px;text-align:left">
+    <button onclick="girisKayitlaraGit()" class="giris-kart" style="width:100%;display:flex;align-items:center;gap:14px;padding:14px 16px;text-align:left;margin-bottom:10px">
       <div style="font-size:28px;flex-shrink:0">💾</div>
       <div style="flex:1;min-width:0">
         <div style="font-size:14px;font-weight:700;color:var(--text)">Kayıtlarım</div>
@@ -463,6 +468,16 @@ select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
       </div>
       <div id="giris-kayit-rozeti" style="flex-shrink:0;background:var(--blue);color:#fff;font-size:12px;font-weight:700;
         border-radius:20px;padding:4px 10px;min-width:22px;text-align:center">0</div>
+    </button>
+
+    <!-- Yem Kütüphanesi kartı -->
+    <button onclick="girisKutuphaneyeGit()" class="giris-kart" style="width:100%;display:flex;align-items:center;gap:14px;padding:14px 16px;text-align:left">
+      <div style="font-size:28px;flex-shrink:0">📚</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:14px;font-weight:700;color:var(--text)">Yem Kütüphanesi</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px">Tüm yemleri görüntüle, ara ve düzenle</div>
+      </div>
+      <div style="flex-shrink:0;color:var(--text3);font-size:18px">›</div>
     </button>
   </div>
 </div>
@@ -493,12 +508,12 @@ select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
     <button onclick="sekmeAc('rasyon')">🌾 Rasyon Tasarımı</button>
     <button onclick="sekmeAc('degerlendirme')">⚖️ Değerlendirme</button>
     <button onclick="sekmeAc('optimizasyon')">⚡ Optimizasyon</button>
+    <button onclick="sekmeAc('sagmalvagon')">🚛 Karma Vagon</button>
   </span>
   <button id="besi-nav-btn" onclick="sekmeAc('besi')" style="display:none">🐂 Besi Rasyonu</button>
   <button id="besi-rapor-nav-btn" onclick="sekmeAc('besirapor')" style="display:none">📄 Rapor</button>
   <button id="besi-vagon-nav-btn" onclick="sekmeAc('besivagon')" style="display:none">🚛 Karma Vagon</button>
   <button id="besi-bilgi-nav-btn" onclick="sekmeAc('besibilgi')" style="display:none">📰 Besi Bilgi Merkezi</button>
-  <button onclick="sekmeAc('kutuphane')">📚 Yem Kütüphanesi</button>
   <button onclick="sekmeAc('kayitlar')">💾 Kayıtlar</button>
 </div>
 
@@ -1193,6 +1208,57 @@ select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
   <div style="display:flex;gap:8px;margin-top:12px">
     <button onclick="window.print()" style="padding:9px 16px;background:var(--blue);border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:700;cursor:pointer">🖨️ Yazdır / PDF Kaydet</button>
     <button onclick="besiVagonKopyala()" style="padding:9px 16px;background:var(--bg4);border:1px solid var(--border2);border-radius:8px;color:var(--text2);font-size:13px;cursor:pointer">📋 Metni Kopyala</button>
+  </div>
+</div>
+
+<!-- ==================== SAĞMAL KARMA VAGON ==================== -->
+<div id="sekme-sagmalvagon" class="hidden">
+  <div class="card mb8">
+    <div class="card-title">🚛 Karma Yem Vagonu — Yükleme Ayarları</div>
+    <div class="grid-4">
+      <div class="field"><label>Hesaplama Tipi</label>
+        <select id="sagmalvagon-tip" onchange="sagmalVagonRender()">
+          <option value="bas">Baş Sayısına Göre (by head)</option>
+          <option value="miktar">Toplam Miktara Göre (by amount)</option>
+        </select>
+      </div>
+      <div class="field" id="sagmalvagon-bas-alani"><label>Hayvan Sayısı</label>
+        <input type="number" id="sagmalvagon-bas-sayisi" value="71" min="1" max="10000" oninput="sagmalVagonRender()"></div>
+      <div class="field" id="sagmalvagon-miktar-alani" style="display:none"><label>Toplam KM Miktarı (kg)</label>
+        <input type="number" id="sagmalvagon-toplam-miktar" value="500" min="1" max="100000" oninput="sagmalVagonRender()"></div>
+      <div class="field"><label>Öğün Payı %</label>
+        <input type="number" id="sagmalvagon-intake-pct" value="100" min="1" max="100" step="1" oninput="sagmalVagonRender()" style="padding:10px;font-size:15px;font-weight:700"></div>
+      <div class="field">
+        <label>Yuvarlama</label>
+        <div id="sagmalvagon-yuvarlama-grid" style="display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:6px">
+            <span class="fs11" style="color:var(--text3)">Kaba Yem</span>
+            <select id="sagmalvagon-yuvarla-kaba" onchange="sagmalVagonRender()" style="width:60px;padding:3px 4px;font-size:11px">
+              <option value="1">1</option><option value="5">5</option><option value="10">10</option>
+            </select>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:6px">
+            <span class="fs11" style="color:var(--text3)">Kesif Yem</span>
+            <select id="sagmalvagon-yuvarla-kesif" onchange="sagmalVagonRender()" style="width:60px;padding:3px 4px;font-size:11px">
+              <option value="1">1</option><option value="5">5</option><option value="10">10</option>
+            </select>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:6px">
+            <span class="fs11" style="color:var(--text3)">Min-Vit</span>
+            <select id="sagmalvagon-yuvarla-minvit" onchange="sagmalVagonRender()" style="width:60px;padding:3px 4px;font-size:11px">
+              <option value="0.5">0,5</option><option value="1">1</option><option value="5">5</option><option value="10">10</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="sagmalvagon-icerik"></div>
+
+  <div style="display:flex;gap:8px;margin-top:12px">
+    <button onclick="window.print()" style="padding:9px 16px;background:var(--blue);border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:700;cursor:pointer">🖨️ Yazdır / PDF Kaydet</button>
+    <button onclick="sagmalVagonKopyala()" style="padding:9px 16px;background:var(--bg4);border:1px solid var(--border2);border-radius:8px;color:var(--text2);font-size:13px;cursor:pointer">📋 Metni Kopyala</button>
   </div>
 </div>
 
@@ -1929,6 +1995,7 @@ function sekmeAc(id) {
   if(id==='besi') besiSayfasiRender();
   if(id==='besirapor') besiRaporRender();
   if(id==='besivagon') besiVagonRender();
+  if(id==='sagmalvagon') sagmalVagonRender();
   if(id==='kutuphane') yemListesiGuncelle();
   if(id==='kayitlar') { kayitListesiGuncelle(); kayitOzetGuncelle(); kayitTarihBilgiGuncelle(); }
 }
@@ -4559,6 +4626,176 @@ function besiVagonKopyala() {
   }).catch(() => alert('Kopyalama başarısız — tarayıcı izni gerekebilir.'));
 }
 
+// ============================================================
+// SAĞMAL KARMA VAGON — besi Karma Vagon'un sağmal karşılığı
+// Aynı mantık: baş sayısı/toplam miktara göre yükleme listesi,
+// kategoriye göre yuvarlama (Kaba Yem / Kesif Yem / Min-Vit).
+// ============================================================
+function sagmalVagonRender() {
+  rasyonHesapla();
+  const km = rasyon.toplamKM;
+  let toplamDH_ = 0;
+  rasyonSatirlari.forEach(s => { if (s.yemId && s.miktar>0) toplamDH_ += s.miktar; });
+
+  const tip = document.getElementById('sagmalvagon-tip')?.value || 'bas';
+  const basAlani = document.getElementById('sagmalvagon-bas-alani');
+  const miktarAlani = document.getElementById('sagmalvagon-miktar-alani');
+  if (basAlani)    basAlani.style.display    = tip === 'bas' ? '' : 'none';
+  if (miktarAlani) miktarAlani.style.display = tip === 'miktar' ? '' : 'none';
+
+  const basSayisi   = Math.max(1, parseInt(document.getElementById('sagmalvagon-bas-sayisi')?.value) || 1);
+  const toplamMiktar = Math.max(0.1, parseFloat(document.getElementById('sagmalvagon-toplam-miktar')?.value) || 1);
+  const intakePct   = Math.min(100, Math.max(1, parseFloat(document.getElementById('sagmalvagon-intake-pct')?.value) || 100));
+
+  let carpan;
+  if (tip === 'bas') {
+    carpan = basSayisi * (intakePct / 100);
+  } else {
+    carpan = km > 0 ? (toplamMiktar / km) * (intakePct / 100) : 0;
+  }
+
+  const icerikEl = document.getElementById('sagmalvagon-icerik');
+  if (!icerikEl) return;
+
+  const gecerliIdler = new Set(rasyonSatirlari.filter(s => s.yemId && s.miktar > 0).map(s => s.id));
+  if (!sagmalVagonSira) sagmalVagonSira = [];
+  sagmalVagonSira = sagmalVagonSira.filter(id => gecerliIdler.has(id));
+  rasyonSatirlari.forEach(s => {
+    if (s.yemId && s.miktar > 0 && !sagmalVagonSira.includes(s.id)) sagmalVagonSira.push(s.id);
+  });
+
+  const vagonUstKategori = (kategori) => (kategori === 'Kaba Yem' || kategori === 'Min-Vit') ? kategori : 'Kesif Yem';
+  const yuvarlamaSecim = {
+    'Kaba Yem':  parseFloat(document.getElementById('sagmalvagon-yuvarla-kaba')?.value) || 1,
+    'Kesif Yem': parseFloat(document.getElementById('sagmalvagon-yuvarla-kesif')?.value) || 1,
+    'Min-Vit':   parseFloat(document.getElementById('sagmalvagon-yuvarla-minvit')?.value) || 1,
+  };
+  const yuvarlaKg = (deger, adim) => adim === 1 ? deger : Math.round(deger / adim) * adim;
+
+  const yemSatirlari = sagmalVagonSira.map(id => {
+    const s = rasyonSatirlari.find(s => s.id === id);
+    if (!s) return null;
+    const y = s.ozelYem || YEMLER.find(y => y.id === s.yemId);
+    if (!y) return null;
+    const afTek = s.miktar;
+    const dmTek = afTek * (y.KM/100);
+    const kategori = vagonUstKategori(yemAnaGrup(y));
+    const adim = yuvarlamaSecim[kategori] || 1;
+    return {
+      satirId: s.id,
+      isim: y.ozelYem ? `[Özel] ${y.isim}` : y.isim,
+      afTek: r3(afTek),
+      dmTek: dmTek.toFixed(2).replace('.', ','),
+      afToplam: yuvarlaKg(r2(afTek * carpan), adim),
+      dmToplam: r2(dmTek * carpan),
+    };
+  }).filter(Boolean);
+
+  if (yemSatirlari.length === 0) {
+    icerikEl.innerHTML = `<div class="card" style="text-align:center;padding:40px;color:var(--text3)">
+      🐄 Rasyonda yem yok. Önce "Rasyon Tasarımı" sekmesinden rasyon oluşturun.
+    </div>`;
+    return;
+  }
+
+  let toplamAF = 0, toplamDM = 0, kumulatif = 0;
+  const GRID = 'display:grid;grid-template-columns:34px minmax(0,1fr) 60px 60px 64px 64px;gap:5px;align-items:center';
+  const satirHTML = yemSatirlari.map((s,i) => {
+    toplamAF += s.afToplam;
+    toplamDM += s.dmToplam;
+    kumulatif += s.afToplam;
+    const ilkMi = i === 0;
+    const sonMu = i === yemSatirlari.length - 1;
+    return `<div style="${GRID};padding:8px 6px;background:${i%2===0?'var(--bg3)':'var(--bg2)'};border-radius:6px;margin-bottom:3px">
+      <div style="display:flex;flex-direction:column;gap:1px">
+        <button onclick="sagmalVagonSiraTasi(${s.satirId},-1)" ${ilkMi?'disabled':''}
+          style="width:16px;height:14px;border:none;border-radius:3px;background:${ilkMi?'var(--bg4)':'var(--blue)'};color:${ilkMi?'var(--text4)':'#fff'};font-size:8px;line-height:1;cursor:${ilkMi?'default':'pointer'};padding:0">▲</button>
+        <button onclick="sagmalVagonSiraTasi(${s.satirId},1)" ${sonMu?'disabled':''}
+          style="width:16px;height:14px;border:none;border-radius:3px;background:${sonMu?'var(--bg4)':'var(--blue)'};color:${sonMu?'var(--text4)':'#fff'};font-size:8px;line-height:1;cursor:${sonMu?'default':'pointer'};padding:0">▼</button>
+      </div>
+      <div style="font-size:14px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${s.isim}">${s.isim}</div>
+      <div style="text-align:right;font-size:14px;font-weight:600;color:var(--text2)">${s.afTek}</div>
+      <div style="text-align:right;font-size:14px;font-weight:600;color:var(--text2)">${s.dmTek}</div>
+      <div style="text-align:right;font-size:15px;font-weight:800;color:var(--blue2)">${s.afToplam}</div>
+      <div style="text-align:right;font-size:14px;font-weight:600;color:var(--purple)">${r2(kumulatif)}</div>
+    </div>`;
+  }).join('');
+
+  const carpanEtiket = tip === 'bas'
+    ? `${basSayisi} baş × %${intakePct}`
+    : `${toplamMiktar} kg hedef KM × %${intakePct}`;
+
+  icerikEl.innerHTML = `
+    <div class="card" style="padding:10px 8px">
+      <div class="card-title" style="font-size:13px;padding:0 4px 8px">🚛 Yükleme Listesi — ${carpanEtiket}</div>
+      <div style="${GRID};padding:0 6px 6px">
+        <div></div>
+        <div class="fs11" style="color:var(--text4);font-weight:700">Yem</div>
+        <div class="fs11" style="color:var(--text4);text-align:right;font-weight:700">AF</div>
+        <div class="fs11" style="color:var(--text4);text-align:right;font-weight:700">DM</div>
+        <div class="fs11" style="color:var(--text4);text-align:right;font-weight:700">${basSayisi}baş</div>
+        <div class="fs11" style="color:var(--text4);text-align:right;font-weight:700">Cum.</div>
+      </div>
+      <div>${satirHTML}</div>
+      <div style="${GRID};padding:9px 6px;margin-top:4px;background:var(--bg4);border-radius:6px;font-weight:800">
+        <div></div>
+        <div style="font-size:14px;color:var(--text)">TOPLAM</div>
+        <div style="text-align:right;font-size:14px;color:var(--text2)">${r3(toplamDH_)}</div>
+        <div style="text-align:right;font-size:14px;color:var(--text2)">${r3(km)}</div>
+        <div style="text-align:right;font-size:15px;color:var(--blue2)">${r2(toplamAF)}</div>
+        <div style="text-align:right;font-size:14px;color:var(--purple)">${r2(toplamAF)}</div>
+      </div>
+    </div>`;
+}
+
+let sagmalVagonSira = null;
+
+function sagmalVagonSiraTasi(satirId, yon) {
+  if (!sagmalVagonSira) return;
+  const idx = sagmalVagonSira.indexOf(satirId);
+  const hedefIdx = idx + yon;
+  if (idx === -1 || hedefIdx < 0 || hedefIdx >= sagmalVagonSira.length) return;
+  const tmp = sagmalVagonSira[idx];
+  sagmalVagonSira[idx] = sagmalVagonSira[hedefIdx];
+  sagmalVagonSira[hedefIdx] = tmp;
+  sagmalVagonRender();
+}
+
+function sagmalVagonKopyala() {
+  rasyonHesapla();
+  const tip = document.getElementById('sagmalvagon-tip')?.value || 'bas';
+  const basSayisi = Math.max(1, parseInt(document.getElementById('sagmalvagon-bas-sayisi')?.value)||1);
+  const toplamMiktar = Math.max(0.1, parseFloat(document.getElementById('sagmalvagon-toplam-miktar')?.value)||1);
+  const intakePct = Math.min(100, Math.max(1, parseFloat(document.getElementById('sagmalvagon-intake-pct')?.value)||100));
+  const km = rasyon.toplamKM;
+  const carpan = tip === 'bas' ? basSayisi*(intakePct/100) : (km>0 ? (toplamMiktar/km)*(intakePct/100) : 0);
+
+  let metin = `KARMA YEM VAGONU YÜKLEME LİSTESİ\n`;
+  metin += `Tarih: ${new Date().toLocaleDateString('tr-TR')}\n`;
+  metin += tip==='bas' ? `${basSayisi} baş, Intake %${intakePct}\n\n` : `${toplamMiktar} kg hedef KM, Intake %${intakePct}\n\n`;
+  const sira = sagmalVagonSira && sagmalVagonSira.length ? sagmalVagonSira : rasyonSatirlari.map(s=>s.id);
+  let toplam = 0;
+  sira.forEach(id => {
+    const s = rasyonSatirlari.find(s=>s.id===id);
+    if (!s || !s.yemId || s.miktar<=0) return;
+    const y = s.ozelYem || YEMLER.find(y=>y.id===s.yemId);
+    if (!y) return;
+    const kgToplam = r2(s.miktar*carpan);
+    const dmToplam = r2(s.miktar*(y.KM/100)*carpan);
+    toplam += kgToplam;
+    metin += `  ${y.isim}: AF ${kgToplam} kg (DM ${dmToplam} kg)\n`;
+  });
+  metin += `\nTOPLAM: ${r2(toplam)} kg\n`;
+
+  navigator.clipboard?.writeText(metin).then(() => {
+    const b = document.createElement('div');
+    b.style.cssText = 'position:fixed;top:16px;right:16px;z-index:9999;padding:10px 18px;background:rgba(52,211,153,0.15);border:1px solid rgba(52,211,153,0.4);border-radius:8px;color:var(--teal);font-size:13px;font-weight:600';
+    b.textContent = '📋 Vagon listesi kopyalandı';
+    document.body.appendChild(b);
+    setTimeout(() => b.remove(), 2500);
+  }).catch(() => alert('Kopyalama başarısız — tarayıcı izni gerekebilir.'));
+}
+
 function besiSatirEkle() {
   besiRasyonSatirlari.push({ id: besiNextSatirId++, yemId: null, miktar: 0 });
   besiSayfasiRender();
@@ -5732,6 +5969,9 @@ window.onload = function() {
   window.besiVagonRender = besiVagonRender;
   window.besiVagonKopyala = besiVagonKopyala;
   window.besiVagonSiraTasi = besiVagonSiraTasi;
+  window.sagmalVagonRender = sagmalVagonRender;
+  window.sagmalVagonKopyala = sagmalVagonKopyala;
+  window.sagmalVagonSiraTasi = sagmalVagonSiraTasi;
   window.sagmalProfilGoster = sagmalProfilGoster;
   window.besiProfilGoster   = besiProfilGoster;
   window.optKisitInputDegistir = optKisitInputDegistir;
@@ -5839,6 +6079,13 @@ function girisKayitlaraGit() {
   sekmeAc('kayitlar');
 }
 
+// Ana sayfadaki "Yem Kütüphanesi" kartına tıklanınca doğrudan kütüphane sekmesine gider
+function girisKutuphaneyeGit() {
+  girisEkraniniGizle();
+  if (typeof hayvanGrubu === 'undefined' || !hayvanGrubu) grupSec('sagmal');
+  sekmeAc('kutuphane');
+}
+
 // Giriş sayfasındaki kayıt sayısı rozetini günceller
 function girisKayitRozetiGuncelle() {
   const rozet = document.getElementById('giris-kayit-rozeti');
@@ -5853,6 +6100,7 @@ function girisKayitRozetiGuncelle() {
 window.girisYapAsPar = girisYapAsPar;
 window.anaSayfayaDon = anaSayfayaDon;
 window.girisKayitlaraGit = girisKayitlaraGit;
+window.girisKutuphaneyeGit = girisKutuphaneyeGit;
 window.girisKayitRozetiGuncelle = girisKayitRozetiGuncelle;
 
 // Sayfa ilk açıldığında (giriş ekranındayken) kayıt sayısını göster
