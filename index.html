@@ -1527,31 +1527,8 @@ const YEMLER = [
   // ============================================================
 
   {
-    // P-GOZDE PLUS — NDS 17.06.2026 raporundan geri hesaplanmış
-    // KM:88.031, nişasta:28.3% (NDS raporundan geri hesaplanmış)
-    id:"KY004",
-    isim:"Süt Yemi — P-GOZDE PLUS",
-    kat:"Karma Yem", alt:"Karma",
-    KM:88.031, HP:24.71, HY:3.20, HK:7.08,
-    NDF:27.0,  ADF:10.5, ADL:2.5, eNDF:0.34,
-    nisasta:28.3, seker:4.5, NFC:41.0,
-    PA:29.77, PB1:55.0, PB2:7.5, PB3:12.0, PC:5.5,
-    kd_PB2:5.18, kd_PB3:5.18, kp:0.058, dRUP:0.80,
-    RDP_3x:16.29, RUP_3x:8.42,
-    NDFD30:52.0, kd_NDF:5.18, iNDF:12.0,
-    NEL:1.766, NEm:1.908, NEg:1.267,
-    UFL:0.0, UFV:0.0, PDIE:148, PDIN:172,
-    Ca:0.699, P:0.8685, Mg:0.3848, K:1.1041, Na:0.3542, Cl:0.4753, S:0.3299,
-    Mn:38, Cu:9, Fe:206, Zn:62,
-    Lys:2.50, Met:1.667, His:2.39, Arg:5.19, Thr:3.24,
-    Ile:3.86, Leu:10.45, Val:5.00,
-    analiz_tarihi:"17.06.2026",
-    fiyat:13.0
-  },
-
-  {
     id:"KY001",
-    isim:"Buzağı Büyütme Yemi — GÜÇLÜ (Etiket Analizi güncel)",
+    isim:"Buzağı Büyütme 18X",
     kat:"Karma Yem", alt:"Karma",
     // Etiket/garanti analizi (AF): Nem 10.86, Protein 18.73, Ham Selüloz 8.87, Yağ 2.83, Kül 7.54, Nişasta 21.25
     // KM = 100-10.86 = 89.14 → DM bazına çevrilmiş değerler
@@ -1578,7 +1555,7 @@ const YEMLER = [
 
   {
     id:"KY002",
-    isim:"Konsantre Yem — GRAND (12.06.2026)",
+    isim:"Besi Bitirme 1436",
     kat:"Karma Yem", alt:"Karma",
     // NDS: 4226016923 — Analiz: 12.06.2026
     KM:88.43, HP:15.83, HY:3.39, HK:7.28,
@@ -1608,8 +1585,31 @@ const YEMLER = [
   },
 
   {
+    // P-GOZDE PLUS — NDS 17.06.2026 raporundan geri hesaplanmış
+    // KM:88.031, nişasta:28.3% (NDS raporundan geri hesaplanmış)
+    id:"KY004",
+    isim:"Süt 18X",
+    kat:"Karma Yem", alt:"Karma",
+    KM:88.031, HP:24.71, HY:3.20, HK:7.08,
+    NDF:27.0,  ADF:10.5, ADL:2.5, eNDF:0.34,
+    nisasta:28.3, seker:4.5, NFC:41.0,
+    PA:29.77, PB1:55.0, PB2:7.5, PB3:12.0, PC:5.5,
+    kd_PB2:5.18, kd_PB3:5.18, kp:0.058, dRUP:0.80,
+    RDP_3x:16.29, RUP_3x:8.42,
+    NDFD30:52.0, kd_NDF:5.18, iNDF:12.0,
+    NEL:1.766, NEm:1.908, NEg:1.267,
+    UFL:0.0, UFV:0.0, PDIE:148, PDIN:172,
+    Ca:0.699, P:0.8685, Mg:0.3848, K:1.1041, Na:0.3542, Cl:0.4753, S:0.3299,
+    Mn:38, Cu:9, Fe:206, Zn:62,
+    Lys:2.50, Met:1.667, His:2.39, Arg:5.19, Thr:3.24,
+    Ile:3.86, Leu:10.45, Val:5.00,
+    analiz_tarihi:"17.06.2026",
+    fiyat:13.0
+  },
+
+  {
     id:"KY003",
-    isim:"Süt Yemi 21 — HEDEF PLUS (12.06.2026)",
+    isim:"Süt 21X",
     kat:"Karma Yem", alt:"Karma",
     // NDS: 3481245235 — Analiz: 12.06.2026
     KM:89.04, HP:24.71, HY:2.78, HK:7.08,
@@ -5407,6 +5407,8 @@ function kayitListesiGuncelle() {
           ${k.not ? `<div style="font-size:11px;color:var(--text3);margin-top:3px;font-style:italic">${k.not}</div>` : ''}
         </div>
         <div style="display:flex;gap:5px">
+          ${isBesi ? `<button onclick="besiNotPaneliAcKapa('${k.id}')" title="Notlar"
+            style="padding:4px 8px;background:var(--bg4);border:1px solid var(--border2);border-radius:5px;color:var(--blue2);font-size:11px;cursor:pointer">📝 <span id="not-sayac-${k.id}">${(k.notlar||[]).length||''}</span></button>` : ''}
           <button onclick="rasyonDisa('${k.id}')" title="JSON indir"
             style="padding:4px 8px;background:var(--bg4);border:1px solid var(--border2);border-radius:5px;color:var(--text3);font-size:11px;cursor:pointer">⬇</button>
           <button onclick="rasyonSil('${k.id}','${k.isim.replace(/'/g,"\'")}') "
@@ -5420,6 +5422,17 @@ function kayitListesiGuncelle() {
           <div style="font-size:11px;font-weight:700;color:${it.c}">${it.v}</div>
         </div>`).join('')}
       </div>
+      ${isBesi ? `<div id="not-panel-${k.id}" style="display:none;margin-bottom:8px;padding:10px;background:var(--bg2);border-radius:8px;border:1px solid var(--border)">
+        <div class="fs11 fw7" style="color:var(--blue2);margin-bottom:6px">📝 Rasyon Notları</div>
+        <div id="not-liste-${k.id}"></div>
+        <div style="display:grid;grid-template-columns:110px 1fr 34px;gap:5px;margin-top:6px">
+          <input type="date" id="not-tarih-${k.id}" value="${new Date().toISOString().slice(0,10)}"
+            style="padding:6px 5px;background:var(--bg4);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-size:11px">
+          <input type="text" id="not-metin-${k.id}" placeholder="Not yazın..."
+            style="padding:6px 8px;background:var(--bg4);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-size:12px">
+          <button onclick="besiNotEkle('${k.id}')" style="background:var(--blue);border:none;border-radius:6px;color:#fff;font-size:16px;cursor:pointer">+</button>
+        </div>
+      </div>` : ''}
       <button onclick="rasyonYukle('${k.id}')"
         style="width:100%;padding:7px;background:var(--blue);border:none;border-radius:7px;color:#fff;font-size:12px;font-weight:700;cursor:pointer">
         ▶ Rasyonu Yükle
@@ -5427,6 +5440,82 @@ function kayitListesiGuncelle() {
     </div>`;
   }).join('');
 }
+
+// ============================================================
+// BESİ RASYONU NOTLARI — her kayda özel tarih+not günlüğü
+// ============================================================
+function besiNotPaneliAcKapa(kayitId) {
+  const panel = document.getElementById('not-panel-' + kayitId);
+  if (!panel) return;
+  const acikMi = panel.style.display !== 'none';
+  if (acikMi) {
+    panel.style.display = 'none';
+  } else {
+    panel.style.display = 'block';
+    besiNotListesiRender(kayitId);
+  }
+}
+
+function besiNotListesiRender(kayitId) {
+  const listeEl = document.getElementById('not-liste-' + kayitId);
+  if (!listeEl) return;
+  const kayitlar = kayitlariGetir();
+  const kayit = kayitlar.find(k => k.id === kayitId);
+  if (!kayit) return;
+  const notlar = (kayit.notlar || []).slice().sort((a,b) => (b.tarih||'').localeCompare(a.tarih||''));
+
+  if (notlar.length === 0) {
+    listeEl.innerHTML = '<div class="fs11" style="color:var(--text4);padding:6px 0">Henüz not eklenmedi.</div>';
+    return;
+  }
+
+  listeEl.innerHTML = notlar.map(n => {
+    const tarihGosterim = n.tarih ? n.tarih.split('-').reverse().join('.') : '—';
+    return `<div style="display:grid;grid-template-columns:80px 1fr 20px;gap:6px;padding:5px 0;border-bottom:1px solid var(--border);align-items:start">
+      <div class="fs10 fw7" style="color:var(--blue2)">${tarihGosterim}</div>
+      <div class="fs11" style="color:var(--text2);word-break:break-word">${n.metin}</div>
+      <button onclick="besiNotSil('${kayitId}','${n.id}')" style="background:transparent;border:none;color:var(--red);font-size:12px;cursor:pointer;padding:0">✕</button>
+    </div>`;
+  }).join('');
+}
+
+function besiNotEkle(kayitId) {
+  const tarihEl = document.getElementById('not-tarih-' + kayitId);
+  const metinEl = document.getElementById('not-metin-' + kayitId);
+  const tarih = tarihEl?.value;
+  const metin = metinEl?.value.trim();
+  if (!tarih) { alert('Lütfen bir tarih seçin.'); return; }
+  if (!metin) { alert('Lütfen bir not yazın.'); return; }
+
+  const kayitlar = kayitlariGetir();
+  const kayit = kayitlar.find(k => k.id === kayitId);
+  if (!kayit) return;
+  if (!kayit.notlar) kayit.notlar = [];
+  kayit.notlar.push({ id: Date.now().toString(36), tarih, metin });
+
+  if (kayitlariYaz(kayitlar)) {
+    metinEl.value = '';
+    besiNotListesiRender(kayitId);
+    const sayacEl = document.getElementById('not-sayac-' + kayitId);
+    if (sayacEl) sayacEl.textContent = kayit.notlar.length;
+  }
+}
+
+function besiNotSil(kayitId, notId) {
+  const kayitlar = kayitlariGetir();
+  const kayit = kayitlar.find(k => k.id === kayitId);
+  if (!kayit || !kayit.notlar) return;
+  kayit.notlar = kayit.notlar.filter(n => n.id !== notId);
+  if (kayitlariYaz(kayitlar)) {
+    besiNotListesiRender(kayitId);
+    const sayacEl = document.getElementById('not-sayac-' + kayitId);
+    if (sayacEl) sayacEl.textContent = kayit.notlar.length || '';
+  }
+}
+
+window.besiNotPaneliAcKapa = besiNotPaneliAcKapa;
+window.besiNotEkle = besiNotEkle;
+window.besiNotSil = besiNotSil;
 
 function kayitOzetGuncelle() {
   const el = document.getElementById('kayit-ozet');
