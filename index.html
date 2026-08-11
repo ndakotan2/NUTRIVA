@@ -603,6 +603,8 @@ select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
 
 <!-- ==================== PROFİL ==================== -->
 <div id="sekme-profil">
+  <!-- SAĞMAL İÇERİĞİ -->
+  <div id="profil-sagmal-icerik">
   <div class="grid-2">
     <div>
       <div class="card">
@@ -655,6 +657,61 @@ select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
         <div class="card-title">📈 Laktasyon Dönemi</div>
         <div id="lakt-donem-icerik"></div>
       </div>
+      <div class="card">
+        <div class="card-title">🌡️ İşletme &amp; İklim Bilgileri</div>
+        <div class="grid-2">
+          <div class="field"><label>Ortam Sıcaklığı (°C)</label>
+            <input type="number" id="p-sicaklik" value="" min="-30" max="50" step="0.5" placeholder="ör: 28" oninput="profilGuncelle()"></div>
+          <div class="field"><label>Bağıl Nem (%)</label>
+            <input type="number" id="p-nem" value="" min="0" max="100" step="1" placeholder="ör: 60" oninput="profilGuncelle()"></div>
+        </div>
+        <div id="sagmal-iklim-sonuc"></div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- BESİ İÇERİĞİ -->
+  <div id="profil-besi-icerik" class="hidden" style="max-width:640px">
+    <div class="card">
+      <div class="card-title">🐂 Besi Hayvanı</div>
+      <div class="grid-2">
+        <div class="field"><label>Irk (INRA Tablosu)</label>
+          <select id="bp-irk" onchange="besiProfilGuncelle(this)">
+            <option value="charolais">Charolais / ×Salers / ×Aubrac</option>
+            <option value="limousin">Limousin / Blonde d'Aquitaine</option>
+            <option value="holstein">Holstein (süt ırkı)</option>
+            <option value="simental">Simental</option>
+            <option value="angus">Angus</option>
+            <option value="brangus">Brangus</option>
+            <option value="melez">Yerli / Melez</option>
+          </select>
+        </div>
+        <div class="field"><label>Mevcut CA (kg)</label>
+          <input type="number" id="bp-ca" value="350" min="100" max="800" oninput="besiProfilGuncelle(this)"></div>
+        <div class="field"><label>Hedef CA (kg)</label>
+          <input type="number" id="bp-ca-hedef" value="500" min="200" max="800" oninput="besiProfilGuncelle(this)"></div>
+        <div class="field"><label>Hedef GCAA (kg/gün)</label>
+          <input type="number" id="bp-gcaa" value="1.4" min="0.5" max="2.5" step="0.1" oninput="besiProfilGuncelle(this)"></div>
+        <div class="field"><label>Cinsiyet</label>
+          <select id="bp-cinsiyet" onchange="besiProfilGuncelle(this)">
+            <option value="erkek">Erkek (Dana)</option>
+            <option value="hadim">Hadım</option>
+            <option value="disı">Dişi (Düve)</option>
+          </select>
+        </div>
+      </div>
+      <div id="bp-inra-kaynak-uyari" class="fs10" style="margin-top:6px;color:var(--text3)"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">🌡️ İşletme &amp; İklim Bilgileri</div>
+      <div class="grid-2">
+        <div class="field"><label>Ortam Sıcaklığı (°C)</label>
+          <input type="number" id="bp-sicaklik" value="" min="-30" max="50" step="0.5" placeholder="ör: 28" oninput="besiProfilGuncelle(this)"></div>
+        <div class="field"><label>Bağıl Nem (%)</label>
+          <input type="number" id="bp-nem" value="" min="0" max="100" step="1" placeholder="ör: 60" oninput="besiProfilGuncelle(this)"></div>
+      </div>
+      <div id="besi-iklim-sonuc"></div>
     </div>
   </div>
 </div>
@@ -1063,7 +1120,7 @@ select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
         <div class="card-title">🐂 Besi Hayvanı</div>
         <div class="grid-5">
           <div class="field"><label>Irk (INRA Tablosu)</label>
-            <select id="b-irk" onchange="besiProfilGuncelle()">
+            <select id="b-irk" onchange="besiProfilGuncelle(this)">
               <option value="charolais">Charolais / ×Salers / ×Aubrac</option>
               <option value="limousin">Limousin / Blonde d'Aquitaine</option>
               <option value="holstein">Holstein (süt ırkı)</option>
@@ -1074,13 +1131,13 @@ select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
             </select>
           </div>
           <div class="field"><label>Mevcut CA (kg)</label>
-            <input type="number" id="b-ca" value="350" min="100" max="800" oninput="besiProfilGuncelle()"></div>
+            <input type="number" id="b-ca" value="350" min="100" max="800" oninput="besiProfilGuncelle(this)"></div>
           <div class="field"><label>Hedef CA (kg)</label>
-            <input type="number" id="b-ca-hedef" value="500" min="200" max="800" oninput="besiProfilGuncelle()"></div>
+            <input type="number" id="b-ca-hedef" value="500" min="200" max="800" oninput="besiProfilGuncelle(this)"></div>
           <div class="field"><label>Hedef GCAA (kg/gün)</label>
-            <input type="number" id="b-gcaa" value="1.4" min="0.5" max="2.5" step="0.1" oninput="besiProfilGuncelle()"></div>
+            <input type="number" id="b-gcaa" value="1.4" min="0.5" max="2.5" step="0.1" oninput="besiProfilGuncelle(this)"></div>
           <div class="field"><label>Cinsiyet</label>
-            <select id="b-cinsiyet" onchange="besiProfilGuncelle()">
+            <select id="b-cinsiyet" onchange="besiProfilGuncelle(this)">
               <option value="erkek">Erkek (Dana)</option>
               <option value="hadim">Hadım</option>
               <option value="disı">Dişi (Düve)</option>
@@ -1853,8 +1910,18 @@ function renkHesapla(val, min, max) {
 
 function ihtiyacHesapla() {
   const p = profil;
-  const DMI = NASEM.DMI({CA:p.CA,BCS:p.BCS,laktGun:p.laktGun,sutVerimi:p.sutVerimi,sutYag:p.sutYag});
-  const NEL_idame = NASEM.NEL_idame({CA:p.CA,BCS:p.BCS});
+  const DMI_ham = NASEM.DMI({CA:p.CA,BCS:p.BCS,laktGun:p.laktGun,sutVerimi:p.sutVerimi,sutYag:p.sutYag});
+
+  // --- İklim stresi düzeltmesi (THI tabanlı, sıcaklık girilmişse) ---
+  const sicaklik = parseFloat(document.getElementById('p-sicaklik')?.value);
+  const nem = parseFloat(document.getElementById('p-nem')?.value);
+  const thi = !isNaN(sicaklik) ? IKLIM_STRES.THI(sicaklik, isNaN(nem) ? null : nem) : null;
+  const dmiDuzeltme = thi !== null ? IKLIM_STRES.sagmalDMIDuzeltme(thi) : 0;
+  const sogukOrani = !isNaN(sicaklik) ? IKLIM_STRES.sogukEnerjiArtisOrani(sicaklik) : 0;
+  const DMI = r2(Math.max(DMI_ham * 0.5, DMI_ham + dmiDuzeltme)); // en fazla %50'ye kadar düşüş sınırı (gerçekçilik payı)
+
+  const NEL_idame_ham = NASEM.NEL_idame({CA:p.CA,BCS:p.BCS});
+  const NEL_idame   = r2(NEL_idame_ham * (1 + sogukOrani)); // soğuk stresinde idame enerjisi artışı
   const NEL_sut   = NASEM.NEL_sut({sutVerimi:p.sutVerimi,sutYag:p.sutYag});
   const NEL_geb   = NASEM.NEL_geb({gebGun:p.gebGun});
   const NEL_bcs   = NASEM.NEL_bcs({hedefBCS:p.hedefBCS,mevcutBCS:p.BCS,CA:p.CA});
@@ -1878,7 +1945,7 @@ function ihtiyacHesapla() {
   const sut_prot = Math.max(0, r2(MP_sut_icin*0.67/(p.sutProtein/100*1000)));
   const NEB = rNEL>0 ? r2(rNEL-NEL_ihtiyac) : null;
   const MPB = rMP>0 ? r2(rMP-MP_ihtiyac) : null;
-  ihtiyac = { DMI, NEL_idame, NEL_sut, NEL_geb, NEL_bcs, NEL_ihtiyac, NEL_yog, MP_idame, MP_sut, MP_geb, MP_ihtiyac, min, vit, sut_enerji, sut_prot, NEB, MPB, rMP };
+  ihtiyac = { DMI, DMI_ham, thi, dmiDuzeltme, sogukOrani, NEL_idame, NEL_sut, NEL_geb, NEL_bcs, NEL_ihtiyac, NEL_yog, MP_idame, MP_sut, MP_geb, MP_ihtiyac, min, vit, sut_enerji, sut_prot, NEB, MPB, rMP };
 }
 
 function rasyonHesapla() {
@@ -1992,6 +2059,7 @@ function sekmeAc(id) {
   if(id==='rasyon') rasyonSayfasiRender();
   if(id==='degerlendirme') degerlendirmeSayfasiRender();
   if(id==='optimizasyon') optimizasyonSayfasiRender();
+  if(id==='profil' && hayvanGrubu==='besi') besiProfilGuncelle();
   if(id==='besi') besiSayfasiRender();
   if(id==='besirapor') besiRaporRender();
   if(id==='besivagon') besiVagonRender();
@@ -2020,6 +2088,39 @@ function profilGuncelle() {
   bcsSkalaSi();
   sutTurevler();
   laktasyonDonemi();
+  sagmalIklimRender();
+}
+
+// Sağmal İşletme & İklim kartındaki THI sonucunu render eder
+function sagmalIklimRender() {
+  const el = document.getElementById('sagmal-iklim-sonuc');
+  if (!el) return;
+  const thi = ihtiyac.thi;
+  if (thi === null || thi === undefined) {
+    el.innerHTML = '<div class="fs10 c-text3" style="margin-top:8px">Sıcaklık girilirse THI (Sıcaklık-Nem İndeksi) hesaplanır ve KM alımı tahminine otomatik yansır.</div>';
+    return;
+  }
+  const seviye = IKLIM_STRES.sagmalSeviye(thi);
+  const dmiDuzeltme = ihtiyac.dmiDuzeltme || 0;
+  const sogukOrani = ihtiyac.sogukOrani || 0;
+  let icerik = `<div style="margin-top:10px;padding:10px 12px;background:var(--bg3);border-radius:8px;border-left:3px solid ${seviye.renk}">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+      <span class="fs12 fw7" style="color:${seviye.renk}">🌡️ THI: ${thi} — ${seviye.etiket}</span>
+    </div>`;
+  if (dmiDuzeltme < 0) {
+    icerik += `<div class="fs11" style="color:var(--text2);margin-top:4px">
+      Bu sıcaklık-nem koşulunda hayvan yaklaşık <b style="color:var(--red)">${Math.abs(dmiDuzeltme)} kg/gün</b> daha az yem tüketebilir.
+      Rasyonun enerji yoğunluğunu artırmayı (yağ ilavesi, kaliteli lif) düşünün.
+    </div>`;
+  } else if (sogukOrani > 0) {
+    icerik += `<div class="fs11" style="color:var(--text2);margin-top:4px">
+      Soğuk stresi: idame enerji ihtiyacı yaklaşık <b style="color:var(--orange)">%${r2(sogukOrani*100)}</b> artıyor.
+    </div>`;
+  } else {
+    icerik += `<div class="fs11" style="color:var(--text3);margin-top:4px">Hayvan konfor bölgesinde, ek düzeltme uygulanmıyor.</div>`;
+  }
+  icerik += `<div class="fs10 c-text4" style="margin-top:6px">📚 THI: NRC (1971) · DMI düzeltmesi: Chang-Fung-Martel ve ark. 2021 (global meta-analiz) — tahmini değerdir, saha gözlemiyle teyit edilmelidir.</div></div>`;
+  el.innerHTML = icerik;
 }
 
 function bcsSkalaSi() {
@@ -4092,6 +4193,69 @@ let besiRasyonSatirlari = [
 let besiNextSatirId = 10;
 let besiRasyon = { toplam: {}, yuzde: {}, toplamKM: 0 };
 
+// ============================================================
+// İKLİM STRESİ MODÜLÜ — THI (Temperature-Humidity Index) tabanlı
+// Kaynaklar:
+//  - THI formülü: NRC (1971), A guide to environmental research on animals
+//  - Sağmal DMI-THI ilişkisi: Chang-Fung-Martel ve ark. 2021, Int J Biometeorol
+//    (676 gözlem/15 ülke meta-analizi) — dairy: DMI −0.45 kg/gün her THI biriminde
+//    (THI=48.14−0.45·DMI eğrisinden türetilmiş eğim), beef: −0.10 kg/gün/THI birimi
+//  - Sıcaklık stresi eşikleri: uluslararası konsensüs (Zimbelman & Collier 2011,
+//    Mader ve ark. 2006; Kerala THI karşılaştırma çalışması)
+//  - Soğuk stresi: LCT altı her 1°F (≈0.56°C) için idame enerjisi +%1
+//    (Kansas State/Iowa State Extension, çoklu kaynak konsensüsü)
+// ============================================================
+const IKLIM_STRES = {
+  // THI hesaplama — NRC 1971 formülü (T=°C, RH=% olarak 0-100 arası)
+  THI: (T, RH) => {
+    if (T === null || T === undefined || isNaN(T)) return null;
+    const rh = (RH === null || RH === undefined || isNaN(RH)) ? 60 : RH; // nem girilmezse ortalama %60 varsayılır
+    return r2((1.8*T + 32) - ((0.55 - 0.0055*rh) * (1.8*T - 26.8)));
+  },
+
+  // Sağmal için THI stres seviyesi ve etiketi
+  sagmalSeviye: (thi) => {
+    if (thi === null) return null;
+    if (thi < 68) return { seviye: 'yok', etiket: 'Konfor', renk: 'var(--green)' };
+    if (thi < 72) return { seviye: 'hafif', etiket: 'Hafif Stres', renk: 'var(--yellow)' };
+    if (thi < 80) return { seviye: 'orta', etiket: 'Orta Stres', renk: 'var(--orange)' };
+    if (thi < 90) return { seviye: 'siddetli', etiket: 'Şiddetli Stres', renk: 'var(--red)' };
+    return { seviye: 'acil', etiket: 'Acil Durum', renk: 'var(--red)' };
+  },
+
+  // Besi sığırı için THI stres seviyesi (dairy'den daha toleranslı eşikler)
+  besiSeviye: (thi) => {
+    if (thi === null) return null;
+    if (thi < 74) return { seviye: 'yok', etiket: 'Konfor', renk: 'var(--green)' };
+    if (thi < 79) return { seviye: 'hafif', etiket: 'Hafif Stres', renk: 'var(--yellow)' };
+    if (thi < 84) return { seviye: 'orta', etiket: 'Orta Stres', renk: 'var(--orange)' };
+    return { seviye: 'siddetli', etiket: 'Şiddetli Stres', renk: 'var(--red)' };
+  },
+
+  // Sağmal DMI düzeltmesi (kg/gün) — THI eşiği 68 üstünde her birim için −0.45 kg
+  sagmalDMIDuzeltme: (thi) => {
+    if (thi === null || thi <= 68) return 0;
+    return r2(-0.45 * (thi - 68));
+  },
+
+  // Besi DMI düzeltmesi (kg/gün) — THI eşiği 74 üstünde her birim için −0.10 kg
+  besiDMIDuzeltme: (thi) => {
+    if (thi === null || thi <= 74) return 0;
+    return r2(-0.10 * (thi - 74));
+  },
+
+  // Soğuk stresi — LCT altında idame enerjisi artışı (oran, örn. 0.12 = %12 artış)
+  // LCT ≈ -6°C (kuru kıl örtüsü, normal vücut kondisyonunda referans alınır)
+  sogukEnerjiArtisOrani: (T) => {
+    if (T === null || T === undefined || isNaN(T)) return 0;
+    const LCT = -6;
+    if (T >= LCT) return 0;
+    const farkC = LCT - T;
+    const farkF = farkC * 1.8; // °C farkını °F'e çevir (1% kural °F bazlı)
+    return r2(Math.min(0.40, farkF * 0.01)); // %40 ile sınırlandırılmış, gerçekçi üst sınır
+  },
+};
+
 const BESI_ME = {
   // NEm (idame net enerjisi, Mcal/gün) — NASEM 2016
   NEm: (CA) => Math.round(0.077 * Math.pow(CA, 0.75) * 100) / 100,
@@ -4125,9 +4289,21 @@ function besiIhtiyacHesapla() {
   const GCAA = besiProfil.gcaa || 1.2;
   const irk = besiProfil.irk || 'charolais';
 
-  const NEm = BESI_ME.NEm(CA);
+  const NEm_ham = BESI_ME.NEm(CA);
+
+  // --- İklim stresi düzeltmesi (THI tabanlı, sıcaklık girilmişse) ---
+  const bSicaklikEl = document.getElementById('bp-sicaklik');
+  const bNemEl = document.getElementById('bp-nem');
+  const sicaklik = parseFloat(bSicaklikEl?.value);
+  const nem = parseFloat(bNemEl?.value);
+  const thi = !isNaN(sicaklik) ? IKLIM_STRES.THI(sicaklik, isNaN(nem) ? null : nem) : null;
+  const dmiDuzeltme = thi !== null ? IKLIM_STRES.besiDMIDuzeltme(thi) : 0;
+  const sogukOrani = !isNaN(sicaklik) ? IKLIM_STRES.sogukEnerjiArtisOrani(sicaklik) : 0;
+  const NEm = r2(NEm_ham * (1 + sogukOrani));
+
   const NEg = BESI_ME.NEg(CA, GCAA);
-  const DMI = BESI_ME.DMI(CA);
+  const DMI_ham = BESI_ME.DMI(CA);
+  const DMI = r2(Math.max(DMI_ham * 0.5, DMI_ham + dmiDuzeltme));
   const ME_ihtiyac = BESI_ME.ME_ihtiyac(NEm, NEg);
   const ME_yogunluk_hedef = DMI > 0 ? r2(ME_ihtiyac / DMI) : 0;
   const HP = BESI_ME.HP(CA, GCAA);
@@ -4153,7 +4329,7 @@ function besiIhtiyacHesapla() {
   const UFV_yog_hedef = DMI > 0 ? r2(UFV_ihtiyac / DMI) : 0;
 
   return {
-    NEm, NEg, DMI, ME_ihtiyac, ME_yogunluk_hedef, HP, Ca, P,
+    NEm, NEg, DMI, DMI_ham, thi, dmiDuzeltme, sogukOrani, ME_ihtiyac, ME_yogunluk_hedef, HP, Ca, P,
     UFV_ihtiyac, UFV_yog_hedef, PDI_ihtiyac,
     UFV_ihtiyac_formul, PDI_ihtiyac_formul,
     Ca_abs_ihtiyac, P_abs_ihtiyac, UEB_kapasite,
@@ -4164,13 +4340,69 @@ function besiIhtiyacHesapla() {
   };
 }
 
-function besiProfilGuncelle() {
-  besiProfil.ca      = parseFloat(document.getElementById('b-ca')?.value) || 350;
-  besiProfil.caHedef = parseFloat(document.getElementById('b-ca-hedef')?.value) || 500;
-  besiProfil.gcaa    = parseFloat(document.getElementById('b-gcaa')?.value) || 1.4;
-  besiProfil.cinsiyet= document.getElementById('b-cinsiyet')?.value || 'erkek';
-  besiProfil.irk     = document.getElementById('b-irk')?.value || 'charolais';
+function besiProfilGuncelle(kaynakEl) {
+  // İki eş input seti var: Besi Rasyonu sayfasındaki (b-*) ve Genel Veriler'deki (bp-*).
+  // kaynakEl varsa (kullanıcı hangi inputu değiştirdiyse) onun değeri esas alınır,
+  // diğer taraf ona senkronize edilir. kaynakEl yoksa (örn. sekme açılışı) besiProfil esas alınır.
+  const bCa = document.getElementById('b-ca'), bpCa = document.getElementById('bp-ca');
+  const bCaHedef = document.getElementById('b-ca-hedef'), bpCaHedef = document.getElementById('bp-ca-hedef');
+  const bGcaa = document.getElementById('b-gcaa'), bpGcaa = document.getElementById('bp-gcaa');
+  const bCinsiyet = document.getElementById('b-cinsiyet'), bpCinsiyet = document.getElementById('bp-cinsiyet');
+  const bIrk = document.getElementById('b-irk'), bpIrk = document.getElementById('bp-irk');
+
+  if (kaynakEl) {
+    // Sadece değişen alanı besiProfil'e yaz
+    if (kaynakEl === bCa || kaynakEl === bpCa) besiProfil.ca = parseFloat(kaynakEl.value) || 350;
+    if (kaynakEl === bCaHedef || kaynakEl === bpCaHedef) besiProfil.caHedef = parseFloat(kaynakEl.value) || 500;
+    if (kaynakEl === bGcaa || kaynakEl === bpGcaa) besiProfil.gcaa = parseFloat(kaynakEl.value) || 1.4;
+    if (kaynakEl === bCinsiyet || kaynakEl === bpCinsiyet) besiProfil.cinsiyet = kaynakEl.value || 'erkek';
+    if (kaynakEl === bIrk || kaynakEl === bpIrk) besiProfil.irk = kaynakEl.value || 'charolais';
+  } else {
+    // Kaynak belirtilmemiş (örn. sekme açılışı) — besiProfil zaten günceldir, değiştirme
+  }
+
+  // Her iki tarafı da besiProfil ile senkron tut
+  if (bCa) bCa.value = besiProfil.ca; if (bpCa) bpCa.value = besiProfil.ca;
+  if (bCaHedef) bCaHedef.value = besiProfil.caHedef; if (bpCaHedef) bpCaHedef.value = besiProfil.caHedef;
+  if (bGcaa) bGcaa.value = besiProfil.gcaa; if (bpGcaa) bpGcaa.value = besiProfil.gcaa;
+  if (bCinsiyet) bCinsiyet.value = besiProfil.cinsiyet; if (bpCinsiyet) bpCinsiyet.value = besiProfil.cinsiyet;
+  if (bIrk) bIrk.value = besiProfil.irk; if (bpIrk) bpIrk.value = besiProfil.irk;
+
   if (hayvanGrubu === 'besi') besiSayfasiRender();
+  besiIklimRender();
+}
+
+// Besi Hayvanı kartındaki İşletme & İklim sonucunu render eder
+function besiIklimRender() {
+  const el = document.getElementById('besi-iklim-sonuc');
+  if (!el) return;
+  const ih = besiIhtiyacHesapla();
+  const thi = ih.thi;
+  if (thi === null || thi === undefined) {
+    el.innerHTML = '<div class="fs10 c-text3" style="margin-top:8px">Sıcaklık girilirse THI (Sıcaklık-Nem İndeksi) hesaplanır ve KM alımı tahminine otomatik yansır.</div>';
+    return;
+  }
+  const seviye = IKLIM_STRES.besiSeviye(thi);
+  const dmiDuzeltme = ih.dmiDuzeltme || 0;
+  const sogukOrani = ih.sogukOrani || 0;
+  let icerik = `<div style="margin-top:10px;padding:10px 12px;background:var(--bg3);border-radius:8px;border-left:3px solid ${seviye.renk}">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+      <span class="fs12 fw7" style="color:${seviye.renk}">🌡️ THI: ${thi} — ${seviye.etiket}</span>
+    </div>`;
+  if (dmiDuzeltme < 0) {
+    icerik += `<div class="fs11" style="color:var(--text2);margin-top:4px">
+      Bu sıcaklık-nem koşulunda hayvan yaklaşık <b style="color:var(--red)">${Math.abs(dmiDuzeltme)} kg/gün</b> daha az yem tüketebilir.
+      Rasyonun enerji yoğunluğunu artırmayı düşünün.
+    </div>`;
+  } else if (sogukOrani > 0) {
+    icerik += `<div class="fs11" style="color:var(--text2);margin-top:4px">
+      Soğuk stresi: idame enerji ihtiyacı yaklaşık <b style="color:var(--orange)">%${r2(sogukOrani*100)}</b> artıyor.
+    </div>`;
+  } else {
+    icerik += `<div class="fs11" style="color:var(--text3);margin-top:4px">Hayvan konfor bölgesinde, ek düzeltme uygulanmıyor.</div>`;
+  }
+  icerik += `<div class="fs10 c-text4" style="margin-top:6px">📚 THI: NRC (1971) · DMI düzeltmesi: Chang-Fung-Martel ve ark. 2021 (global meta-analiz) — tahmini değerdir, saha gözlemiyle teyit edilmelidir.</div></div>`;
+  el.innerHTML = icerik;
 }
 
 // --- Besi rasyon hesaplama (ME bazlı — kaba/kesif, nem, fraksiyonlar dahil) ---
@@ -4928,18 +5160,20 @@ function besiSayfasiGuncelle() {
       { l:'P (soğurulabilir)',     des:r2((rt.P||0)*1000), ger:ih.P_abs_ihtiyac ?? ih.P, b:'g/gün' },
     ];
     const inraNotu = document.getElementById('inra-kaynak-uyari');
-    if (inraNotu) {
+    const inraNotuBp = document.getElementById('bp-inra-kaynak-uyari');
+    [inraNotu, inraNotuBp].forEach(el => {
+      if (!el) return;
       if (ih.inraKaynak === 'tablo') {
-        inraNotu.innerHTML = `📗 <b>${ih.irkEtiket}</b> — INRA 2001 tablo verisi kullanılıyor (interpolasyonlu). Kapasité d'ingestion (UEB): <b>${ih.UEB_kapasite}</b>`;
-        inraNotu.style.color = 'var(--green)';
+        el.innerHTML = `📗 <b>${ih.irkEtiket}</b> — INRA 2001 tablo verisi kullanılıyor (interpolasyonlu). Kapasité d'ingestion (UEB): <b>${ih.UEB_kapasite}</b>`;
+        el.style.color = 'var(--green)';
       } else if (ih.inraKaynak === 'ekstrapole') {
-        inraNotu.innerHTML = `⚠️ <b>${ih.irkEtiket}</b> — CA/GMQ tablo aralığının dışında, dikkatli ekstrapolasyon uygulanıyor. UEB: <b>${ih.UEB_kapasite}</b>`;
-        inraNotu.style.color = 'var(--yellow)';
+        el.innerHTML = `⚠️ <b>${ih.irkEtiket}</b> — CA/GMQ tablo aralığının dışında, dikkatli ekstrapolasyon uygulanıyor. UEB: <b>${ih.UEB_kapasite}</b>`;
+        el.style.color = 'var(--yellow)';
       } else {
-        inraNotu.innerHTML = `INRA tablo verisi bulunamadı, formül tahmini kullanılıyor.`;
-        inraNotu.style.color = 'var(--text3)';
+        el.innerHTML = `INRA tablo verisi bulunamadı, formül tahmini kullanılıyor.`;
+        el.style.color = 'var(--text3)';
       }
-    }
+    });
     dengeEl.innerHTML =
       `<div style="display:grid;grid-template-columns:1fr 60px 60px 56px;gap:3px;padding:0 4px 5px">
         <div class="fs9 c-text3"></div>
@@ -5283,6 +5517,11 @@ Mevcut rasyon değiştirilecek.`)) return;
     const bCaHedef = document.getElementById('b-ca-hedef'); if (bCaHedef) bCaHedef.value = besiProfil.caHedef || '';
     const bGcaa = document.getElementById('b-gcaa'); if (bGcaa) bGcaa.value = besiProfil.gcaa || '';
     const bCinsiyet = document.getElementById('b-cinsiyet'); if (bCinsiyet) bCinsiyet.value = besiProfil.cinsiyet || 'erkek';
+    const bpIrk = document.getElementById('bp-irk'); if (bpIrk) bpIrk.value = besiProfil.irk || 'charolais';
+    const bpCa = document.getElementById('bp-ca'); if (bpCa) bpCa.value = besiProfil.ca || '';
+    const bpCaHedef = document.getElementById('bp-ca-hedef'); if (bpCaHedef) bpCaHedef.value = besiProfil.caHedef || '';
+    const bpGcaa = document.getElementById('bp-gcaa'); if (bpGcaa) bpGcaa.value = besiProfil.gcaa || '';
+    const bpCinsiyet = document.getElementById('bp-cinsiyet'); if (bpCinsiyet) bpCinsiyet.value = besiProfil.cinsiyet || 'erkek';
 
     // Besi rasyon satırlarını yükle
     besiRasyonSatirlari = kayit.rasyonSatirlari.map(s => ({...s}));
@@ -5870,6 +6109,10 @@ function grupSec(grup) {
     if (besiRaporBtn) besiRaporBtn.style.display = '';
     if (besiVagonBtn) besiVagonBtn.style.display = '';
     if (besiBilgiBtn) besiBilgiBtn.style.display = '';
+    const profilSagmal = document.getElementById('profil-sagmal-icerik');
+    const profilBesi = document.getElementById('profil-besi-icerik');
+    if (profilSagmal) profilSagmal.classList.add('hidden');
+    if (profilBesi) profilBesi.classList.remove('hidden');
     sekmeAc('besihub');
   }
 
@@ -5886,6 +6129,10 @@ function grupSec(grup) {
     if (besiRaporBtn) besiRaporBtn.style.display = 'none';
     if (besiVagonBtn) besiVagonBtn.style.display = 'none';
     if (besiBilgiBtn) besiBilgiBtn.style.display = 'none';
+    const profilSagmal = document.getElementById('profil-sagmal-icerik');
+    const profilBesi = document.getElementById('profil-besi-icerik');
+    if (profilSagmal) profilSagmal.classList.remove('hidden');
+    if (profilBesi) profilBesi.classList.add('hidden');
   }
 
   tumHesapla();
