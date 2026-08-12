@@ -672,10 +672,10 @@ select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
       <div class="card">
         <div class="card-title">⚖️ Vücut Durumu</div>
         <div class="grid-2">
-          <div class="field"><label>Canlı Ağırlık (kg)</label><input type="number" id="p-ca" value="713" min="300" max="900" oninput="profilGuncelle()"></div>
+          <div class="field"><label>Canlı Ağırlık (kg)</label><input type="text" inputmode="decimal" id="p-ca" value="713" oninput="profilGuncelle()"></div>
           <div class="field"><label>Gebelik Günü (0=gebe değil)</label><input type="number" id="p-geb" value="90" min="0" max="285" oninput="profilGuncelle()"></div>
-          <div class="field"><label>Mevcut BCS (1-5)</label><input type="number" id="p-bcs" value="3.0" min="1" max="5" step="0.25" oninput="profilGuncelle()"></div>
-          <div class="field"><label>Hedef BCS</label><input type="number" id="p-hbcs" value="3.0" min="1" max="5" step="0.25" oninput="profilGuncelle()"></div>
+          <div class="field"><label>Mevcut BCS (1-5)</label><input type="text" inputmode="decimal" id="p-bcs" value="3.0" oninput="profilGuncelle()"></div>
+          <div class="field"><label>Hedef BCS</label><input type="text" inputmode="decimal" id="p-hbcs" value="3.0" oninput="profilGuncelle()"></div>
         </div>
         <div>
           <div class="fs10 c-text3 mb8">BCS Skalası — tıklayarak seçin</div>
@@ -688,11 +688,11 @@ select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
       <div class="card" id="sut-kart">
         <div class="card-title">🥛 Süt Verim Parametreleri</div>
         <div class="grid-2">
-          <div class="field"><label>Mevcut Süt Verimi (kg/gün)</label><input type="number" id="p-sut" value="28" min="5" max="70" step="0.5" oninput="profilGuncelle()"></div>
-          <div class="field"><label>Hedeflenen Süt Verimi (kg/gün)</label><input type="number" id="p-sut-hedef" value="30" min="5" max="70" step="0.5" oninput="profilGuncelle()"></div>
-          <div class="field"><label>Süt Yağı (%)</label><input type="number" id="p-yag" value="3.3" min="2" max="6" step="0.1" oninput="profilGuncelle()"></div>
-          <div class="field"><label>Süt Proteini (%)</label><input type="number" id="p-prot" value="3.36" min="2.5" max="4.5" step="0.1" oninput="profilGuncelle()"></div>
-          <div class="field"><label>Süt Laktoz (%)</label><input type="number" id="p-lakt" value="4.7" min="3.5" max="5.5" step="0.1" oninput="profilGuncelle()"></div>
+          <div class="field"><label>Mevcut Süt Verimi (kg/gün)</label><input type="text" inputmode="decimal" id="p-sut" value="28" oninput="profilGuncelle()"></div>
+          <div class="field"><label>Hedeflenen Süt Verimi (kg/gün)</label><input type="text" inputmode="decimal" id="p-sut-hedef" value="30" oninput="profilGuncelle()"></div>
+          <div class="field"><label>Süt Yağı (%)</label><input type="text" inputmode="decimal" id="p-yag" value="3.3" oninput="profilGuncelle()"></div>
+          <div class="field"><label>Süt Proteini (%)</label><input type="text" inputmode="decimal" id="p-prot" value="3.36" oninput="profilGuncelle()"></div>
+          <div class="field"><label>Süt Laktoz (%)</label><input type="text" inputmode="decimal" id="p-lakt" value="4.7" oninput="profilGuncelle()"></div>
         </div>
         <div class="grid-3 mt8">
           <div class="stat"><div class="lbl">FCM (4% Yağ)</div><div class="val c-yellow" id="fcm">—</div><div class="unit">kg/gün</div></div>
@@ -735,11 +735,11 @@ select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
           </select>
         </div>
         <div class="field"><label>Mevcut CA (kg)</label>
-          <input type="number" id="bp-ca" value="350" min="100" max="800" oninput="besiProfilGuncelle(this)"></div>
+          <input type="text" inputmode="decimal" id="bp-ca" value="350" oninput="besiProfilGuncelle(this)"></div>
         <div class="field"><label>Hedef CA (kg)</label>
-          <input type="number" id="bp-ca-hedef" value="500" min="200" max="800" oninput="besiProfilGuncelle(this)"></div>
+          <input type="text" inputmode="decimal" id="bp-ca-hedef" value="500" oninput="besiProfilGuncelle(this)"></div>
         <div class="field"><label>Hedef GCAA (kg/gün)</label>
-          <input type="number" id="bp-gcaa" value="1.4" min="0.5" max="2.5" step="0.1" oninput="besiProfilGuncelle(this)"></div>
+          <input type="text" inputmode="decimal" id="bp-gcaa" value="1.4" oninput="besiProfilGuncelle(this)"></div>
         <div class="field"><label>Cinsiyet</label>
           <select id="bp-cinsiyet" onchange="besiProfilGuncelle(this)">
             <option value="erkek">Erkek (Dana)</option>
@@ -1178,11 +1178,11 @@ select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
             </select>
           </div>
           <div class="field"><label>Mevcut CA (kg)</label>
-            <input type="number" id="b-ca" value="350" min="100" max="800" oninput="besiProfilGuncelle(this)"></div>
+            <input type="text" inputmode="decimal" id="b-ca" value="350" oninput="besiProfilGuncelle(this)"></div>
           <div class="field"><label>Hedef CA (kg)</label>
-            <input type="number" id="b-ca-hedef" value="500" min="200" max="800" oninput="besiProfilGuncelle(this)"></div>
+            <input type="text" inputmode="decimal" id="b-ca-hedef" value="500" oninput="besiProfilGuncelle(this)"></div>
           <div class="field"><label>Hedef GCAA (kg/gün)</label>
-            <input type="number" id="b-gcaa" value="1.4" min="0.5" max="2.5" step="0.1" oninput="besiProfilGuncelle(this)"></div>
+            <input type="text" inputmode="decimal" id="b-gcaa" value="1.4" oninput="besiProfilGuncelle(this)"></div>
           <div class="field"><label>Cinsiyet</label>
             <select id="b-cinsiyet" onchange="besiProfilGuncelle(this)">
               <option value="erkek">Erkek (Dana)</option>
@@ -1594,7 +1594,7 @@ const YEMLER = [
   { id:"CS007", isim:"Mısır Silajı — %27KM %24 Nişasta", kat:"Kaba Yem", alt:"Silaj", KM:27.0, HP:8.24, HY:3.19, HK:4.17, NDF:41.8, ADF:24.84, ADL:2.98, eNDF:0.57, nisasta:24.0, seker:0.52, NFC:41.6, PA:52.27, PB1:30.15, PB2:6.23, PB3:13.93, PC:7.70, kd_PB2:0.20, kd_PB3:0.038, kp:0.047, dRUP:0.75, NDFD30:59.0, kd_NDF:0.063, iNDF:10.4, NEL:1.483, NEm:1.60, NEg:1.00, UFL:0.872, UFV:0.768, PDIE:63, PDIN:56, Ca:0.31, P:0.27, Mg:0.22, K:1.22, Na:0.01, Cl:0.32, S:0.12, Mn:31, Cu:7, Fe:184, Zn:25, Lys:2.80, Met:1.59, His:1.71, Arg:2.32, Thr:3.41, Ile:3.41, Leu:8.54, Val:4.51, fiyat:3.2 },
   { id:"AH002", isim:"Yonca Kuru Otu — 1. Kalite %36NDF", kat:"Kaba Yem", alt:"Kuru Ot", KM:88.4, HP:19.73, HY:2.62, HK:11.32, NDF:35.79, ADF:28.7, ADL:6.4, eNDF:1.00, nisasta:0.49, seker:5.1, NFC:30.54, PA:37.50, PB1:47.85, PB2:6.55, PB3:14.65, PC:8.10, kd_PB2:0.137, kd_PB3:0.061, kp:0.040, dRUP:0.72, NDFD30:43.0, kd_NDF:0.058, iNDF:25.0, NEL:1.275, NEm:1.37, NEg:0.79, UFL:0.828, UFV:0.763, PDIE:96, PDIN:110, Ca:1.493, P:0.276, Mg:0.34, K:2.374, Na:0.178, Cl:0.738, S:0.30, Mn:37, Cu:10, Fe:400, Zn:27, Lys:4.81, Met:1.33, His:1.93, Arg:4.20, Thr:4.03, Ile:3.92, Leu:6.69, Val:4.97, fiyat:8.0 },
   { id:"ST001", isim:"Buğday Samanı", kat:"Kaba Yem", alt:"Saman", KM:86.2, HP:3.884, HY:1.53, HK:8.12, NDF:80.1, ADF:55.72, ADL:9.51, eNDF:1.00, nisasta:1.8, seker:2.875, NFC:6.37, PA:39.99, PB1:24.0, PB2:13.0, PB3:36.0, PC:23.0, kd_PB2:0.15, kd_PB3:0.028, kp:0.030, dRUP:0.60, NDFD30:22.0, kd_NDF:0.022, iNDF:48.0, NEL:0.735, NEm:0.72, NEg:0.19, UFL:0.336, UFV:0.221, PDIE:22, PDIN:16, Ca:0.42, P:0.12, Mg:0.13, K:1.44, Na:0.11, Cl:0.55, S:0.14, Mn:65, Cu:5, Fe:310, Zn:17, Lys:4.21, Met:1.77, His:3.60, Arg:2.02, Thr:4.21, Ile:4.01, Leu:6.64, Val:5.80, fiyat:2.0 },
-  { id:"GPS003", isim:"Buğday Silajı — Tam Analiz %31KM %59NDF (cemalitoprak 15.01.2019)",
+  { id:"GPS003", isim:"Buğday Silajı — Tam Analiz %31KM %59NDF",
     kat:"Kaba Yem", alt:"Silaj",
     KM:31.34, HP:9.25, HY:3.08, HK:7.12,
     NDF:59.12, ADF:38.43, ADL:5.05, eNDF:0.85,
@@ -1607,7 +1607,7 @@ const YEMLER = [
     Ca:0.19, P:0.239, Mg:0.12, K:2.086, Na:0.06, Cl:0.83, S:0.155,
     Mn:50, Cu:9, Fe:650, Zn:33,
     Lys:3.89, Met:1.64, His:3.33, Arg:1.87, Thr:3.89, Ile:3.71, Leu:6.14, Val:5.37,
-    analiz_tarihi:"23.06.2020", analiz_kaynagi:"NDS Professional — cemalitoprak",
+    analiz_tarihi:"23.06.2020", analiz_kaynagi:"NDS Professional",
     fiyat:3.0 },
   { id:"GPS002", isim:"Buğday Silajı %31KM %55NDF", kat:"Kaba Yem", alt:"Silaj", KM:31.4, HP:9.27, HY:3.0, HK:7.68, NDF:55.49, ADF:36.3, ADL:4.75, eNDF:0.65, nisasta:3.5, seker:4.5, NFC:24.56, PA:67.72, PB1:19.63, PB2:5.61, PB3:11.86, PC:6.25, kd_PB2:0.15, kd_PB3:0.051, kp:0.042, dRUP:0.68, NDFD30:55.0, kd_NDF:0.062, iNDF:18.0, NEL:1.199, NEm:1.28, NEg:0.71, UFL:0.719, UFV:0.631, PDIE:58, PDIN:52, Ca:0.20, P:0.25, Mg:0.12, K:2.12, Na:0.06, Cl:0.85, S:0.16, Mn:50, Cu:9, Fe:650, Zn:33, Lys:4.21, Met:1.77, His:3.60, Arg:2.02, Thr:4.21, Ile:4.01, Leu:6.64, Val:5.80, fiyat:3.2 },
   { id:"GR001", isim:"Mısır Flake", kat:"Konsantre", alt:"Tahıl", KM:86.0, HP:8.476, HY:3.67, HK:1.288, NDF:9.0, ADF:3.749, ADL:1.258, eNDF:0.05, nisasta:75.563, seker:1.633, NFC:77.566, PA:12.50, PB1:73.83, PB2:5.69, PB3:13.68, PC:7.99, kd_PB2:0.08, kd_PB3:0.07, kp:0.055, dRUP:0.70, NDFD30:72.0, kd_NDF:0.080, iNDF:8.0, NEL:2.015, NEm:2.161, NEg:1.483, UFL:1.185, UFV:1.149, PDIE:78, PDIN:67, Ca:0.03, P:0.31, Mg:0.11, K:0.33, Na:0.01, Cl:0.06, S:0.14, Mn:6, Cu:5, Fe:30, Zn:13, Lys:3.00, Met:2.00, His:2.88, Arg:4.75, Thr:3.63, Ile:3.38, Leu:12.00, Val:4.63, fiyat:9.5 },
@@ -1776,6 +1776,65 @@ const YEMLER = [
     analiz_tarihi:"12.06.2026",
     fiyat:13.0
   },
+
+  // ============================================================
+  // CEMALİ TOPRAK HAMMADDE ANALİZLERİ — Laboratuvar veritabanından
+  // aktarılan 50 hammadde (RAPOR sekmesi ortalama değerleri).
+  // Protein fraksiyonları, mineraller, amino asitler ve UFL/UFV/PDI
+  // gibi kaynak dosyada bulunmayan alanlar, aynı kategorideki (Protein/
+  // Enerji) mevcut kütüphane yemlerinin tipik oranlarından tahmin
+  // edilmiştir — kesin laboratuvar sonucu değildir.
+  // ============================================================
+  { id:"CT001", isim:"Arpa", kat:"Konsantre", alt:"Tahıl", KM:89.92, HP:10.03, HY:2.11, HK:2.38, NDF:22.61, ADF:7.32, ADL:1.38, eNDF:0.1, nisasta:50.53, seker:12.34, NFC:62.87, PA:35.0, PB1:48.0, PB2:8.0, PB3:6.0, PC:3.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.657, NEm:1.79, NEg:1.127, UFL:0.928, UFV:0.896, PDIE:62.0, PDIN:68.0, Ca:0.08, P:0.32, Mg:0.15, K:0.55, Na:0.03, Cl:0.1, S:0.13, Mn:20, Cu:7, Fe:90, Zn:28, Lys:2.8, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:7.0, Val:4.5, fiyat:9.0 },
+  { id:"CT002", isim:"Ayçiçek Tohumu Küspesi — İthal", kat:"Konsantre", alt:"Protein", KM:91.12, HP:36.51, HY:1.43, HK:6.38, NDF:31.3, ADF:23.34, ADL:6.63, eNDF:0.08, nisasta:0.81, seker:23.57, NFC:24.38, PA:25.0, PB1:48.0, PB2:10.0, PB3:12.0, PC:5.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.411, NEm:1.524, NEg:0.959, UFL:0.79, UFV:0.762, PDIE:226.0, PDIN:248.0, Ca:0.35, P:0.65, Mg:0.3, K:1.2, Na:0.05, Cl:0.06, S:0.35, Mn:35, Cu:12, Fe:150, Zn:55, Lys:3.2, Met:1.4, His:1.8, Arg:4.5, Thr:2.6, Ile:2.7, Leu:4.8, Val:3.3, fiyat:16.0 },
+  { id:"CT003", isim:"Ayçiçek Tohumu Küspesi — Yerli", kat:"Konsantre", alt:"Protein", KM:90.94, HP:26.91, HY:1.25, HK:4.82, NDF:44.09, ADF:33.71, ADL:10.45, eNDF:0.08, nisasta:0.83, seker:22.1, NFC:22.93, PA:25.0, PB1:48.0, PB2:10.0, PB3:12.0, PC:5.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.37, NEm:1.48, NEg:0.932, UFL:0.767, UFV:0.74, PDIE:167.0, PDIN:183.0, Ca:0.35, P:0.65, Mg:0.3, K:1.2, Na:0.05, Cl:0.06, S:0.35, Mn:35, Cu:12, Fe:150, Zn:55, Lys:3.2, Met:1.4, His:1.8, Arg:4.5, Thr:2.6, Ile:2.7, Leu:4.8, Val:3.3, fiyat:16.0 },
+  { id:"CT004", isim:"Ayçiçek Tohumu Küspesi — Ekspeller", kat:"Konsantre", alt:"Protein", KM:94.2, HP:34.78, HY:7.36, HK:6.4, NDF:32.5, ADF:23.0, ADL:6.3, eNDF:0.08, nisasta:1.0, seker:17.96, NFC:18.96, PA:25.0, PB1:48.0, PB2:10.0, PB3:12.0, PC:5.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.594, NEm:1.722, NEg:1.084, UFL:0.893, UFV:0.862, PDIE:216.0, PDIN:237.0, Ca:0.35, P:0.65, Mg:0.3, K:1.2, Na:0.05, Cl:0.06, S:0.35, Mn:35, Cu:12, Fe:150, Zn:55, Lys:3.2, Met:1.4, His:1.8, Arg:4.5, Thr:2.6, Ile:2.7, Leu:4.8, Val:3.3, fiyat:16.0 },
+  { id:"CT005", isim:"Bisküvi Kırığı", kat:"Konsantre", alt:"Yan Ürün", KM:84.5, HP:8.0, HY:5.1, HK:3.3, NDF:6.3, ADF:3.3, ADL:2.0, eNDF:0.1, nisasta:51.0, seker:26.3, NFC:77.3, PA:35.0, PB1:48.0, PB2:8.0, PB3:6.0, PC:3.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.693, NEm:1.828, NEg:1.151, UFL:0.948, UFV:0.915, PDIE:50.0, PDIN:54.0, Ca:0.08, P:0.32, Mg:0.15, K:0.55, Na:0.03, Cl:0.1, S:0.13, Mn:20, Cu:7, Fe:90, Zn:28, Lys:2.8, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:7.0, Val:4.5, fiyat:9.0 },
+  { id:"CT006", isim:"Bonkalite (Buğday Unu Yan Ürünü)", kat:"Konsantre", alt:"Yan Ürün", KM:89.24, HP:14.7, HY:3.24, HK:2.31, NDF:10.31, ADF:3.24, ADL:0.8, eNDF:0.1, nisasta:50.2, seker:19.24, NFC:69.44, PA:35.0, PB1:48.0, PB2:8.0, PB3:6.0, PC:3.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.812, NEm:1.957, NEg:1.232, UFL:1.015, UFV:0.979, PDIE:91.0, PDIN:100.0, Ca:0.08, P:0.32, Mg:0.15, K:0.55, Na:0.03, Cl:0.1, S:0.13, Mn:20, Cu:7, Fe:90, Zn:28, Lys:2.8, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:7.0, Val:4.5, fiyat:9.0 },
+  { id:"CT007", isim:"Buğday", kat:"Konsantre", alt:"Tahıl", KM:88.5, HP:10.5, HY:2.0, HK:1.7, NDF:12.85, ADF:3.7, ADL:0.65, eNDF:0.1, nisasta:46.45, seker:26.5, NFC:72.95, PA:35.0, PB1:48.0, PB2:8.0, PB3:6.0, PC:3.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.719, NEm:1.857, NEg:1.169, UFL:0.963, UFV:0.929, PDIE:65.0, PDIN:71.0, Ca:0.08, P:0.32, Mg:0.15, K:0.55, Na:0.03, Cl:0.1, S:0.13, Mn:20, Cu:7, Fe:90, Zn:28, Lys:2.8, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:7.0, Val:4.5, fiyat:9.0 },
+  { id:"CT008", isim:"Buğday Kepeği — İthal", kat:"Konsantre", alt:"Yan Ürün", KM:87.0, HP:12.6, HY:0.0, HK:0.0, NDF:0.0, ADF:0.0, ADL:0.0, eNDF:0.1, nisasta:0.0, seker:13.11, NFC:87.4, PA:35.0, PB1:48.0, PB2:8.0, PB3:6.0, PC:3.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.67, NEm:1.804, NEg:1.136, UFL:0.935, UFV:0.902, PDIE:78.0, PDIN:86.0, Ca:0.08, P:0.32, Mg:0.15, K:0.55, Na:0.03, Cl:0.1, S:0.13, Mn:20, Cu:7, Fe:90, Zn:28, Lys:2.8, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:7.0, Val:4.5, fiyat:9.0 },
+  { id:"CT009", isim:"Buğday Kepeği — Yerli", kat:"Konsantre", alt:"Yan Ürün", KM:88.49, HP:14.98, HY:3.46, HK:4.59, NDF:36.13, ADF:11.64, ADL:2.77, eNDF:0.1, nisasta:21.51, seker:19.33, NFC:40.84, PA:35.0, PB1:48.0, PB2:8.0, PB3:6.0, PC:3.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.43, NEm:1.544, NEg:0.972, UFL:0.801, UFV:0.773, PDIE:93.0, PDIN:102.0, Ca:0.08, P:0.32, Mg:0.15, K:0.55, Na:0.03, Cl:0.1, S:0.13, Mn:20, Cu:7, Fe:90, Zn:28, Lys:2.8, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:7.0, Val:4.5, fiyat:9.0 },
+  { id:"CT010", isim:"Buğday Ruşeymi (Embriyo)", kat:"Konsantre", alt:"Protein", KM:89.93, HP:30.63, HY:8.03, HK:5.45, NDF:9.4, ADF:2.88, ADL:0.48, eNDF:0.08, nisasta:19.62, seker:26.87, NFC:46.49, PA:25.0, PB1:48.0, PB2:10.0, PB3:12.0, PC:5.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:2.185, NEm:2.36, NEg:1.486, UFL:1.224, UFV:1.181, PDIE:190.0, PDIN:208.0, Ca:0.35, P:0.65, Mg:0.3, K:1.2, Na:0.05, Cl:0.06, S:0.35, Mn:35, Cu:12, Fe:150, Zn:55, Lys:3.2, Met:1.4, His:1.8, Arg:4.5, Thr:2.6, Ile:2.7, Leu:4.8, Val:3.3, fiyat:16.0 },
+  { id:"CT011", isim:"Bulgur Kepeği", kat:"Konsantre", alt:"Yan Ürün", KM:85.71, HP:14.82, HY:7.11, HK:3.76, NDF:39.1, ADF:14.39, ADL:2.38, eNDF:0.1, nisasta:18.24, seker:16.97, NFC:35.21, PA:35.0, PB1:48.0, PB2:8.0, PB3:6.0, PC:3.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.514, NEm:1.635, NEg:1.03, UFL:0.848, UFV:0.818, PDIE:92.0, PDIN:101.0, Ca:0.08, P:0.32, Mg:0.15, K:0.55, Na:0.03, Cl:0.1, S:0.13, Mn:20, Cu:7, Fe:90, Zn:28, Lys:2.8, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:7.0, Val:4.5, fiyat:9.0 },
+  { id:"CT012", isim:"Bulgur Unu", kat:"Konsantre", alt:"Yan Ürün", KM:88.8, HP:14.3, HY:7.2, HK:2.7, NDF:21.8, ADF:8.75, ADL:2.1, eNDF:0.1, nisasta:39.15, seker:14.85, NFC:54.0, PA:35.0, PB1:48.0, PB2:8.0, PB3:6.0, PC:3.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.814, NEm:1.959, NEg:1.234, UFL:1.016, UFV:0.98, PDIE:89.0, PDIN:97.0, Ca:0.08, P:0.32, Mg:0.15, K:0.55, Na:0.03, Cl:0.1, S:0.13, Mn:20, Cu:7, Fe:90, Zn:28, Lys:2.8, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:7.0, Val:4.5, fiyat:9.0 },
+  { id:"CT013", isim:"Patates Cipsi Yan Ürünü", kat:"Konsantre", alt:"Yan Ürün", KM:90.5, HP:6.05, HY:11.85, HK:1.65, NDF:3.0, ADF:2.6, ADL:2.0, eNDF:0.1, nisasta:51.3, seker:26.15, NFC:77.45, PA:35.0, PB1:48.0, PB2:8.0, PB3:6.0, PC:3.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:2.202, NEm:2.378, NEg:1.497, UFL:1.233, UFV:1.19, PDIE:38.0, PDIN:41.0, Ca:0.08, P:0.32, Mg:0.15, K:0.55, Na:0.03, Cl:0.1, S:0.13, Mn:20, Cu:7, Fe:90, Zn:28, Lys:2.8, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:7.0, Val:4.5, fiyat:9.0 },
+  { id:"CT014", isim:"Mercimek Çarpması", kat:"Konsantre", alt:"Yan Ürün", KM:90.3, HP:14.3, HY:1.0, HK:2.7, NDF:39.5, ADF:33.2, ADL:3.6, eNDF:0.1, nisasta:15.1, seker:27.4, NFC:42.5, PA:35.0, PB1:48.0, PB2:8.0, PB3:6.0, PC:3.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.362, NEm:1.471, NEg:0.926, UFL:0.763, UFV:0.736, PDIE:89.0, PDIN:97.0, Ca:0.08, P:0.32, Mg:0.15, K:0.55, Na:0.03, Cl:0.1, S:0.13, Mn:20, Cu:7, Fe:90, Zn:28, Lys:2.8, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:7.0, Val:4.5, fiyat:9.0 },
+  { id:"CT015", isim:"DDGS (Kurutulmuş Mısır Damıtık Tanesi)", kat:"Konsantre", alt:"Protein", KM:90.11, HP:26.15, HY:9.62, HK:4.36, NDF:27.45, ADF:12.27, ADL:2.75, eNDF:0.08, nisasta:5.85, seker:26.57, NFC:32.42, PA:15.0, PB1:35.0, PB2:12.0, PB3:25.0, PC:13.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.882, NEm:2.033, NEg:1.28, UFL:1.054, UFV:1.017, PDIE:162.0, PDIN:178.0, Ca:0.35, P:0.65, Mg:0.3, K:1.2, Na:0.05, Cl:0.06, S:0.35, Mn:35, Cu:12, Fe:150, Zn:55, Lys:3.2, Met:1.4, His:1.8, Arg:4.5, Thr:2.6, Ile:2.7, Leu:4.8, Val:3.3, fiyat:16.0 },
+  { id:"CT016", isim:"Fındık Küspesi", kat:"Konsantre", alt:"Tahıl", KM:94.35, HP:20.65, HY:9.1, HK:7.0, NDF:31.3, ADF:25.2, ADL:10.05, eNDF:0.1, nisasta:6.15, seker:25.8, NFC:31.95, PA:35.0, PB1:48.0, PB2:8.0, PB3:6.0, PC:3.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.728, NEm:1.866, NEg:1.175, UFL:0.968, UFV:0.934, PDIE:128.0, PDIN:140.0, Ca:0.08, P:0.32, Mg:0.15, K:0.55, Na:0.03, Cl:0.1, S:0.13, Mn:20, Cu:7, Fe:90, Zn:28, Lys:2.8, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:7.0, Val:4.5, fiyat:9.0 },
+  { id:"CT017", isim:"Fıstık Kabuğu", kat:"Konsantre", alt:"Yan Ürün", KM:91.94, HP:7.38, HY:4.68, HK:4.16, NDF:65.5, ADF:53.61, ADL:19.35, eNDF:0.1, nisasta:0.88, seker:17.4, NFC:18.28, PA:35.0, PB1:48.0, PB2:8.0, PB3:6.0, PC:3.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:0.774, NEm:0.836, NEg:0.526, UFL:0.433, UFV:0.418, PDIE:46.0, PDIN:50.0, Ca:0.08, P:0.32, Mg:0.15, K:0.55, Na:0.03, Cl:0.1, S:0.13, Mn:20, Cu:7, Fe:90, Zn:28, Lys:2.8, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:7.0, Val:4.5, fiyat:9.0 },
+  { id:"CT018", isim:"Kanola Küspesi", kat:"Konsantre", alt:"Protein", KM:90.4, HP:36.43, HY:1.34, HK:7.71, NDF:26.33, ADF:19.07, ADL:7.0, eNDF:0.08, nisasta:0.82, seker:27.37, NFC:28.19, PA:25.0, PB1:48.0, PB2:10.0, PB3:12.0, PC:5.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.531, NEm:1.653, NEg:1.041, UFL:0.857, UFV:0.827, PDIE:226.0, PDIN:248.0, Ca:0.35, P:0.65, Mg:0.3, K:1.2, Na:0.05, Cl:0.06, S:0.35, Mn:35, Cu:12, Fe:150, Zn:55, Lys:3.2, Met:1.4, His:1.8, Arg:4.5, Thr:2.6, Ile:2.7, Leu:4.8, Val:3.3, fiyat:16.0 },
+  { id:"CT019", isim:"Keten Tohumu Küspesi — Ekspeller", kat:"Konsantre", alt:"Protein", KM:87.9, HP:39.0, HY:0.5, HK:6.0, NDF:41.6, ADF:19.1, ADL:4.7, eNDF:0.08, nisasta:0.0, seker:1.94, NFC:12.9, PA:25.0, PB1:48.0, PB2:10.0, PB3:12.0, PC:5.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.458, NEm:1.575, NEg:0.991, UFL:0.816, UFV:0.787, PDIE:242.0, PDIN:265.0, Ca:0.35, P:0.65, Mg:0.3, K:1.2, Na:0.05, Cl:0.06, S:0.35, Mn:35, Cu:12, Fe:150, Zn:55, Lys:3.2, Met:1.4, His:1.8, Arg:4.5, Thr:2.6, Ile:2.7, Leu:4.8, Val:3.3, fiyat:16.0 },
+  { id:"CT020", isim:"Keten Tohumu Küspesi — Ekstraksiyon", kat:"Konsantre", alt:"Protein", KM:92.3, HP:40.7, HY:0.7, HK:5.6, NDF:41.9, ADF:19.9, ADL:4.0, eNDF:0.08, nisasta:8.6, seker:2.5, NFC:11.1, PA:25.0, PB1:48.0, PB2:10.0, PB3:12.0, PC:5.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.572, NEm:1.698, NEg:1.069, UFL:0.88, UFV:0.849, PDIE:252.0, PDIN:277.0, Ca:0.35, P:0.65, Mg:0.3, K:1.2, Na:0.05, Cl:0.06, S:0.35, Mn:35, Cu:12, Fe:150, Zn:55, Lys:3.2, Met:1.4, His:1.8, Arg:4.5, Thr:2.6, Ile:2.7, Leu:4.8, Val:3.3, fiyat:16.0 },
+  { id:"CT021", isim:"Kırık Buğday", kat:"Konsantre", alt:"Yan Ürün", KM:89.61, HP:12.55, HY:1.86, HK:2.9, NDF:17.97, ADF:6.87, ADL:1.53, eNDF:0.1, nisasta:50.89, seker:13.83, NFC:64.72, PA:35.0, PB1:48.0, PB2:8.0, PB3:6.0, PC:3.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.678, NEm:1.812, NEg:1.141, UFL:0.94, UFV:0.907, PDIE:78.0, PDIN:85.0, Ca:0.08, P:0.32, Mg:0.15, K:0.55, Na:0.03, Cl:0.1, S:0.13, Mn:20, Cu:7, Fe:90, Zn:28, Lys:2.8, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:7.0, Val:4.5, fiyat:9.0 },
+  { id:"CT022", isim:"Kırık Pirinç", kat:"Konsantre", alt:"Yan Ürün", KM:89.3, HP:6.8, HY:0.5, HK:0.5, NDF:2.1, ADF:0.3, ADL:0.01, eNDF:0.1, nisasta:76.6, seker:13.5, NFC:90.1, PA:35.0, PB1:48.0, PB2:8.0, PB3:6.0, PC:3.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.773, NEm:1.915, NEg:1.206, UFL:0.993, UFV:0.958, PDIE:42.0, PDIN:46.0, Ca:0.08, P:0.32, Mg:0.15, K:0.55, Na:0.03, Cl:0.1, S:0.13, Mn:20, Cu:7, Fe:90, Zn:28, Lys:2.8, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:7.0, Val:4.5, fiyat:9.0 },
+  { id:"CT023", isim:"Makarnalık Kepek", kat:"Konsantre", alt:"Yan Ürün", KM:88.08, HP:14.65, HY:4.17, HK:4.13, NDF:32.99, ADF:10.55, ADL:2.17, eNDF:0.1, nisasta:26.38, seker:17.68, NFC:44.06, PA:35.0, PB1:48.0, PB2:8.0, PB3:6.0, PC:3.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.494, NEm:1.614, NEg:1.016, UFL:0.837, UFV:0.808, PDIE:91.0, PDIN:100.0, Ca:0.08, P:0.32, Mg:0.15, K:0.55, Na:0.03, Cl:0.1, S:0.13, Mn:20, Cu:7, Fe:90, Zn:28, Lys:2.8, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:7.0, Val:4.5, fiyat:9.0 },
+  { id:"CT024", isim:"Melas (Şeker Pancarı)", kat:"Konsantre", alt:"Tahıl", KM:82.25, HP:10.75, HY:0.3, HK:6.6, NDF:0.0, ADF:0.0, ADL:0.0, eNDF:0.1, nisasta:0.0, seker:12.35, NFC:82.35, PA:35.0, PB1:48.0, PB2:8.0, PB3:6.0, PC:3.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.576, NEm:1.702, NEg:1.072, UFL:0.883, UFV:0.852, PDIE:67.0, PDIN:73.0, Ca:0.7, P:0.08, Mg:0.15, K:0.55, Na:0.03, Cl:0.1, S:0.13, Mn:20, Cu:7, Fe:90, Zn:28, Lys:2.8, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:7.0, Val:4.5, fiyat:9.0 },
+  { id:"CT025", isim:"Mercimek", kat:"Konsantre", alt:"Protein", KM:89.49, HP:25.05, HY:1.59, HK:3.38, NDF:14.82, ADF:4.58, ADL:0.87, eNDF:0.08, nisasta:41.25, seker:13.91, NFC:55.16, PA:25.0, PB1:48.0, PB2:10.0, PB3:12.0, PC:5.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.823, NEm:1.969, NEg:1.24, UFL:1.021, UFV:0.985, PDIE:155.0, PDIN:170.0, Ca:0.35, P:0.65, Mg:0.3, K:1.2, Na:0.05, Cl:0.06, S:0.35, Mn:35, Cu:12, Fe:150, Zn:55, Lys:3.2, Met:1.4, His:1.8, Arg:4.5, Thr:2.6, Ile:2.7, Leu:4.8, Val:3.3, fiyat:16.0 },
+  { id:"CT026", isim:"Mısır (Tane)", kat:"Konsantre", alt:"Tahıl", KM:87.06, HP:6.76, HY:3.26, HK:1.15, NDF:8.84, ADF:2.84, ADL:0.74, eNDF:0.1, nisasta:63.77, seker:16.22, NFC:79.99, PA:35.0, PB1:48.0, PB2:8.0, PB3:6.0, PC:3.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.727, NEm:1.865, NEg:1.174, UFL:0.967, UFV:0.933, PDIE:42.0, PDIN:46.0, Ca:0.08, P:0.32, Mg:0.15, K:0.55, Na:0.03, Cl:0.1, S:0.13, Mn:20, Cu:7, Fe:90, Zn:28, Lys:2.8, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:7.0, Val:4.5, fiyat:9.0 },
+  { id:"CT027", isim:"Mısır Gluteni", kat:"Konsantre", alt:"Protein", KM:90.76, HP:61.55, HY:1.64, HK:2.26, NDF:5.09, ADF:4.03, ADL:0.67, eNDF:0.08, nisasta:6.06, seker:23.4, NFC:29.46, PA:15.0, PB1:35.0, PB2:12.0, PB3:25.0, PC:13.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:2.236, NEm:2.415, NEg:1.52, UFL:1.252, UFV:1.208, PDIE:382.0, PDIN:419.0, Ca:0.35, P:0.65, Mg:0.3, K:1.2, Na:0.05, Cl:0.06, S:0.35, Mn:35, Cu:12, Fe:150, Zn:55, Lys:3.2, Met:1.4, His:1.8, Arg:4.5, Thr:2.6, Ile:2.7, Leu:4.8, Val:3.3, fiyat:16.0 },
+  { id:"CT028", isim:"Mısır Grizi", kat:"Konsantre", alt:"Yan Ürün", KM:90.31, HP:18.28, HY:2.8, HK:8.28, NDF:33.98, ADF:10.66, ADL:1.23, eNDF:0.1, nisasta:13.37, seker:23.29, NFC:36.66, PA:35.0, PB1:48.0, PB2:8.0, PB3:6.0, PC:3.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.505, NEm:1.625, NEg:1.023, UFL:0.843, UFV:0.813, PDIE:113.0, PDIN:124.0, Ca:0.08, P:0.32, Mg:0.15, K:0.55, Na:0.03, Cl:0.1, S:0.13, Mn:20, Cu:7, Fe:90, Zn:28, Lys:2.8, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:7.0, Val:4.5, fiyat:9.0 },
+  { id:"CT029", isim:"Mısır Karma Yan Ürünü", kat:"Konsantre", alt:"Yan Ürün", KM:87.67, HP:8.97, HY:6.93, HK:2.22, NDF:18.4, ADF:5.38, ADL:0.96, eNDF:0.1, nisasta:45.96, seker:17.52, NFC:63.48, PA:35.0, PB1:48.0, PB2:8.0, PB3:6.0, PC:3.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.802, NEm:1.946, NEg:1.225, UFL:1.009, UFV:0.974, PDIE:56.0, PDIN:61.0, Ca:0.08, P:0.32, Mg:0.15, K:0.55, Na:0.03, Cl:0.1, S:0.13, Mn:20, Cu:7, Fe:90, Zn:28, Lys:2.8, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:7.0, Val:4.5, fiyat:9.0 },
+  { id:"CT030", isim:"Mısır Kırığı", kat:"Konsantre", alt:"Yan Ürün", KM:87.11, HP:7.33, HY:2.77, HK:1.67, NDF:12.81, ADF:4.31, ADL:0.9, eNDF:0.1, nisasta:56.2, seker:19.22, NFC:75.42, PA:35.0, PB1:48.0, PB2:8.0, PB3:6.0, PC:3.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.68, NEm:1.814, NEg:1.142, UFL:0.941, UFV:0.908, PDIE:45.0, PDIN:50.0, Ca:0.08, P:0.32, Mg:0.15, K:0.55, Na:0.03, Cl:0.1, S:0.13, Mn:20, Cu:7, Fe:90, Zn:28, Lys:2.8, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:7.0, Val:4.5, fiyat:9.0 },
+  { id:"CT031", isim:"Mısır Özü Küspesi", kat:"Konsantre", alt:"Yan Ürün", KM:94.17, HP:11.94, HY:38.02, HK:1.94, NDF:26.76, ADF:12.32, ADL:2.48, eNDF:0.1, nisasta:13.54, seker:7.8, NFC:21.34, PA:35.0, PB1:48.0, PB2:8.0, PB3:6.0, PC:3.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:2.773, NEm:2.995, NEg:1.886, UFL:1.553, UFV:1.499, PDIE:74.0, PDIN:81.0, Ca:0.08, P:0.32, Mg:0.15, K:0.55, Na:0.03, Cl:0.1, S:0.13, Mn:20, Cu:7, Fe:90, Zn:28, Lys:2.8, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:7.0, Val:4.5, fiyat:9.0 },
+  { id:"CT032", isim:"Mısır Unu", kat:"Konsantre", alt:"Yan Ürün", KM:86.69, HP:4.98, HY:1.66, HK:0.5, NDF:3.17, ADF:1.37, ADL:0.46, eNDF:0.1, nisasta:73.61, seker:16.08, NFC:89.69, PA:35.0, PB1:48.0, PB2:8.0, PB3:6.0, PC:3.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.711, NEm:1.848, NEg:1.163, UFL:0.958, UFV:0.924, PDIE:31.0, PDIN:34.0, Ca:0.08, P:0.32, Mg:0.15, K:0.55, Na:0.03, Cl:0.1, S:0.13, Mn:20, Cu:7, Fe:90, Zn:28, Lys:2.8, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:7.0, Val:4.5, fiyat:9.0 },
+  { id:"CT033", isim:"Pamuk Tohumu Küspesi — İyi Kalite", kat:"Konsantre", alt:"Protein", KM:92.23, HP:29.17, HY:3.65, HK:5.15, NDF:43.18, ADF:34.23, ADL:10.95, eNDF:0.08, nisasta:1.0, seker:17.85, NFC:18.85, PA:25.0, PB1:48.0, PB2:10.0, PB3:12.0, PC:5.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.353, NEm:1.461, NEg:0.92, UFL:0.758, UFV:0.731, PDIE:181.0, PDIN:198.0, Ca:0.35, P:0.65, Mg:0.3, K:1.2, Na:0.05, Cl:0.06, S:0.35, Mn:35, Cu:12, Fe:150, Zn:55, Lys:3.2, Met:1.4, His:1.8, Arg:4.5, Thr:2.6, Ile:2.7, Leu:4.8, Val:3.3, fiyat:16.0 },
+  { id:"CT034", isim:"Pamuk Tohumu Küspesi — Düşük Kalite", kat:"Konsantre", alt:"Tahıl", KM:92.93, HP:17.95, HY:7.24, HK:9.11, NDF:43.67, ADF:35.41, ADL:10.41, eNDF:0.1, nisasta:0.69, seker:21.34, NFC:22.03, PA:35.0, PB1:48.0, PB2:8.0, PB3:6.0, PC:3.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.297, NEm:1.401, NEg:0.882, UFL:0.726, UFV:0.701, PDIE:111.0, PDIN:122.0, Ca:0.08, P:0.32, Mg:0.15, K:0.55, Na:0.03, Cl:0.1, S:0.13, Mn:20, Cu:7, Fe:90, Zn:28, Lys:2.8, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:7.0, Val:4.5, fiyat:9.0 },
+  { id:"CT035", isim:"Pamuk Tohumu Küspesi — Yapraklı", kat:"Konsantre", alt:"Tahıl", KM:93.05, HP:18.45, HY:7.18, HK:10.92, NDF:40.77, ADF:33.91, ADL:10.28, eNDF:0.1, nisasta:0.55, seker:22.13, NFC:22.68, PA:35.0, PB1:48.0, PB2:8.0, PB3:6.0, PC:3.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.308, NEm:1.413, NEg:0.889, UFL:0.732, UFV:0.706, PDIE:114.0, PDIN:125.0, Ca:0.08, P:0.32, Mg:0.15, K:0.55, Na:0.03, Cl:0.1, S:0.13, Mn:20, Cu:7, Fe:90, Zn:28, Lys:2.8, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:7.0, Val:4.5, fiyat:9.0 },
+  { id:"CT036", isim:"Pirinç Kepeği", kat:"Konsantre", alt:"Yan Ürün", KM:89.55, HP:14.1, HY:14.82, HK:8.0, NDF:19.77, ADF:10.98, ADL:3.31, eNDF:0.1, nisasta:22.83, seker:20.48, NFC:43.31, PA:35.0, PB1:48.0, PB2:8.0, PB3:6.0, PC:3.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.948, NEm:2.104, NEg:1.325, UFL:1.091, UFV:1.053, PDIE:87.0, PDIN:96.0, Ca:0.08, P:0.32, Mg:0.15, K:0.55, Na:0.03, Cl:0.1, S:0.13, Mn:20, Cu:7, Fe:90, Zn:28, Lys:2.8, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:7.0, Val:4.5, fiyat:9.0 },
+  { id:"CT037", isim:"Razmol (Buğday Un Yan Ürünü)", kat:"Konsantre", alt:"Yan Ürün", KM:88.5, HP:14.8, HY:0.0, HK:0.0, NDF:0.0, ADF:0.0, ADL:0.0, eNDF:0.1, nisasta:39.4, seker:45.8, NFC:85.2, PA:35.0, PB1:48.0, PB2:8.0, PB3:6.0, PC:3.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.717, NEm:1.854, NEg:1.168, UFL:0.962, UFV:0.928, PDIE:92.0, PDIN:101.0, Ca:0.08, P:0.32, Mg:0.15, K:0.55, Na:0.03, Cl:0.1, S:0.13, Mn:20, Cu:7, Fe:90, Zn:28, Lys:2.8, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:7.0, Val:4.5, fiyat:9.0 },
+  { id:"CT038", isim:"Soya Fasulyesi Kabuğu", kat:"Konsantre", alt:"Protein", KM:89.67, HP:46.14, HY:1.68, HK:6.37, NDF:9.53, ADF:6.12, ADL:0.7, eNDF:0.08, nisasta:5.85, seker:30.43, NFC:36.28, PA:25.0, PB1:48.0, PB2:10.0, PB3:12.0, PC:5.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.945, NEm:2.101, NEg:1.323, UFL:1.089, UFV:1.051, PDIE:286.0, PDIN:314.0, Ca:0.35, P:0.65, Mg:0.3, K:1.2, Na:0.05, Cl:0.06, S:0.35, Mn:35, Cu:12, Fe:150, Zn:55, Lys:3.2, Met:1.4, His:1.8, Arg:4.5, Thr:2.6, Ile:2.7, Leu:4.8, Val:3.3, fiyat:16.0 },
+  { id:"CT039", isim:"Tam Yağlı Soya", kat:"Konsantre", alt:"Protein", KM:88.36, HP:34.86, HY:17.27, HK:4.9, NDF:8.99, ADF:6.56, ADL:0.67, eNDF:0.08, nisasta:4.96, seker:29.02, NFC:33.98, PA:25.0, PB1:48.0, PB2:10.0, PB3:12.0, PC:5.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:2.52, NEm:2.722, NEg:1.714, UFL:1.411, UFV:1.362, PDIE:216.0, PDIN:237.0, Ca:0.35, P:0.65, Mg:0.3, K:1.2, Na:0.05, Cl:0.06, S:0.35, Mn:35, Cu:12, Fe:150, Zn:55, Lys:3.2, Met:1.4, His:1.8, Arg:4.5, Thr:2.6, Ile:2.7, Leu:4.8, Val:3.3, fiyat:16.0 },
+  { id:"CT040", isim:"Tavuk Unu", kat:"Konsantre", alt:"Protein", KM:94.27, HP:59.29, HY:16.46, HK:7.94, NDF:0.0, ADF:0.0, ADL:0.0, eNDF:0.08, nisasta:0.0, seker:2.45, NFC:16.31, PA:15.0, PB1:35.0, PB2:12.0, PB3:25.0, PC:13.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:2.874, NEm:3.104, NEg:1.954, UFL:1.609, UFV:1.553, PDIE:368.0, PDIN:403.0, Ca:8.5, P:4.2, Mg:0.3, K:1.2, Na:0.05, Cl:0.06, S:0.35, Mn:35, Cu:12, Fe:150, Zn:55, Lys:3.0, Met:1.6, His:1.8, Arg:4.5, Thr:2.6, Ile:2.7, Leu:4.8, Val:3.3, fiyat:16.0 },
+  { id:"CT041", isim:"Tritikale", kat:"Konsantre", alt:"Tahıl", KM:89.55, HP:7.8, HY:3.05, HK:2.75, NDF:22.95, ADF:10.4, ADL:2.15, eNDF:0.1, nisasta:44.7, seker:18.75, NFC:63.45, PA:35.0, PB1:48.0, PB2:8.0, PB3:6.0, PC:3.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.622, NEm:1.752, NEg:1.103, UFL:0.908, UFV:0.876, PDIE:48.0, PDIN:53.0, Ca:0.08, P:0.32, Mg:0.15, K:0.55, Na:0.03, Cl:0.1, S:0.13, Mn:20, Cu:7, Fe:90, Zn:28, Lys:2.8, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:7.0, Val:4.5, fiyat:9.0 },
+  { id:"CT042", isim:"Soya Kabuğu", kat:"Konsantre", alt:"Yan Ürün", KM:89.18, HP:12.55, HY:2.37, HK:4.1, NDF:49.38, ADF:35.85, ADL:2.55, eNDF:0.1, nisasta:13.9, seker:17.7, NFC:31.6, PA:35.0, PB1:48.0, PB2:8.0, PB3:6.0, PC:3.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:0.92, NEm:0.994, NEg:0.626, UFL:0.515, UFV:0.497, PDIE:78.0, PDIN:85.0, Ca:0.08, P:0.32, Mg:0.15, K:0.55, Na:0.03, Cl:0.1, S:0.13, Mn:20, Cu:7, Fe:90, Zn:28, Lys:2.8, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:7.0, Val:4.5, fiyat:9.0 },
+  { id:"CT043", isim:"Aktif C Mısır Hamuru", kat:"Konsantre", alt:"Yan Ürün", KM:95.3, HP:14.4, HY:6.2, HK:10.6, NDF:6.6, ADF:5.4, ADL:2.1, eNDF:0.1, nisasta:29.0, seker:33.2, NFC:62.2, PA:35.0, PB1:48.0, PB2:8.0, PB3:6.0, PC:3.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.777, NEm:1.919, NEg:1.208, UFL:0.995, UFV:0.96, PDIE:89.0, PDIN:98.0, Ca:0.08, P:0.32, Mg:0.15, K:0.55, Na:0.03, Cl:0.1, S:0.13, Mn:20, Cu:7, Fe:90, Zn:28, Lys:2.8, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:7.0, Val:4.5, fiyat:9.0 },
+  { id:"CT044", isim:"Bezelye Kepeği", kat:"Konsantre", alt:"Yan Ürün", KM:89.1, HP:13.75, HY:1.45, HK:3.2, NDF:39.4, ADF:32.15, ADL:0.3, eNDF:0.1, nisasta:21.35, seker:20.85, NFC:42.2, PA:35.0, PB1:48.0, PB2:8.0, PB3:6.0, PC:3.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.535, NEm:1.658, NEg:1.044, UFL:0.86, UFV:0.83, PDIE:85.0, PDIN:94.0, Ca:0.08, P:0.32, Mg:0.15, K:0.55, Na:0.03, Cl:0.1, S:0.13, Mn:20, Cu:7, Fe:90, Zn:28, Lys:2.8, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:7.0, Val:4.5, fiyat:9.0 },
+  { id:"CT045", isim:"Guar Küspesi", kat:"Konsantre", alt:"Protein", KM:91.7, HP:50.24, HY:4.27, HK:5.26, NDF:14.06, ADF:8.96, ADL:0.66, eNDF:0.08, nisasta:5.67, seker:20.5, NFC:26.17, PA:25.0, PB1:48.0, PB2:10.0, PB3:12.0, PC:5.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:2.063, NEm:2.228, NEg:1.403, UFL:1.155, UFV:1.115, PDIE:311.0, PDIN:342.0, Ca:0.35, P:0.65, Mg:0.3, K:1.2, Na:0.05, Cl:0.06, S:0.35, Mn:35, Cu:12, Fe:150, Zn:55, Lys:3.2, Met:1.4, His:1.8, Arg:4.5, Thr:2.6, Ile:2.7, Leu:4.8, Val:3.3, fiyat:16.0 },
+  { id:"CT046", isim:"Guar Unu", kat:"Konsantre", alt:"Protein", KM:93.9, HP:42.6, HY:5.8, HK:5.7, NDF:20.6, ADF:15.4, ADL:0.5, eNDF:0.08, nisasta:3.0, seker:22.3, NFC:25.3, PA:25.0, PB1:48.0, PB2:10.0, PB3:12.0, PC:5.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:2.042, NEm:2.205, NEg:1.389, UFL:1.144, UFV:1.104, PDIE:264.0, PDIN:290.0, Ca:0.35, P:0.65, Mg:0.3, K:1.2, Na:0.05, Cl:0.06, S:0.35, Mn:35, Cu:12, Fe:150, Zn:55, Lys:3.2, Met:1.4, His:1.8, Arg:4.5, Thr:2.6, Ile:2.7, Leu:4.8, Val:3.3, fiyat:16.0 },
+  { id:"CT047", isim:"İrmik", kat:"Konsantre", alt:"Yan Ürün", KM:86.87, HP:6.7, HY:2.03, HK:0.77, NDF:3.63, ADF:1.67, ADL:0.27, eNDF:0.1, nisasta:68.57, seker:18.3, NFC:86.87, PA:35.0, PB1:48.0, PB2:8.0, PB3:6.0, PC:3.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.676, NEm:1.81, NEg:1.14, UFL:0.939, UFV:0.906, PDIE:42.0, PDIN:46.0, Ca:0.08, P:0.32, Mg:0.15, K:0.55, Na:0.03, Cl:0.1, S:0.13, Mn:20, Cu:7, Fe:90, Zn:28, Lys:2.8, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:7.0, Val:4.5, fiyat:9.0 },
+  { id:"CT048", isim:"Karışık Çerez Yan Ürünü", kat:"Konsantre", alt:"Yan Ürün", KM:93.2, HP:19.2, HY:28.0, HK:4.0, NDF:33.4, ADF:27.6, ADL:5.7, eNDF:0.1, nisasta:1.6, seker:13.8, NFC:15.4, PA:35.0, PB1:48.0, PB2:8.0, PB3:6.0, PC:3.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:2.339, NEm:2.526, NEg:1.591, UFL:1.31, UFV:1.264, PDIE:119.0, PDIN:131.0, Ca:0.08, P:0.32, Mg:0.15, K:0.55, Na:0.03, Cl:0.1, S:0.13, Mn:20, Cu:7, Fe:90, Zn:28, Lys:2.8, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:7.0, Val:4.5, fiyat:9.0 },
+  { id:"CT049", isim:"Mısır Flake — Yan Ürün Analizi", kat:"Konsantre", alt:"Yan Ürün", KM:86.9, HP:5.77, HY:3.82, HK:1.35, NDF:8.13, ADF:2.52, ADL:0.77, eNDF:0.1, nisasta:70.52, seker:10.41, NFC:80.93, PA:35.0, PB1:48.0, PB2:8.0, PB3:6.0, PC:3.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.669, NEm:1.803, NEg:1.135, UFL:0.935, UFV:0.902, PDIE:36.0, PDIN:39.0, Ca:0.08, P:0.32, Mg:0.15, K:0.55, Na:0.03, Cl:0.1, S:0.13, Mn:20, Cu:7, Fe:90, Zn:28, Lys:2.8, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:7.0, Val:4.5, fiyat:9.0 },
+  { id:"CT050", isim:"Nişasta (Saf)", kat:"Konsantre", alt:"Yan Ürün", KM:89.5, HP:0.9, HY:0.6, HK:0.2, NDF:0.3, ADF:0.2, ADL:0.4, eNDF:0.1, nisasta:83.7, seker:14.3, NFC:98.0, PA:35.0, PB1:48.0, PB2:8.0, PB3:6.0, PC:3.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:55.0, kd_NDF:0.06, iNDF:10.0, NEL:1.675, NEm:1.809, NEg:1.139, UFL:0.938, UFV:0.905, PDIE:6.0, PDIN:6.0, Ca:0.7, P:0.08, Mg:0.15, K:0.55, Na:0.03, Cl:0.1, S:0.13, Mn:20, Cu:7, Fe:90, Zn:28, Lys:2.8, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:7.0, Val:4.5, fiyat:9.0 },
 ];
 
 // ============================================================
@@ -1988,6 +2047,15 @@ const r2 = v => Math.round(v*100)/100;
 const r3 = v => Math.round(v*1000)/1000;
 const r4 = v => Math.round(v*10000)/10000;
 const pct = (v,km) => km>0 ? Math.round(v/km*1000)/10 : 0;
+// Bir input elementinin değerini virgül/nokta ayracı fark etmeksizin sayıya çevirir.
+// parseFloat("1,3") = 1 döndürür (virgülü tanımaz, sessizce yarım okur) — bu yüzden
+// ondalık girişi olan TÜM alanlarda doğrudan parseFloat yerine bu kullanılmalı.
+const sayiOku = (val, varsayilan) => {
+  if (val === null || val === undefined) return varsayilan;
+  const temiz = String(val).replace(',', '.');
+  const n = parseFloat(temiz);
+  return isNaN(n) ? varsayilan : n;
+};
 
 function renkHesapla(val, min, max) {
   if(val===null||val===undefined||isNaN(val)) return 'var(--text2)';
@@ -2163,17 +2231,17 @@ function sekmeAc(id) {
 // ============================================================
 function profilGuncelle() {
   profil.irk = document.getElementById('p-irk').value;
-  profil.CA = parseFloat(document.getElementById('p-ca').value)||620;
-  profil.BCS = parseFloat(document.getElementById('p-bcs').value)||3.0;
-  profil.hedefBCS = parseFloat(document.getElementById('p-hbcs').value)||3.25;
+  profil.CA = sayiOku(document.getElementById('p-ca').value, 620);
+  profil.BCS = sayiOku(document.getElementById('p-bcs').value, 3.0);
+  profil.hedefBCS = sayiOku(document.getElementById('p-hbcs').value, 3.25);
   profil.laktGun = parseInt(document.getElementById('p-lakt-gun').value)||60;
   profil.laktSirasi = parseInt(document.getElementById('p-lakt-sira').value)||2;
   profil.gebGun = parseInt(document.getElementById('p-geb').value)||0;
-  profil.sutVerimi = parseFloat(document.getElementById('p-sut').value)||35;
-  profil.sutHedef = parseFloat(document.getElementById('p-sut-hedef').value)||profil.sutVerimi;
-  profil.sutYag = parseFloat(document.getElementById('p-yag').value)||3.8;
-  profil.sutProtein = parseFloat(document.getElementById('p-prot').value)||3.2;
-  profil.sutLaktoz = parseFloat(document.getElementById('p-lakt').value)||4.7;
+  profil.sutVerimi = sayiOku(document.getElementById('p-sut').value, 35);
+  profil.sutHedef = sayiOku(document.getElementById('p-sut-hedef').value, profil.sutVerimi);
+  profil.sutYag = sayiOku(document.getElementById('p-yag').value, 3.8);
+  profil.sutProtein = sayiOku(document.getElementById('p-prot').value, 3.2);
+  profil.sutLaktoz = sayiOku(document.getElementById('p-lakt').value, 4.7);
   tumHesapla();
   bcsSkalaSi();
   sutTurevler();
@@ -4470,9 +4538,12 @@ function besiProfilGuncelle(kaynakEl) {
     // Kullanıcı alanı silip boş bıraktıysa (yazmaya devam edecek) hiçbir işlem yapma —
     // değeri varsayılana zorlayıp input'u geri yazarsak kullanıcı silemez/değiştiremez hale gelir.
     const bosMu = kaynakEl.value === '';
-    const sayiGecerliMi = !isNaN(parseFloat(kaynakEl.value));
+    // Geçerlilik kontrolü virgülü de kabul eder (sayiOku zaten virgülü noktaya çevirip okuyacak);
+    // sadece "-" veya "." gibi henüz tamamlanmamış ara durumları eler.
+    const temizlenmis = String(kaynakEl.value).replace(',', '.');
+    const sayiGecerliMi = /^-?\d*\.?\d*$/.test(temizlenmis) && temizlenmis !== '' && temizlenmis !== '-' && temizlenmis !== '.';
     if (!bosMu && kaynakEl !== bCinsiyet && kaynakEl !== bpCinsiyet && kaynakEl !== bIrk && kaynakEl !== bpIrk && !sayiGecerliMi) {
-      return; // geçersiz ara durum (örn. "-" veya "."), henüz yazma bitmedi
+      return; // geçersiz ara durum (örn. "-" veya "." veya "1.2.3"), henüz yazma bitmedi
     }
     if (bosMu) {
       // Boş bırakılan tarafı olduğu gibi boş tut, diğer tarafı da eşitle ama besiProfil'i DEĞİŞTİRME
@@ -4482,20 +4553,29 @@ function besiProfilGuncelle(kaynakEl) {
       if (kaynakEl === bGcaa || kaynakEl === bpGcaa) { if (bGcaa) bGcaa.value=''; if (bpGcaa) bpGcaa.value=''; }
       return;
     }
-    // Sadece değişen alanı besiProfil'e yaz
-    if (kaynakEl === bCa || kaynakEl === bpCa) besiProfil.ca = parseFloat(kaynakEl.value);
-    if (kaynakEl === bCaHedef || kaynakEl === bpCaHedef) besiProfil.caHedef = parseFloat(kaynakEl.value);
-    if (kaynakEl === bGcaa || kaynakEl === bpGcaa) besiProfil.gcaa = parseFloat(kaynakEl.value);
+    // Sadece değişen alanı besiProfil'e yaz (sayiOku virgülü otomatik noktaya çevirir)
+    if (kaynakEl === bCa || kaynakEl === bpCa) besiProfil.ca = sayiOku(kaynakEl.value, besiProfil.ca);
+    if (kaynakEl === bCaHedef || kaynakEl === bpCaHedef) besiProfil.caHedef = sayiOku(kaynakEl.value, besiProfil.caHedef);
+    if (kaynakEl === bGcaa || kaynakEl === bpGcaa) besiProfil.gcaa = sayiOku(kaynakEl.value, besiProfil.gcaa);
     if (kaynakEl === bCinsiyet || kaynakEl === bpCinsiyet) besiProfil.cinsiyet = kaynakEl.value || 'erkek';
     if (kaynakEl === bIrk || kaynakEl === bpIrk) besiProfil.irk = kaynakEl.value || 'charolais';
   } else {
     // Kaynak belirtilmemiş (örn. sekme açılışı) — besiProfil zaten günceldir, değiştirme
   }
 
-  // Her iki tarafı da besiProfil ile senkron tut
-  if (bCa) bCa.value = besiProfil.ca; if (bpCa) bpCa.value = besiProfil.ca;
-  if (bCaHedef) bCaHedef.value = besiProfil.caHedef; if (bpCaHedef) bpCaHedef.value = besiProfil.caHedef;
-  if (bGcaa) bGcaa.value = besiProfil.gcaa; if (bpGcaa) bpGcaa.value = besiProfil.gcaa;
+  // Her iki tarafı da besiProfil ile senkron tut — ANCAK kullanıcının az önce
+  // yazdığı (kaynakEl) input'un kendi ekran değerine DOKUNMA: besiProfil.gcaa
+  // gibi alanlar Number tipinde olduğu için value'ya atanınca JS onu otomatik
+  // stringe çevirir ve bu dönüşüm HER ZAMAN nokta kullanır — kullanıcı virgülle
+  // yazdıysa bile ekranda anında nokta görünür. Sadece EŞİNİ (b-*/bp-* karşılığını)
+  // güncelleyerek hem senkronizasyonu koruyoruz hem kullanıcının yazdığı formatı
+  // (virgül veya nokta) ekranda bozmuyoruz.
+  if (bCa && kaynakEl !== bCa) bCa.value = besiProfil.ca;
+  if (bpCa && kaynakEl !== bpCa) bpCa.value = besiProfil.ca;
+  if (bCaHedef && kaynakEl !== bCaHedef) bCaHedef.value = besiProfil.caHedef;
+  if (bpCaHedef && kaynakEl !== bpCaHedef) bpCaHedef.value = besiProfil.caHedef;
+  if (bGcaa && kaynakEl !== bGcaa) bGcaa.value = besiProfil.gcaa;
+  if (bpGcaa && kaynakEl !== bpGcaa) bpGcaa.value = besiProfil.gcaa;
   if (bCinsiyet) bCinsiyet.value = besiProfil.cinsiyet; if (bpCinsiyet) bpCinsiyet.value = besiProfil.cinsiyet;
   if (bIrk) bIrk.value = besiProfil.irk; if (bpIrk) bpIrk.value = besiProfil.irk;
 
@@ -6640,6 +6720,11 @@ window.onload = function() {
   laktasyonDonemi();
   rasyonSayfasiRender();
   yemListesiGuncelle();
+
+  // Not: Ondalık girilen alanlarda (Canlı Ağırlık, GCAA, BCS, Süt parametreleri vb.)
+  // virgül->nokta dönüşümü artık her input'un kendi oninput'unda satır başında
+  // yapılıyor (bkz. "this.value=this.value.replace(',','.')") — daha güvenilir,
+  // tarayıcı/cihaz event sıralamasına bağımlı değil.
 };
 
 // Sıfırla düğmesi
