@@ -4467,10 +4467,25 @@ function besiProfilGuncelle(kaynakEl) {
   const bIrk = document.getElementById('b-irk'), bpIrk = document.getElementById('bp-irk');
 
   if (kaynakEl) {
+    // Kullanıcı alanı silip boş bıraktıysa (yazmaya devam edecek) hiçbir işlem yapma —
+    // değeri varsayılana zorlayıp input'u geri yazarsak kullanıcı silemez/değiştiremez hale gelir.
+    const bosMu = kaynakEl.value === '';
+    const sayiGecerliMi = !isNaN(parseFloat(kaynakEl.value));
+    if (!bosMu && kaynakEl !== bCinsiyet && kaynakEl !== bpCinsiyet && kaynakEl !== bIrk && kaynakEl !== bpIrk && !sayiGecerliMi) {
+      return; // geçersiz ara durum (örn. "-" veya "."), henüz yazma bitmedi
+    }
+    if (bosMu) {
+      // Boş bırakılan tarafı olduğu gibi boş tut, diğer tarafı da eşitle ama besiProfil'i DEĞİŞTİRME
+      // (kullanıcı henüz yeni değeri yazmayı bitirmedi)
+      if (kaynakEl === bCa || kaynakEl === bpCa) { if (bCa) bCa.value=''; if (bpCa) bpCa.value=''; }
+      if (kaynakEl === bCaHedef || kaynakEl === bpCaHedef) { if (bCaHedef) bCaHedef.value=''; if (bpCaHedef) bpCaHedef.value=''; }
+      if (kaynakEl === bGcaa || kaynakEl === bpGcaa) { if (bGcaa) bGcaa.value=''; if (bpGcaa) bpGcaa.value=''; }
+      return;
+    }
     // Sadece değişen alanı besiProfil'e yaz
-    if (kaynakEl === bCa || kaynakEl === bpCa) besiProfil.ca = parseFloat(kaynakEl.value) || 350;
-    if (kaynakEl === bCaHedef || kaynakEl === bpCaHedef) besiProfil.caHedef = parseFloat(kaynakEl.value) || 500;
-    if (kaynakEl === bGcaa || kaynakEl === bpGcaa) besiProfil.gcaa = parseFloat(kaynakEl.value) || 1.4;
+    if (kaynakEl === bCa || kaynakEl === bpCa) besiProfil.ca = parseFloat(kaynakEl.value);
+    if (kaynakEl === bCaHedef || kaynakEl === bpCaHedef) besiProfil.caHedef = parseFloat(kaynakEl.value);
+    if (kaynakEl === bGcaa || kaynakEl === bpGcaa) besiProfil.gcaa = parseFloat(kaynakEl.value);
     if (kaynakEl === bCinsiyet || kaynakEl === bpCinsiyet) besiProfil.cinsiyet = kaynakEl.value || 'erkek';
     if (kaynakEl === bIrk || kaynakEl === bpIrk) besiProfil.irk = kaynakEl.value || 'charolais';
   } else {
