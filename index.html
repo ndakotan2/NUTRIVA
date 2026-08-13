@@ -30,7 +30,8 @@
     --radius-sm:7px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); font-size: 13px; }
+  html { background: var(--bg); min-height: 100%; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); font-size: 13px; min-height: 100vh; }
   input, select { font-family: inherit; font-size: 12px; }
   button { font-family: inherit; cursor: pointer; }
 
@@ -50,7 +51,7 @@
   .nav button:hover:not(.active) { color: var(--text2); }
 
   /* MAIN */
-  .main { padding: 18px 20px; max-width: 1400px; }
+  .main { padding: 18px 20px; max-width: 1400px; min-height: calc(100vh - 200px); }
 
   /* CARDS */
   .card { background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 12px; }
@@ -197,7 +198,6 @@
     /* Grup bar */
     #grup-bar-wrap { padding: 6px 12px; gap: 5px; flex-wrap: wrap; }
     #grup-bar-wrap button { padding: 5px 10px; font-size: 10px; }
-    #grup-badge { font-size: 10px; padding: 3px 8px; }
 
     /* Nav */
     .nav { overflow-x: auto; padding-left: 10px; }
@@ -493,7 +493,7 @@ select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
 </div>
 
 <!-- ==================== ANA PROGRAM (giriş sonrası görünür) ==================== -->
-<div id="ana-program" style="display:none">
+<div id="ana-program" style="display:none;background:var(--bg);min-height:100vh">
 
 <!-- HEADER -->
 <div class="header">
@@ -502,30 +502,6 @@ select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
     <div class="header-sub">NASEM 2021 · CNCPS v6.5 · INRA 2018</div>
 
   </div>
-  <div class="header-badges" id="header-badges-wrap">
-    <div class="badge"><span>Süt: </span><b id="hdr-sut">35</b><span> kg/gün</span></div>
-    <div class="badge"><span>BCS: </span><b id="hdr-bcs" style="color:var(--yellow)">3.0</b></div>
-    <div class="badge"><span>NEL: </span><b id="hdr-nel" style="color:var(--yellow)">—</b><span> Mcal</span></div>
-    <div class="badge"><span>Maliyet: </span><b id="hdr-maliyet" style="color:var(--teal)">—</b><span> ₺/gün</span></div>
-  </div>
-</div>
-
-<!-- NAV -->
-<div class="nav">
-  <button class="active" id="genel-veriler-nav-btn" onclick="sekmeAc('profil')">📋 Genel Veriler</button>
-  <span id="sagmal-nav-btns" style="display:contents">
-    <button onclick="sekmeAc('ihtiyac')">📊 İhtiyaç Analizi</button>
-    <button onclick="sekmeAc('rasyon')">🌾 Rasyon Tasarımı</button>
-    <button onclick="sekmeAc('degerlendirme')">⚖️ Değerlendirme</button>
-    <button onclick="sekmeAc('optimizasyon')">⚡ Optimizasyon</button>
-    <button onclick="sekmeAc('sagmalvagon')">🚛 Karma Vagon</button>
-  </span>
-  <button id="besi-nav-btn" onclick="sekmeAc('besi')" style="display:none">🐂 Besi Rasyonu</button>
-  <button id="besi-rapor-nav-btn" onclick="sekmeAc('besirapor')" style="display:none">📄 Rapor</button>
-  <button id="besi-vagon-nav-btn" onclick="sekmeAc('besivagon')" style="display:none">🚛 Karma Vagon</button>
-  <button id="besi-bilgi-nav-btn" onclick="sekmeAc('besibilgi')" style="display:none">📰 Besi Bilgi Merkezi</button>
-  <button id="fabrika-nav-btn" onclick="sekmeAc('fabrika')" style="display:none">🏭 Karma Formül</button>
-  <button onclick="sekmeAc('kayitlar')">💾 Kayıtlar</button>
 </div>
 
 <!-- GRUP SEÇİM BARI -->
@@ -535,21 +511,27 @@ select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
     style="padding:6px 16px;border-radius:20px;border:2px solid var(--blue);background:var(--blue);color:#fff;font-size:11px;font-weight:700;cursor:pointer">
     🐄 Sağmal
   </button>
-  <button onclick="grupSec('duve')" id="btn-duve"
-    style="padding:6px 16px;border-radius:20px;border:2px solid var(--border2);background:transparent;color:var(--text3);font-size:11px;font-weight:700;cursor:pointer">
-    🐮 Düve
-  </button>
-  <button onclick="grupSec('kuru')" id="btn-kuru"
-    style="padding:6px 16px;border-radius:20px;border:2px solid var(--border2);background:transparent;color:var(--text3);font-size:11px;font-weight:700;cursor:pointer">
-    🌿 Kuru Dönem
-  </button>
   <button onclick="grupSec('besi')" id="btn-besi"
     style="padding:6px 16px;border-radius:20px;border:2px solid var(--border2);background:transparent;color:var(--text3);font-size:11px;font-weight:700;cursor:pointer">
     🐂 Besi
   </button>
-  <div id="grup-badge" style="margin-left:auto;padding:4px 12px;background:rgba(20,184,166,0.15);border:1px solid rgba(20,184,166,0.3);border-radius:12px;font-size:11px;color:var(--blue2);font-weight:600">
-    🐄 Sağmal — NASEM 2021
-  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <button class="active" id="genel-veriler-nav-btn" onclick="sekmeAc('profil')">📋 Genel Veriler</button>
+  <span id="sagmal-nav-btns" style="display:contents">
+    <button onclick="sekmeAc('ihtiyac')">📊 İhtiyaç Analizi</button>
+    <button onclick="sekmeAc('rasyon')">🌾 Rasyon Tasarımı</button>
+    <button onclick="sekmeAc('optimizasyon')">⚡ Optimizasyon</button>
+    <button onclick="sekmeAc('sagmalvagon')">🚛 Karma Vagon</button>
+  </span>
+  <button id="besi-nav-btn" onclick="sekmeAc('besi')" style="display:none">🐂 Besi Rasyonu</button>
+  <button id="besi-rapor-nav-btn" onclick="sekmeAc('besirapor')" style="display:none">📄 Rapor</button>
+  <button id="besi-vagon-nav-btn" onclick="sekmeAc('besivagon')" style="display:none">🚛 Karma Vagon</button>
+  <button id="besi-bilgi-nav-btn" onclick="sekmeAc('besibilgi')" style="display:none">📰 Besi Bilgi Merkezi</button>
+  <button id="fabrika-nav-btn" onclick="sekmeAc('fabrika')" style="display:none">🏭 Karma Formül</button>
+  <button onclick="sekmeAc('kayitlar')">💾 Kayıtlar</button>
 </div>
 
 <!-- MAIN -->
@@ -804,7 +786,6 @@ select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
     <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
       <button class="btn btn-outline" onclick="satirEkle()">+ Yem Ekle</button>
       <button class="btn btn-primary" onclick="sekmeAc('optimizasyon')">⚡ Optimize</button>
-      <button onclick="sekmeAc('degerlendirme')" style="padding:6px 14px;background:var(--bg4);border:1px solid var(--border2);border-radius:7px;color:var(--text2);font-size:12px;cursor:pointer">⚖️ Değerlendirme</button>
       <button onclick="hizliKaydet()" style="padding:6px 14px;background:rgba(52,211,153,0.15);border:1px solid rgba(52,211,153,0.4);border-radius:7px;color:var(--teal);font-size:12px;cursor:pointer;font-weight:600">💾 Kaydet</button>
     </div>
     <div style="display:flex;gap:8px;align-items:center">
@@ -1012,97 +993,101 @@ select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
     </div>
   </div>
 
-</div>
-
-<!-- ==================== DEĞERLENDİRME ==================== -->
-<div id="sekme-degerlendirme" class="hidden">
-  <!-- ===== SAĞMAL: DETAYLI DEĞERLENDİRME ===== -->
-  <div class="grid-2" id="deg-tablo-wrap">
-    <div>
-      <div style="background:var(--bg2);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden">
-        <div style="display:grid;grid-template-columns:20px 1fr 80px 110px 90px;background:var(--bg4);padding:8px;gap:4px">
-          <div></div>
-          <div class="fs10 fw7 c-blue3">Besin Maddeleri</div>
-          <div class="fs10 fw7 c-blue3" style="text-align:right">Birim</div>
-          <div class="fs10 fw7 c-blue3" style="text-align:right">KM %</div>
-          <div class="fs10 fw7 c-blue3" style="text-align:right">Destek</div>
-        </div>
-        <div class="flex-between" style="padding:3px 8px;background:#c9f2ea;border-bottom:1px solid var(--border)">
-          <span class="fs10 c-text3">Satırları sürükleyerek sıralayın</span>
-          <button onclick="window.siralamaStfirla()" style="background:transparent;border:none;font-size:10px;color:var(--text3)">↺ Sıfırla</button>
-        </div>
-        <div id="deg-tablo"></div>
-      </div>
-    </div>
-    <div>
-      <div class="card">
-        <div class="card-title">🥛 Süt Üretim Tahmini</div>
-        <div id="sut-tahmini"></div>
-        <div class="alert-blue mt8" id="sinirli-faktor2"></div>
-      </div>
-      <div class="card">
-        <div class="card-title">⚖️ İhtiyaç / Rasyon</div>
-        <div id="kars-barlar"></div>
-      </div>
-      <div class="card">
-        <div class="card-title" style="color:var(--teal)">💰 Maliyet Analizi</div>
-        <div class="grid-2" id="maliyet-kartlar"></div>
-      </div>
-      <!-- Asidoz İndeksi (Rasyon Tasarımı'ndan taşındı) -->
-      <div style="background:var(--bg2);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;margin-top:12px">
-        <div id="asidoz-satir" style="padding:9px 12px;background:var(--bg2)">
-          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-            <span class="fs11 fw7 c-blue3">🧪 Asidoz İndeksi:</span>
-            <div style="display:flex;gap:4px;align-items:center">
-              <span class="fs10 c-text3">pH Ort:</span>
-              <span id="ph-ort" style="font-size:13px;font-weight:700;color:var(--green)">—</span>
-            </div>
-            <div style="display:flex;gap:4px;align-items:center">
-              <span class="fs10 c-text3">Min:</span>
-              <span id="ph-min" style="font-size:13px;font-weight:700;color:var(--yellow)">—</span>
-            </div>
-            <div style="display:flex;gap:4px;align-items:center">
-              <span class="fs10 c-text3">pH&lt;5.8:</span>
-              <span id="ph-sure" style="font-size:13px;font-weight:700;color:var(--text2)">—</span>
-              <span class="fs10 c-text3">sa</span>
-            </div>
-            <div style="display:flex;gap:4px;align-items:center">
-              <span class="fs10 c-text3">İndeks:</span>
-              <span id="asidoz-idx-inline" style="font-size:13px;font-weight:700;color:var(--green)">—</span>
-            </div>
-            <div id="asidoz-risk-badge" style="margin-left:auto;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:rgba(74,222,128,0.15);color:var(--green)">Risk Yok</div>
+  <!-- ==================== DEĞERLENDİRME (Rasyon Tasarımı'nın altına taşındı) ==================== -->
+  <div style="margin-top:16px;padding-top:12px;border-top:2px solid var(--border2)">
+    <div class="fs13 fw7 c-blue3" style="margin-bottom:10px">⚖️ Rasyon Değerlendirme</div>
+    <div class="grid-2" id="deg-tablo-wrap">
+      <div>
+        <div style="background:var(--bg2);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden">
+          <div style="display:grid;grid-template-columns:20px 1fr 80px 110px 90px;background:var(--bg4);padding:8px;gap:4px">
+            <div></div>
+            <div class="fs10 fw7 c-blue3">Besin Maddeleri</div>
+            <div class="fs10 fw7 c-blue3" style="text-align:right">Birim</div>
+            <div class="fs10 fw7 c-blue3" style="text-align:right">KM %</div>
+            <div class="fs10 fw7 c-blue3" style="text-align:right">Destek</div>
           </div>
-        </div>
-        <div id="asidoz-gauge" style="border-top:1px solid var(--border);padding:4px 16px 2px;background:var(--bg3)"></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;font-size:10px;font-weight:700;text-align:center;border-top:1px solid var(--border)">
-          <div style="padding:4px;background:rgba(74,222,128,0.12);color:var(--green)">Risk Yok</div>
-          <div style="padding:4px;background:rgba(251,191,36,0.12);color:var(--yellow)">Düşük Risk</div>
-          <div style="padding:4px;background:rgba(251,146,60,0.12);color:var(--orange)">Orta Risk</div>
-          <div style="padding:4px;background:rgba(248,113,113,0.12);color:var(--red)">Yüksek Risk</div>
-        </div>
-        <!-- Lif Yeterliliği -->
-        <div style="border-top:2px solid var(--border)">
-          <div style="padding:6px 10px;background:var(--bg4);display:flex;justify-content:space-between;align-items:center">
-            <div class="fs10 fw7 c-blue3">🌿 Lif Yeterliliği (SARA Riski)</div>
-            <div id="sara-risk-badge" style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:rgba(74,222,128,0.12);color:var(--green)">SARA Riski Yok</div>
+          <div class="flex-between" style="padding:3px 8px;background:#c9f2ea;border-bottom:1px solid var(--border)">
+            <span class="fs10 c-text3">Satırları sürükleyerek sıralayın</span>
+            <button onclick="window.siralamaStfirla()" style="background:transparent;border:none;font-size:10px;color:var(--text3)">↺ Sıfırla</button>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:6px 8px 4px">
-            <div style="background:var(--bg3);border-radius:6px;padding:6px 8px;text-align:center">
-              <div class="fs10 c-text3">Ort. Rumen pH</div>
-              <div id="lif-ph-ort" style="font-size:15px;font-weight:700;color:var(--green)">—</div>
-              <div class="fs10 c-text3">hedef ≥6.20</div>
-            </div>
-            <div style="background:var(--bg3);border-radius:6px;padding:6px 8px;text-align:center">
-              <div class="fs10 c-text3">pH&lt;5.8 (sa/gün)</div>
-              <div id="lif-ph-sure" style="font-size:15px;font-weight:700;color:var(--green)">—</div>
-              <div class="fs10 c-text3">hedef &lt;5 saat</div>
+          <div id="deg-tablo"></div>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="card-title">🥛 Süt Üretim Tahmini</div>
+          <div id="sut-tahmini"></div>
+          <div class="alert-blue mt8" id="sinirli-faktor2"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">⚖️ İhtiyaç / Rasyon</div>
+          <div id="kars-barlar"></div>
+        </div>
+        <div class="card">
+          <div class="card-title" style="color:var(--teal)">💰 Maliyet Analizi</div>
+          <div class="grid-2" id="maliyet-kartlar"></div>
+        </div>
+        <!-- Asidoz İndeksi -->
+        <div style="background:var(--bg2);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;margin-top:12px">
+          <div id="asidoz-satir" style="padding:9px 12px;background:var(--bg2)">
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+              <span class="fs11 fw7 c-blue3">🧪 Asidoz İndeksi:</span>
+              <div style="display:flex;gap:4px;align-items:center">
+                <span class="fs10 c-text3">pH Ort:</span>
+                <span id="ph-ort" style="font-size:13px;font-weight:700;color:var(--green)">—</span>
+              </div>
+              <div style="display:flex;gap:4px;align-items:center">
+                <span class="fs10 c-text3">Min:</span>
+                <span id="ph-min" style="font-size:13px;font-weight:700;color:var(--yellow)">—</span>
+              </div>
+              <div style="display:flex;gap:4px;align-items:center">
+                <span class="fs10 c-text3">pH&lt;5.8:</span>
+                <span id="ph-sure" style="font-size:13px;font-weight:700;color:var(--text2)">—</span>
+                <span class="fs10 c-text3">sa</span>
+              </div>
+              <div style="display:flex;gap:4px;align-items:center">
+                <span class="fs10 c-text3">İndeks:</span>
+                <span id="asidoz-idx-inline" style="font-size:13px;font-weight:700;color:var(--green)">—</span>
+              </div>
+              <div id="asidoz-risk-badge" style="margin-left:auto;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:rgba(74,222,128,0.15);color:var(--green)">Risk Yok</div>
             </div>
           </div>
-          <div id="lif-tablo" style="padding:4px 8px 8px"></div>
+          <div id="asidoz-gauge" style="border-top:1px solid var(--border);padding:4px 16px 2px;background:var(--bg3)"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;font-size:10px;font-weight:700;text-align:center;border-top:1px solid var(--border)">
+            <div style="padding:4px;background:rgba(74,222,128,0.12);color:var(--green)">Risk Yok</div>
+            <div style="padding:4px;background:rgba(251,191,36,0.12);color:var(--yellow)">Düşük Risk</div>
+            <div style="padding:4px;background:rgba(251,146,60,0.12);color:var(--orange)">Orta Risk</div>
+            <div style="padding:4px;background:rgba(248,113,113,0.12);color:var(--red)">Yüksek Risk</div>
+          </div>
+          <!-- Lif Yeterliliği -->
+          <div style="border-top:2px solid var(--border)">
+            <div style="padding:6px 10px;background:var(--bg4);display:flex;justify-content:space-between;align-items:center">
+              <div class="fs10 fw7 c-blue3">🌿 Lif Yeterliliği (SARA Riski)</div>
+              <div id="sara-risk-badge" style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:rgba(74,222,128,0.12);color:var(--green)">SARA Riski Yok</div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:6px 8px 4px">
+              <div style="background:var(--bg3);border-radius:6px;padding:6px 8px;text-align:center">
+                <div class="fs10 c-text3">Ort. Rumen pH</div>
+                <div id="lif-ph-ort" style="font-size:15px;font-weight:700;color:var(--green)">—</div>
+                <div class="fs10 c-text3">hedef ≥6.20</div>
+              </div>
+              <div style="background:var(--bg3);border-radius:6px;padding:6px 8px;text-align:center">
+                <div class="fs10 c-text3">pH&lt;5.8 (sa/gün)</div>
+                <div id="lif-ph-sure" style="font-size:15px;font-weight:700;color:var(--green)">—</div>
+                <div class="fs10 c-text3">hedef &lt;5 saat</div>
+              </div>
+            </div>
+            <div id="lif-tablo" style="padding:4px 8px 8px"></div>
+          </div>
         </div>
       </div>
     </div>
   </div>
+
+</div>
+
+<!-- ==================== DEĞERLENDİRME (eski sekme kaldırıldı, içerik Rasyon Tasarımı'na taşındı) ==================== -->
+<div id="sekme-degerlendirme" class="hidden">
 </div>
 
 <!-- ==================== OPTİMİZASYON ==================== -->
@@ -1624,6 +1609,7 @@ const YEMLER = [
   { id:"MIN001", isim:"Amonyum Klorür (NH4Cl) — Anyonik Tuz", kat:"Mineral", alt:"Mineral", KM:99.5, HP:163.55, HY:0.0, HK:66.28, NDF:0.0, ADF:0.0, ADL:0.0, eNDF:0.00, nisasta:0.0, seker:0.0, NFC:0.0, PA:100, PB1:0, PB2:0, PB3:0, PC:0, kd_PB2:0, kd_PB3:0, kp:0.065, dRUP:0, NDFD30:0, kd_NDF:0, iNDF:0, NEL:0.0, NEm:0.0, NEg:0.0, UFL:0.0, UFV:0.0, PDIE:0, PDIN:0, Ca:0.0, P:0.0, Mg:0.0, K:0.0, Na:0.08, Cl:66.2, S:0.0, Mn:0, Cu:0, Fe:0, Zn:0, Lys:0, Met:0, His:0, Arg:0, Thr:0, Ile:0, Leu:0, Val:0, fiyat:4.5 },
   { id:"MIN002", isim:"Magnezyum Oksit — Kaba Düşük Çözünür", kat:"Mineral", alt:"Mineral", KM:98.2, HP:0.0, HY:0.0, HK:100.0, NDF:0.0, ADF:0.0, ADL:0.0, eNDF:0.00, nisasta:0.0, seker:0.0, NFC:0.0, PA:0, PB1:0, PB2:0, PB3:0, PC:0, kd_PB2:0, kd_PB3:0, kp:0.065, dRUP:0, NDFD30:0, kd_NDF:0, iNDF:0, NEL:0.0, NEm:0.0, NEg:0.0, UFL:0.0, UFV:0.0, PDIE:0, PDIN:0, Ca:3.07, P:0.0, Mg:54.0, K:0.0, Na:0.0, Cl:0.0, S:0.0, Mn:0, Cu:0, Fe:0, Zn:0, Lys:0, Met:0, His:0, Arg:0, Thr:0, Ile:0, Leu:0, Val:0, fiyat:8.0 },
   { id:"MIN003", isim:"Sodyum Bikarbonat (NaHCO3)", kat:"Mineral", alt:"Mineral", KM:95.6, HP:0.0, HY:0.0, HK:54.39, NDF:0.0, ADF:0.0, ADL:0.0, eNDF:0.00, nisasta:0.0, seker:0.0, NFC:0.0, PA:0, PB1:0, PB2:0, PB3:0, PC:0, kd_PB2:0, kd_PB3:0, kp:0.065, dRUP:0, NDFD30:0, kd_NDF:0, iNDF:0, NEL:0.0, NEm:0.0, NEg:0.0, UFL:0.0, UFV:0.0, PDIE:0, PDIN:0, Ca:0.0, P:0.0, Mg:0.0, K:0.0, Na:27.62, Cl:0.0, S:0.0, Mn:0, Cu:0, Fe:0, Zn:0, Lys:0, Met:0, His:0, Arg:0, Thr:0, Ile:0, Leu:0, Val:0, fiyat:4.0 },
+  { id:"SU001", isim:"Su (Rasyon Nemi Ayarı)", kat:"Mineral", alt:"Mineral", KM:0.0, HP:0.0, HY:0.0, HK:0.0, NDF:0.0, ADF:0.0, ADL:0.0, eNDF:0.00, nisasta:0.0, seker:0.0, NFC:0.0, PA:0, PB1:0, PB2:0, PB3:0, PC:0, kd_PB2:0, kd_PB3:0, kp:0, dRUP:0, NDFD30:0, kd_NDF:0, iNDF:0, NEL:0.0, NEm:0.0, NEg:0.0, UFL:0.0, UFV:0.0, PDIE:0, PDIN:0, Ca:0.0, P:0.0, Mg:0.0, K:0.0, Na:0.0, Cl:0.0, S:0.0, Mn:0, Cu:0, Fe:0, Zn:0, Lys:0, Met:0, His:0, Arg:0, Thr:0, Ile:0, Leu:0, Val:0, fiyat:0.0 },
   // ============================================================
   // YAN ÜRÜNLER — Pancar Posası, Maya vb.
   // ============================================================
@@ -2196,10 +2182,16 @@ function tumHesapla() {
 }
 
 function headerGuncelle() {
-  document.getElementById('hdr-sut').textContent = profil.sutVerimi;
-  document.getElementById('hdr-bcs').textContent = profil.BCS;
-  document.getElementById('hdr-nel').textContent = ihtiyac.NEL_ihtiyac||'—';
-  document.getElementById('hdr-maliyet').textContent = rasyon.toplam.maliyet||'—';
+  // Not: Header rozetleri (Süt/BCS/NEL/Maliyet) kullanıcı isteğiyle kaldırıldı.
+  // Elementler artık DOM'da yok; varsa güncelle, yoksa sessizce atla.
+  const sutEl = document.getElementById('hdr-sut');
+  if (sutEl) sutEl.textContent = profil.sutVerimi;
+  const bcsEl = document.getElementById('hdr-bcs');
+  if (bcsEl) bcsEl.textContent = profil.BCS;
+  const nelEl = document.getElementById('hdr-nel');
+  if (nelEl) nelEl.textContent = ihtiyac.NEL_ihtiyac||'—';
+  const malEl = document.getElementById('hdr-maliyet');
+  if (malEl) malEl.textContent = rasyon.toplam.maliyet||'—';
 }
 
 // ============================================================
@@ -2213,7 +2205,7 @@ function sekmeAc(id) {
     btn.classList.toggle('active', btn.getAttribute('onclick') === `sekmeAc('${id}')`);
   });
   if(id==='ihtiyac') ihtiyacSayfasiRender();
-  if(id==='rasyon') rasyonSayfasiRender();
+  if(id==='rasyon') { rasyonSayfasiRender(); degerlendirmeSayfasiRender(); }
   if(id==='degerlendirme') degerlendirmeSayfasiRender();
   if(id==='optimizasyon') optimizasyonSayfasiRender();
   if(id==='profil' && hayvanGrubu==='besi') besiProfilGuncelle();
@@ -2458,7 +2450,10 @@ function rasyonSayfasiRender() {
   if (toplamEl) {
     toplamEl.innerHTML =
       `<div class="fs10 fw7 c-blue2">TOPLAM</div>` +
-      `<div style="text-align:right;font-size:10px;font-weight:700;color:var(--text)">${r2(toplamDH)}</div>` +
+      `<input type="number" id="rasyon-toplam-dh-input" value="${r2(toplamDH)||''}" min="0" step="0.1" ` +
+        `title="Toplam DH kg'ı değiştirirseniz tüm yem oranları korunarak rasyon orantılı ölçeklenir" ` +
+        `style="width:100%;text-align:right;font-size:10px;font-weight:700;color:var(--text);background:var(--bg3);border:1px solid var(--border2);border-radius:5px;padding:2px 4px" ` +
+        `onchange="rasyonToplamDHDegistir(this.value)" onfocus="this.select()">` +
       `<div style="text-align:right;font-size:10px;font-weight:700;color:var(--green)">${r2(toplamKM_kg)}</div>` +
       `<div style="text-align:right;font-size:9px;color:var(--text2)">100%</div>` +
       `<div style="text-align:right;font-size:9px;color:var(--teal)">₺${r2(toplamMaliyet/Math.max(toplamDH,0.01))}</div>` +
@@ -2936,7 +2931,10 @@ function rasyonSonucGuncelle() {
   if (toplamEl) {
     toplamEl.innerHTML =
       `<div class="fs10 fw7 c-blue2">TOPLAM</div>` +
-      `<div style="text-align:right;font-size:10px;font-weight:700;color:var(--text)">${r2(toplamDH)}</div>` +
+      `<input type="number" id="rasyon-toplam-dh-input" value="${r2(toplamDH)||''}" min="0" step="0.1" ` +
+        `title="Toplam DH kg'ı değiştirirseniz tüm yem oranları korunarak rasyon orantılı ölçeklenir" ` +
+        `style="width:100%;text-align:right;font-size:10px;font-weight:700;color:var(--text);background:var(--bg3);border:1px solid var(--border2);border-radius:5px;padding:2px 4px" ` +
+        `onchange="rasyonToplamDHDegistir(this.value)" onfocus="this.select()">` +
       `<div style="text-align:right;font-size:10px;font-weight:700;color:var(--green)">${r2(km)}</div>` +
       `<div style="text-align:right;font-size:9px;color:var(--text2)">100%</div>` +
       `<div style="text-align:right;font-size:9px;color:var(--teal)">₺${r2(toplamMaliyet/Math.max(toplamDH,0.01))}</div>` +
@@ -2973,8 +2971,11 @@ function rasyonSonucGuncelle() {
   // Besin tablosu
   rasyonBesinTabloGuncelle();
 
-  // Asidoz + lif yeterliliği + gauge — tek fonksiyonda toplanmış
-  asidozLifPaneliRender();
+  // Değerlendirme bölümü — artık Rasyon Tasarımı'nın altında olduğu için
+  // yem miktarı/fiyatı her değiştiğinde anında güncellenmesi gerekiyor
+  // (deg-tablo, süt tahmini, ihtiyaç barları, maliyet kartları dahil).
+  if (document.getElementById('deg-tablo')) degerlendirmeSayfasiRender();
+  else asidozLifPaneliRender();
 }
 
 function satirEkle() {
@@ -3113,6 +3114,27 @@ function satirMiktarDegistir(id, val) {
   // DOM'u yeniden yazmadan sadece hesaplanan değerleri güncelle
   rasyonSonucGuncelle();
 }
+
+// TOPLAM satırındaki DH kg hücresi elle değiştirilince çağrılır. Mevcut rasyondaki
+// yem ORANLARI korunarak tüm satırlar aynı katsayıyla ölçeklenir — karışım (hangi
+// yemden ne kadar oranında) aynı kalır, sadece toplam miktar büyür/küçülür.
+// Örn: rasyon 15 kg iken kullanıcı 10 yazarsa, her yem kendi payı oranında küçülür.
+function rasyonToplamDHDegistir(val) {
+  const yeniToplam = sayiOku(val, 0);
+  if (yeniToplam <= 0) return;
+
+  const mevcutToplam = rasyonSatirlari.reduce((a,s) => a + (s.miktar || 0), 0);
+  if (mevcutToplam <= 0) { alert('Ölçekleme için önce en az bir yem miktarı girilmiş olmalı.'); return; }
+
+  const olcekKatsayisi = yeniToplam / mevcutToplam;
+  rasyonSatirlari.forEach(s => {
+    if (s.miktar > 0) s.miktar = r3(s.miktar * olcekKatsayisi);
+  });
+
+  tumHesapla();
+  rasyonSayfasiRender();
+}
+window.rasyonToplamDHDegistir = rasyonToplamDHDegistir;
 
 // ============================================================
 // DEĞERLENDİRME SAYFASI
@@ -3631,7 +3653,7 @@ function optimize() {
             <div style="font-size:28px;font-weight:700;color:var(--teal)">₺${sonuc.maliyet}</div>
             <div class="fs11 c-text3">₺${profil.sutVerimi>0?r2(sonuc.maliyet/profil.sutVerimi):'—'} / kg süt</div>
           </div>
-          <button class="btn btn-outline mt12" style="width:100%" onclick="sekmeAc('degerlendirme')">⚖️ Değerlendirmeye Git</button>`;
+          <button class="btn btn-outline mt12" style="width:100%" onclick="sekmeAc('rasyon')">🌾 Rasyon Tasarımına Git</button>`;
       } else {
         document.getElementById('opt-mesaj').innerHTML=`<div class="alert-red">⚠️ Kısıtları karşılayan rasyon bulunamadı. Kısıtları gevşetin.</div>`;
         document.getElementById('opt-sonuc').classList.add('hidden');
@@ -5519,13 +5541,13 @@ function besiSayfasiGuncelle() {
   if (dengeEl) {
     const HP_g = Math.round((rt.HP||0)*1000);
     const satirlar = [
+      { l:'KM Alımı',              des:r2(km), ger:ih.DMI, b:'kg/gün' },
+      { l:'Ham Protein',           des:ry.HP||0, ger:'—', b:'%KM' },
       { l:'ME (Metabolik Enerji)', des:r2(rt.ME||0), ger:ih.ME_ihtiyac, b:'Mcal/gün', kritik:true },
       { l:'ME Yoğunluğu',          des:ry.ME_yog||0, ger:ih.ME_yogunluk_hedef, b:'Mcal/kgKM' },
       { l:'UFV (INRA)',            des:r2(rt.UFV||0), ger:ih.UFV_ihtiyac, b:'UFV/gün', kritik:true },
       { l:'PDI (INRA, min N/E)',   des:Math.round(ry.PDI_min||0), ger:ih.PDI_ihtiyac, b:'g/gün', kritik:true },
       { l:'Ham Protein',           des:HP_g, ger:ih.HP, b:'g/gün' },
-      { l:'Ham Protein',           des:ry.HP||0, ger:'—', b:'%KM' },
-      { l:'KM Alımı',              des:r2(km), ger:ih.DMI, b:'kg/gün' },
       { l:'Ca (soğurulabilir)',    des:r2((rt.Ca||0)*1000), ger:ih.Ca_abs_ihtiyac ?? ih.Ca, b:'g/gün' },
       { l:'P (soğurulabilir)',     des:r2((rt.P||0)*1000), ger:ih.P_abs_ihtiyac ?? ih.P, b:'g/gün' },
     ];
@@ -5592,11 +5614,11 @@ function besiSayfasiGuncelle() {
   if (frEl) {
     const satirlar = [
       { l:'Nişasta',    v:ry.nisasta,   u:'%KM', min:20, max:40 },
+      { l:'peNDF',       v:ry.peNDF,     u:'%KM', min:15, max:30 },
+      { l:'NFC',        v:ry.NFC,       u:'%KM', min:30, max:50 },
       { l:'NDF',        v:ry.NDF,       u:'%KM', min:25, max:50 },
       { l:'Forage NDF', v:ry.ForageNDF, u:'%KM', min:15, max:30 },
-      { l:'peNDF',       v:ry.peNDF,     u:'%KM', min:15, max:30 },
       { l:'ADF',        v:ry.ADF,       u:'%KM', min:15, max:28 },
-      { l:'NFC',        v:ry.NFC,       u:'%KM', min:30, max:50 },
       { l:'Ham Yağ',    v:ry.HY,        u:'%KM', min:2,  max:6 },
     ];
     frEl.innerHTML = satirlar.map((s,i) => {
@@ -6453,12 +6475,6 @@ function grupSec(grup) {
   if (headerBadges) headerBadges.style.display = '';
 
   const RENK = { sagmal:'var(--blue)', duve:'var(--purple)', kuru:'var(--green)', besi:'var(--orange)' };
-  const BADGE = {
-    sagmal: '🐄 Sağmal — NASEM 2021',
-    duve:   '🐮 Düve — Geliştiriliyor',
-    kuru:   '🌿 Kuru Dönem — Geliştiriliyor',
-    besi:   '🐂 Besi — Geliştiriliyor',
-  };
 
   // Nav bar buton stillerini güncelle
   ['sagmal','duve','kuru','besi'].forEach(g => {
@@ -6474,16 +6490,6 @@ function grupSec(grup) {
       btn.style.color = 'var(--text3)';
     }
   });
-
-  // Badge güncelle
-  const badge = document.getElementById('grup-badge');
-  if (badge) {
-    badge.textContent = BADGE[grup];
-    badge.style.borderColor = RENK[grup].replace('var(','').replace(')','') === RENK[grup]
-      ? 'rgba(20,184,166,0.3)' : RENK[grup];
-    badge.style.color = RENK[grup];
-    badge.style.background = RENK[grup].replace(')', ',0.1)').replace('var(', 'rgba(').replace('--blue','59,130,246').replace('--purple','139,92,246').replace('--green','74,222,128').replace('--orange','251,146,60');
-  }
 
   // Profil açıklama güncelle
   const acEl = document.getElementById('grup-aciklama');
