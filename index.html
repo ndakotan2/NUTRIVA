@@ -2153,6 +2153,10 @@ const r2 = v => Math.round(v*100)/100;
 const r3 = v => Math.round(v*1000)/1000;
 const r4 = v => Math.round(v*10000)/10000;
 const pct = (v,km) => km>0 ? Math.round(v/km*1000)/10 : 0;
+// Türkçe "0,00" formatı: her zaman 2 ondalık basamak, virgül ayraç.
+// Geçersiz/eksik değerlerde "—" döner — ekranda çirkin "NaN" veya kayan nokta
+// hatası (9.3159999999999...) hiç görünmez.
+const fmt2 = v => (v === null || v === undefined || isNaN(v)) ? '—' : v.toFixed(2).replace('.', ',');
 // Bir input elementinin değerini virgül/nokta ayracı fark etmeksizin sayıya çevirir.
 // parseFloat("1,3") = 1 döndürür (virgülü tanımaz, sessizce yarım okur) — bu yüzden
 // ondalık girişi olan TÜM alanlarda doğrudan parseFloat yerine bu kullanılmalı.
@@ -2410,9 +2414,9 @@ function bcsSkalaSi() {
 
 function sutTurevler() {
   const sv=profil.sutVerimi, sy=profil.sutYag, sp=profil.sutProtein, sl=profil.sutLaktoz;
-  document.getElementById('fcm').textContent = r2(0.4*sv+15*sv*sy/100);
-  document.getElementById('ecm').textContent = r2(sv*(0.327+0.00968*sy+0.00535*sp));
-  document.getElementById('sut-km').textContent = r2(sv*(sy/100+sp/100+sl/100));
+  document.getElementById('fcm').textContent = fmt2(0.4*sv+15*sv*sy/100);
+  document.getElementById('ecm').textContent = fmt2(sv*(0.327+0.00968*sy+0.00535*sp));
+  document.getElementById('sut-km').textContent = fmt2(sv*(sy/100+sp/100+sl/100));
 }
 
 function laktasyonDonemi() {
@@ -2462,35 +2466,35 @@ function ihtiyacSayfasiRender() {
       <div style="font-size:15px;font-weight:700;color:${c}">${v}</div>
     </div>`;
   document.getElementById('nel-dagılım').innerHTML =
-    nelSatir('İdame',ih.NEL_idame,'var(--blue2)',`CA:${profil.CA}kg`)+
-    nelSatir('Süt Üretimi',ih.NEL_sut,'var(--green)',`${profil.sutVerimi}kg × (0.36+0.097×${profil.sutYag}%)`)+
-    nelSatir('Gebelik',ih.NEL_geb,'var(--purple)',profil.gebGun<190?'< 190 gün — sıfır':`${profil.gebGun}. gün gebelik`)+
-    nelSatir('BCS Değişimi',ih.NEL_bcs,'var(--orange)',`${profil.BCS} → ${profil.hedefBCS}`)+
+    nelSatir('İdame',fmt2(ih.NEL_idame),'var(--blue2)',`CA:${profil.CA}kg`)+
+    nelSatir('Süt Üretimi',fmt2(ih.NEL_sut),'var(--green)',`${profil.sutVerimi}kg × (0.36+0.097×${profil.sutYag}%)`)+
+    nelSatir('Gebelik',fmt2(ih.NEL_geb),'var(--purple)',profil.gebGun<190?'< 190 gün — sıfır':`${profil.gebGun}. gün gebelik`)+
+    nelSatir('BCS Değişimi',fmt2(ih.NEL_bcs),'var(--orange)',`${profil.BCS} → ${profil.hedefBCS}`)+
     `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:var(--bg4);border-radius:6px;border:1px solid rgba(251,191,36,0.3)">
       <div class="fs12 fw7" style="color:var(--yellow)">TOPLAM</div>
-      <div style="font-size:18px;font-weight:700;color:var(--yellow)">${ih.NEL_ihtiyac}</div>
+      <div style="font-size:18px;font-weight:700;color:var(--yellow)">${fmt2(ih.NEL_ihtiyac)}</div>
     </div>`;
 
   // MP dağılımı
   document.getElementById('mp-dagılım').innerHTML =
-    nelSatir('İdame',ih.MP_idame,'var(--blue2)','3.8 g/kgCA^0.75 / 0.67')+
-    nelSatir('Süt Proteini',ih.MP_sut,'var(--green)',`${profil.sutVerimi}kg × ${profil.sutProtein}% / 0.67`)+
-    nelSatir('Gebelik',ih.MP_geb,'var(--purple)',profil.gebGun<190?'< 190 gün — sıfır':'')+
+    nelSatir('İdame',fmt2(ih.MP_idame),'var(--blue2)','3.8 g/kgCA^0.75 / 0.67')+
+    nelSatir('Süt Proteini',fmt2(ih.MP_sut),'var(--green)',`${profil.sutVerimi}kg × ${profil.sutProtein}% / 0.67`)+
+    nelSatir('Gebelik',fmt2(ih.MP_geb),'var(--purple)',profil.gebGun<190?'< 190 gün — sıfır':'')+
     `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:var(--bg4);border-radius:6px;border:1px solid rgba(249,168,212,0.3)">
       <div class="fs12 fw7 c-pink">TOPLAM MP</div>
-      <div style="font-size:18px;font-weight:700;color:var(--pink)">${ih.MP_ihtiyac}</div>
+      <div style="font-size:18px;font-weight:700;color:var(--pink)">${fmt2(ih.MP_ihtiyac)}</div>
     </div>`;
 
-  document.getElementById('sut-enerji').textContent = ih.sut_enerji;
-  document.getElementById('sut-protein').textContent = ih.sut_prot;
+  document.getElementById('sut-enerji').textContent = fmt2(ih.sut_enerji);
+  document.getElementById('sut-protein').textContent = fmt2(ih.sut_prot);
   const sinir = Math.min(ih.sut_enerji,ih.sut_prot);
-  document.getElementById('sinirli-faktor').innerHTML = `💡 Sınırlayıcı faktör: <b>${sinir} kg/gün</b> — ${ih.sut_enerji<ih.sut_prot?'Enerji':'Protein'}`;
+  document.getElementById('sinirli-faktor').innerHTML = `💡 Sınırlayıcı faktör: <b>${fmt2(sinir)} kg/gün</b> — ${ih.sut_enerji<ih.sut_prot?'Enerji':'Protein'}`;
 
   // Mineraller
   document.getElementById('mineral-ihtiyac').innerHTML = Object.entries(ih.min).map(([k,v])=>`
     <div style="display:flex;justify-content:space-between;padding:6px 10px;background:var(--bg2);border-radius:6px">
       <span class="fs12 c-text2">${k}</span>
-      <span class="fs12 fw7 c-green">${v} g</span>
+      <span class="fs12 fw7 c-green">${fmt2(v)} g</span>
     </div>`).join('');
 
   // Vitaminler
@@ -2847,14 +2851,14 @@ function asidozLifPaneliRender() {
   const phMinEl = document.getElementById('ph-min');
   const phMaxEl = document.getElementById('ph-max');
   if (phOrtEl) {
-    phOrtEl.textContent = asidozSonuc.pH_ortalama || '—';
+    phOrtEl.textContent = asidozSonuc.pH_ortalama ? fmt2(asidozSonuc.pH_ortalama) : '—';
     phOrtEl.style.color = asidozSonuc.pH_ortalama >= 6.2 ? 'var(--green)' : asidozSonuc.pH_ortalama >= 5.8 ? 'var(--yellow)' : 'var(--red)';
   }
   if (phMinEl) {
-    phMinEl.textContent = asidozSonuc.pH_min || '—';
+    phMinEl.textContent = asidozSonuc.pH_min ? fmt2(asidozSonuc.pH_min) : '—';
     phMinEl.style.color = asidozSonuc.pH_min >= 5.8 ? 'var(--green)' : asidozSonuc.pH_min >= 5.5 ? 'var(--yellow)' : 'var(--red)';
   }
-  if (phMaxEl) { phMaxEl.textContent = asidozSonuc.pH_max || '—'; }
+  if (phMaxEl) { phMaxEl.textContent = asidozSonuc.pH_max ? fmt2(asidozSonuc.pH_max) : '—'; }
 
   // Risk badge
   const riskBadge = document.getElementById('asidoz-risk-badge');
@@ -2883,7 +2887,7 @@ function asidozLifPaneliRender() {
         <div style="font-size:11px;color:var(--text2)">${s.l}</div>
         <div style="text-align:right;font-size:${s.bold?'14':'13'}px;font-weight:${s.bold?'700':'600'};color:${s.renk};
           ${s.bold?'background:'+s.renk.replace(')',',.12)').replace('var(','rgba(').replace('--green','74,222,128').replace('--yellow','251,191,36').replace('--orange','251,146,60').replace('--red','248,113,113')+';padding:2px 6px;border-radius:5px;':''}
-          font-variant-numeric:tabular-nums">${s.v}</div>
+          font-variant-numeric:tabular-nums">${fmt2(s.v)}</div>
         <div style="font-size:10px;color:var(--text4);text-align:right">${s.ref}</div>
       </div>`
     ).join('');
@@ -2937,7 +2941,7 @@ function asidozLifPaneliRender() {
       `<text x="162" y="45" font-size="9" fill="#f97316" font-weight="600">6.4</text>` +
       `<text x="202" y="108" font-size="9" fill="#2f6a62" font-weight="600">8+</text>` +
       // İndeks değeri ortada
-      `<text x="${GCX}" y="${GCY+22}" font-size="13" fill="${gaugeRenk}" text-anchor="middle" font-weight="700">${idx}</text>` +
+      `<text x="${GCX}" y="${GCY+22}" font-size="13" fill="${gaugeRenk}" text-anchor="middle" font-weight="700">${fmt2(idx)}</text>` +
       `<text x="${GCX}" y="${GCY+34}" font-size="9" fill="#2f6a62" text-anchor="middle">pH×dk/kgKM</text>` +
       `</svg>`;
   }
@@ -2948,8 +2952,8 @@ function asidozLifPaneliRender() {
     const setEl2 = (id,v) => { const e=document.getElementById(id); if(e) e.textContent=v; };
     const setClr2 = (id,c) => { const e=document.getElementById(id); if(e) e.style.color=c; };
 
-    setEl2('lif-ph-ort', lifSonuc.ph_ort);
-    setEl2('lif-ph-sure', lifSonuc.sure_58);
+    setEl2('lif-ph-ort', fmt2(lifSonuc.ph_ort));
+    setEl2('lif-ph-sure', fmt2(lifSonuc.sure_58));
     setClr2('lif-ph-ort', lifSonuc.ph_ok ? 'var(--green)' : 'var(--red)');
     setClr2('lif-ph-sure', lifSonuc.sure_ok ? 'var(--green)' : lifSonuc.sure_58<6 ? 'var(--yellow)' : 'var(--red)');
 
@@ -2986,10 +2990,10 @@ function asidozLifPaneliRender() {
             border-radius:${isMevcut?'6px':'4px'};margin-bottom:2px;align-items:center;
             border-left:${isMevcut?'3px solid var(--blue2)':'none'}">
             <div style="font-size:${isMevcut?'11':'10'}px;font-weight:${isMevcut?'700':'400'};color:${isMevcut?'var(--blue2)':r.renk||'var(--text3)'}">${r.kat}</div>
-            <div style="text-align:right;font-size:11px;color:var(--text3)">${r.ph||'—'}</div>
-            <div style="text-align:right;font-size:11px;font-weight:${isMevcut?'700':'400'};color:${peNDF_renk}">${r.peNDF}</div>
-            <div style="text-align:right;font-size:11px;font-weight:${isMevcut?'700':'400'};color:${rdNist_renk}">${r.rdNist}</div>
-            <div style="text-align:right;font-size:11px;font-weight:${isMevcut?'700':'400'};color:${sure_renk}">${r.sure!==undefined?r.sure:'—'}</div>
+            <div style="text-align:right;font-size:11px;color:var(--text3)">${r.ph!==undefined&&r.ph!==null?fmt2(r.ph):'—'}</div>
+            <div style="text-align:right;font-size:11px;font-weight:${isMevcut?'700':'400'};color:${peNDF_renk}">${fmt2(r.peNDF)}</div>
+            <div style="text-align:right;font-size:11px;font-weight:${isMevcut?'700':'400'};color:${rdNist_renk}">${fmt2(r.rdNist)}</div>
+            <div style="text-align:right;font-size:11px;font-weight:${isMevcut?'700':'400'};color:${sure_renk}">${r.sure!==undefined?fmt2(r.sure):'—'}</div>
           </div>`;
         }).join('');
     }
@@ -3006,27 +3010,30 @@ function rasyonSayfasiRenderDenge() {
   if (!dengeEl) return;
 
   const dengeVerisi = [
-    { l:'ME Mcal/gün',  destek:rt.NEL?r2(rt.NEL):'—', gereksinim:ih.NEL_ihtiyac||'—', denge:rt.NEL&&ih.NEL_ihtiyac?r2(rt.NEL-ih.NEL_ihtiyac):'—', kritik:true },
-    { l:'MP g/gün',     destek:rt.HP?Math.round(rt.HP*1000*0.64):'—', gereksinim:ih.MP_ihtiyac||'—', denge:rt.HP&&ih.MP_ihtiyac?Math.round(rt.HP*1000*0.64-ih.MP_ihtiyac):'—', kritik:true },
-    { l:'peNDF kg',     destek:rt.peNDF?r2(rt.peNDF):'—', gereksinim:ih.DMI?r2(ih.DMI*0.22):'—', denge:rt.peNDF&&ih.DMI?r2(rt.peNDF-ih.DMI*0.22):'—' },
-    { l:'NDF %KM',      destek:ry.NDF||'—', gereksinim:'28-40', denge:ry.NDF?(ry.NDF<28?r2(ry.NDF-28):ry.NDF>40?r2(ry.NDF-40):'✓'):'—' },
-    { l:'Nişasta %KM',  destek:ry.nisasta||'—', gereksinim:'≤30', denge:ry.nisasta?(ry.nisasta>30?r2(ry.nisasta-30):'✓'):'—' },
-    { l:'Ca g/gün',     destek:rt.Ca?r2(rt.Ca*1000):'—', gereksinim:ih.min?ih.min.Ca:'—', denge:rt.Ca&&ih.min?r2(rt.Ca*1000-ih.min.Ca):'—' },
-    { l:'P g/gün',      destek:rt.P?r2(rt.P*1000):'—', gereksinim:ih.min?ih.min.P:'—', denge:rt.P&&ih.min?r2(rt.P*1000-ih.min.P):'—' },
-    { l:'Mg g/gün',     destek:rt.Mg?r2(rt.Mg*1000):'—', gereksinim:ih.min&&ih.min.Mg?ih.min.Mg:'—', denge:rt.Mg&&ih.min&&ih.min.Mg?r2(rt.Mg*1000-ih.min.Mg):'—' },
-    { l:'KM Alımı kg',  destek:r2(km), gereksinim:ih.DMI||'—', denge:km&&ih.DMI?r2(km-ih.DMI):'—' },
+    { l:'ME Mcal/gün',  destek:rt.NEL, gereksinim:ih.NEL_ihtiyac, dengeRaw:rt.NEL&&ih.NEL_ihtiyac?rt.NEL-ih.NEL_ihtiyac:undefined, kritik:true },
+    { l:'MP g/gün',     destek:rt.HP?rt.HP*1000*0.64:undefined, gereksinim:ih.MP_ihtiyac, dengeRaw:rt.HP&&ih.MP_ihtiyac?rt.HP*1000*0.64-ih.MP_ihtiyac:undefined, kritik:true },
+    { l:'peNDF kg',     destek:rt.peNDF, gereksinim:ih.DMI?ih.DMI*0.22:undefined, dengeRaw:rt.peNDF&&ih.DMI?rt.peNDF-ih.DMI*0.22:undefined },
+    { l:'NDF %KM',      destek:ry.NDF, gereksinim:'28-40', denge:ry.NDF?(ry.NDF<28?fmt2(ry.NDF-28):ry.NDF>40?fmt2(ry.NDF-40):'✓'):'—', dengeRaw:ry.NDF?(ry.NDF<28?ry.NDF-28:ry.NDF>40?ry.NDF-40:0):undefined },
+    { l:'Nişasta %KM',  destek:ry.nisasta, gereksinim:'≤30', denge:ry.nisasta?(ry.nisasta>30?fmt2(ry.nisasta-30):'✓'):'—', dengeRaw:ry.nisasta?(ry.nisasta>30?ry.nisasta-30:0):undefined },
+    { l:'Ca g/gün',     destek:rt.Ca?rt.Ca*1000:undefined, gereksinim:ih.min?ih.min.Ca:undefined, dengeRaw:rt.Ca&&ih.min?rt.Ca*1000-ih.min.Ca:undefined },
+    { l:'P g/gün',      destek:rt.P?rt.P*1000:undefined, gereksinim:ih.min?ih.min.P:undefined, dengeRaw:rt.P&&ih.min?rt.P*1000-ih.min.P:undefined },
+    { l:'Mg g/gün',     destek:rt.Mg?rt.Mg*1000:undefined, gereksinim:ih.min&&ih.min.Mg?ih.min.Mg:undefined, dengeRaw:rt.Mg&&ih.min&&ih.min.Mg?rt.Mg*1000-ih.min.Mg:undefined },
+    { l:'KM Alımı kg',  destek:km, gereksinim:ih.DMI, dengeRaw:km&&ih.DMI?km-ih.DMI:undefined },
   ];
 
   dengeEl.innerHTML = dengeVerisi.map((d,i) => {
-    const dn = parseFloat(d.denge);
+    // Renk hesabı ham sayısal değerden (dengeRaw) yapılır — fmt2() ile gösterilen
+    // virgüllü string ("+1,23") üzerinden parseFloat asla kullanılmaz.
+    const dn = d.dengeRaw;
+    const dengeGosterim = d.denge !== undefined ? d.denge : fmt2(dn);
     let renk = 'var(--text2)';
     if (d.denge==='✓') renk='var(--green)';
-    else if (!isNaN(dn)) renk = d.kritik ? (dn<-2?'var(--red)':dn>5?'var(--yellow)':'var(--green)') : (dn<0?'var(--red)':'var(--green)');
+    else if (dn !== undefined && !isNaN(dn)) renk = d.kritik ? (dn<-2?'var(--red)':dn>5?'var(--yellow)':'var(--green)') : (dn<0?'var(--red)':'var(--green)');
     return `<div style="display:grid;grid-template-columns:1fr 58px 62px 58px;padding:5px 8px;gap:3px;align-items:center;background:${i%2===0?'var(--bg3)':'var(--bg2)'};border-bottom:1px solid #a8e6da">
       <div class="fs12" style="color:var(--text2)">${d.l}</div>
-      <div style="text-align:right;font-size:12px;font-weight:600;color:var(--blue2)">${d.destek}</div>
-      <div style="text-align:right;font-size:12px;font-weight:700;color:${renk}">${d.denge}</div>
-      <div style="text-align:right;font-size:11px;color:var(--text3)">${d.gereksinim}</div>
+      <div style="text-align:right;font-size:12px;font-weight:600;color:var(--blue2)">${fmt2(d.destek)}</div>
+      <div style="text-align:right;font-size:12px;font-weight:700;color:${renk}">${dengeGosterim}</div>
+      <div style="text-align:right;font-size:11px;color:var(--text3)">${typeof d.gereksinim === 'string' ? d.gereksinim : fmt2(d.gereksinim)}</div>
     </div>`;
   }).join('');
 }
@@ -3269,33 +3276,33 @@ function degerlendirmeSayfasiRender() {
   const topMik = rasyonSatirlari.reduce((a,s)=>a+(s.miktar||0),0);
 
   const tümSatirlar = {
-    "K.M.":     { birim:"%",        km: topMik>0?r4(km/topMik*100):"—", destek:r4(km), dBirim:"kg/gün" },
-    "Kaba Yem":  { birim:"%",        km: yuz.kaba?.toFixed(4)||"—",   destek: r4(r.kabaKM||0),   dBirim:"kg KM", min:40, max:60 },
-    "Kesif Yem": { birim:"%",        km: yuz.konsan?.toFixed(4)||"—", destek: r4(r.konsanKM||0), dBirim:"kg KM", min:40, max:60 },
-    "Kaba:Kesif":{ birim:"",         km: yuz.kabaKonsan?.toFixed(4)||"—", destek:"—", dBirim:"" },
-    "HP":        { birim:"%",        km: yuz.HP?.toFixed(4)||"—", destek: r4(r.HP*1000), dBirim:"g/gün", min:14, max:18 },
-    "Sol Prot/RDP":{ birim:"%",     km: km>0?(r.HP*1000*0.65/km/10).toFixed(4):"—", destek:"—", dBirim:"" },
-    "NEL 3x NRC":{ birim:"Mcal/kg", km: yuz.NEL_yog?.toFixed(4)||"—", destek: r.NEL?.toFixed(4)||"—", dBirim:"Mcal/gün", min:1.55, max:1.80 },
-    "Nişasta":   { birim:"%",        km: yuz.nisasta?.toFixed(4)||"—", destek: r4(r.nist||0), dBirim:"kg/gün", min:20, max:30 },
-    "aNDFom":    { birim:"%",        km: yuz.NDF?.toFixed(4)||"—", destek: r4(r.NDF||0), dBirim:"kg/gün", min:28, max:40 },
-    "Kaba Yem NDF":{ birim:"%",      km: yuz.kabaNDF?.toFixed(4)||"—",   destek: r4(r.kabaNDF||0),   dBirim:"kg/gün", min:19, max:26 },
-    "Kesif NDF": { birim:"%",        km: yuz.konsanNDF?.toFixed(4)||"—", destek: r4(r.konsanNDF||0), dBirim:"kg/gün" },
-    "NDF Kaba Payı":{ birim:"%NDF",  km: yuz.kabaNDF_pay?.toFixed(4)||"—", destek:"—", dBirim:"", min:60 },
-    "peNDF":     { birim:"%",        km: yuz.peNDF?.toFixed(4)||"—", destek: r4(r.peNDF||0), dBirim:"kg/gün", min:22, max:35 },
-    "RDP 3X 1.Düzey":{ birim:"%",   km: km>0?(r.HP*1000*0.65/km/10).toFixed(4):"—", destek: r4(r.HP*1000*0.65), dBirim:"g/gün" },
-    "Ham Yağ (EE)":{ birim:"%",     km: yuz.HY?.toFixed(4)||"—", destek: r4(r.HY||0), dBirim:"kg/gün", min:3, max:6 },
-    "ADF":       { birim:"%",        km: yuz.ADF?.toFixed(4)||"—", destek: r4(r.ADF||0), dBirim:"kg/gün", min:17, max:24 },
-    "Lignin (ADL)":{ birim:"%",      km: yuz.ADL?.toFixed(4)||"—", destek: r4(r.ADL||0), dBirim:"kg/gün" },
-    "NFC":       { birim:"%",        km: yuz.NFC?.toFixed(4)||"—", destek:"—", dBirim:"" },
-    "Ca":        { birim:"%",        km: km>0?(r.Ca/km*100).toFixed(4):"—", destek: r4(r.Ca*1000), dBirim:"g/gün", hedef:ih.min&&ih.min.Ca },
-    "P":         { birim:"%",        km: km>0?(r.P/km*100).toFixed(4):"—", destek: r4(r.P*1000), dBirim:"g/gün", hedef:ih.min&&ih.min.P },
-    "Mg":        { birim:"%",        km: km>0?(r.Mg/km*100).toFixed(4):"—", destek: r4(r.Mg*1000), dBirim:"g/gün", hedef:ih.min&&ih.min.Mg },
-    "K":         { birim:"%",        km: km>0?(r.K/km*100).toFixed(4):"—", destek: r4(r.K*1000), dBirim:"g/gün", hedef:ih.min&&ih.min.K },
-    "Na":        { birim:"%",        km: km>0?(r.Na/km*100).toFixed(4):"—", destek: r4(r.Na*1000), dBirim:"g/gün", hedef:ih.min&&ih.min.Na },
-    "S":         { birim:"%",        km: km>0?(r.S/km*100).toFixed(4):"—", destek: r4(r.S*1000), dBirim:"g/gün", max:0.4 },
-    "Ca:P Oranı":{ birim:"",         km: yuz.CaP?.toFixed(4)||"—", destek:"—", dBirim:"", min:1.5, max:2.5 },
-    "Toplam KM": { birim:"kg/gün",   km:"—", destek: r4(km), dBirim:"kg/gün" },
-    "Maliyet":   { birim:"₺/gün",    km:"—", destek: r.maliyet?.toFixed(4)||"—", dBirim:"₺/gün", maliyetSatiri:true },
+    "K.M.":     { birim:"%",        km: topMik>0?fmt2(km/topMik*100):"—", kmRaw: topMik>0?km/topMik*100:undefined, destek:fmt2(km), destekRaw:km, dBirim:"kg/gün" },
+    "Kaba Yem":  { birim:"%",        km: fmt2(yuz.kaba), kmRaw:yuz.kaba, destek: fmt2(r.kabaKM||0), destekRaw:r.kabaKM||0, dBirim:"kg KM", min:40, max:60 },
+    "Kesif Yem": { birim:"%",        km: fmt2(yuz.konsan), kmRaw:yuz.konsan, destek: fmt2(r.konsanKM||0), destekRaw:r.konsanKM||0, dBirim:"kg KM", min:40, max:60 },
+    "Kaba:Kesif":{ birim:"",         km: fmt2(yuz.kabaKonsan), kmRaw:yuz.kabaKonsan, destek:"—", destekRaw:undefined, dBirim:"" },
+    "HP":        { birim:"%",        km: fmt2(yuz.HP), kmRaw:yuz.HP, destek: fmt2(r.HP*1000), destekRaw:r.HP*1000, dBirim:"g/gün", min:14, max:18 },
+    "Sol Prot/RDP":{ birim:"%",     km: km>0?fmt2(r.HP*1000*0.65/km/10):"—", kmRaw: km>0?r.HP*1000*0.65/km/10:undefined, destek:"—", destekRaw:undefined, dBirim:"" },
+    "NEL 3x NRC":{ birim:"Mcal/kg", km: fmt2(yuz.NEL_yog), kmRaw:yuz.NEL_yog, destek: fmt2(r.NEL), destekRaw:r.NEL, dBirim:"Mcal/gün", min:1.55, max:1.80 },
+    "Nişasta":   { birim:"%",        km: fmt2(yuz.nisasta), kmRaw:yuz.nisasta, destek: fmt2(r.nist||0), destekRaw:r.nist||0, dBirim:"kg/gün", min:20, max:30 },
+    "aNDFom":    { birim:"%",        km: fmt2(yuz.NDF), kmRaw:yuz.NDF, destek: fmt2(r.NDF||0), destekRaw:r.NDF||0, dBirim:"kg/gün", min:28, max:40 },
+    "Kaba Yem NDF":{ birim:"%",      km: fmt2(yuz.kabaNDF), kmRaw:yuz.kabaNDF,   destek: fmt2(r.kabaNDF||0), destekRaw:r.kabaNDF||0,   dBirim:"kg/gün", min:19, max:26 },
+    "Kesif NDF": { birim:"%",        km: fmt2(yuz.konsanNDF), kmRaw:yuz.konsanNDF, destek: fmt2(r.konsanNDF||0), destekRaw:r.konsanNDF||0, dBirim:"kg/gün" },
+    "NDF Kaba Payı":{ birim:"%NDF",  km: fmt2(yuz.kabaNDF_pay), kmRaw:yuz.kabaNDF_pay, destek:"—", destekRaw:undefined, dBirim:"", min:60 },
+    "peNDF":     { birim:"%",        km: fmt2(yuz.peNDF), kmRaw:yuz.peNDF, destek: fmt2(r.peNDF||0), destekRaw:r.peNDF||0, dBirim:"kg/gün", min:22, max:35 },
+    "RDP 3X 1.Düzey":{ birim:"%",   km: km>0?fmt2(r.HP*1000*0.65/km/10):"—", kmRaw: km>0?r.HP*1000*0.65/km/10:undefined, destek: fmt2(r.HP*1000*0.65), destekRaw:r.HP*1000*0.65, dBirim:"g/gün" },
+    "Ham Yağ (EE)":{ birim:"%",     km: fmt2(yuz.HY), kmRaw:yuz.HY, destek: fmt2(r.HY||0), destekRaw:r.HY||0, dBirim:"kg/gün", min:3, max:6 },
+    "ADF":       { birim:"%",        km: fmt2(yuz.ADF), kmRaw:yuz.ADF, destek: fmt2(r.ADF||0), destekRaw:r.ADF||0, dBirim:"kg/gün", min:17, max:24 },
+    "Lignin (ADL)":{ birim:"%",      km: fmt2(yuz.ADL), kmRaw:yuz.ADL, destek: fmt2(r.ADL||0), destekRaw:r.ADL||0, dBirim:"kg/gün" },
+    "NFC":       { birim:"%",        km: fmt2(yuz.NFC), kmRaw:yuz.NFC, destek:"—", destekRaw:undefined, dBirim:"" },
+    "Ca":        { birim:"%",        km: km>0?fmt2(r.Ca/km*100):"—", kmRaw: km>0?r.Ca/km*100:undefined, destek: fmt2(r.Ca*1000), destekRaw:r.Ca*1000, dBirim:"g/gün", hedef:ih.min&&ih.min.Ca },
+    "P":         { birim:"%",        km: km>0?fmt2(r.P/km*100):"—", kmRaw: km>0?r.P/km*100:undefined, destek: fmt2(r.P*1000), destekRaw:r.P*1000, dBirim:"g/gün", hedef:ih.min&&ih.min.P },
+    "Mg":        { birim:"%",        km: km>0?fmt2(r.Mg/km*100):"—", kmRaw: km>0?r.Mg/km*100:undefined, destek: fmt2(r.Mg*1000), destekRaw:r.Mg*1000, dBirim:"g/gün", hedef:ih.min&&ih.min.Mg },
+    "K":         { birim:"%",        km: km>0?fmt2(r.K/km*100):"—", kmRaw: km>0?r.K/km*100:undefined, destek: fmt2(r.K*1000), destekRaw:r.K*1000, dBirim:"g/gün", hedef:ih.min&&ih.min.K },
+    "Na":        { birim:"%",        km: km>0?fmt2(r.Na/km*100):"—", kmRaw: km>0?r.Na/km*100:undefined, destek: fmt2(r.Na*1000), destekRaw:r.Na*1000, dBirim:"g/gün", hedef:ih.min&&ih.min.Na },
+    "S":         { birim:"%",        km: km>0?fmt2(r.S/km*100):"—", kmRaw: km>0?r.S/km*100:undefined, destek: fmt2(r.S*1000), destekRaw:r.S*1000, dBirim:"g/gün", max:0.4 },
+    "Ca:P Oranı":{ birim:"",         km: fmt2(yuz.CaP), kmRaw:yuz.CaP, destek:"—", destekRaw:undefined, dBirim:"", min:1.5, max:2.5 },
+    "Toplam KM": { birim:"kg/gün",   km:"—", kmRaw:undefined, destek: fmt2(km), destekRaw:km, dBirim:"kg/gün" },
+    "Maliyet":   { birim:"₺/gün",    km:"—", kmRaw:undefined, destek: fmt2(r.maliyet), destekRaw:r.maliyet, dBirim:"₺/gün", maliyetSatiri:true },
   };
 
   const wrap = document.getElementById('deg-tablo');
@@ -3303,10 +3310,14 @@ function degerlendirmeSayfasiRender() {
   degSirasi.forEach((ad, idx) => {
     const satir = tümSatirlar[ad];
     if(!satir) return;
-    const kmVal = parseFloat(satir.km);
-    const destekVal = parseFloat(satir.destek);
+    // Renk hesabı ham sayısal değerlerden yapılır (satir.kmRaw/destekRaw) —
+    // satir.km/destek zaten "14,52" gibi virgüllü GÖSTERİM stringidir,
+    // parseFloat virgülü tanımayıp sessizce yarım okuyacağı için asla
+    // buradan renk hesaplamak doğru olmaz.
+    const kmVal = satir.kmRaw;
+    const destekVal = satir.destekRaw;
     let renk = 'var(--text2)';
-    if(satir.hedef && !isNaN(destekVal)) {
+    if(satir.hedef && kmVal !== undefined && !isNaN(destekVal)) {
       const oran = destekVal/satir.hedef;
       if(oran<0.90){renk='var(--red)';}
       else if(oran>1.15){renk='var(--yellow)';}
@@ -3352,27 +3363,27 @@ function degerlendirmeSayfasiRender() {
   ].map(it=>{
     const oran=profil.sutVerimi>0?Math.min((it.v/profil.sutVerimi)*100,130):0;
     return `<div class="mb8">
-      <div class="flex-between fs12 mb4"><span class="c-text2">${it.l}</span><span style="color:${it.c};font-weight:700">${it.v} kg/gün</span></div>
+      <div class="flex-between fs12 mb4"><span class="c-text2">${it.l}</span><span style="color:${it.c};font-weight:700">${fmt2(it.v)} kg/gün</span></div>
       <div class="bar-wrap"><div class="bar-fill" style="width:${oran}%;background:${it.c}"></div></div>
     </div>`;
   }).join('');
   const sinir=Math.min(ih.sut_enerji,ih.sut_prot);
-  document.getElementById('sinirli-faktor2').innerHTML=`Sınırlayıcı: <b>${sinir} kg/gün</b> — ${ih.sut_enerji<ih.sut_prot?'Enerji':'Protein'}`;
+  document.getElementById('sinirli-faktor2').innerHTML=`Sınırlayıcı: <b>${fmt2(sinir)} kg/gün</b> — ${ih.sut_enerji<ih.sut_prot?'Enerji':'Protein'}`;
 
   // Karşılaştırma barları
   document.getElementById('kars-barlar').innerHTML = [
     {l:"NEL",h:ih.NEL_ihtiyac,r:r.NEL||0,b:"Mcal/gün"},
     {l:"KM Alımı",h:ih.DMI,r:km,b:"kg/gün"},
-    {l:"Ca",h:ih.min&&ih.min.Ca,r:r2(r.Ca*1000),b:"g/gün"},
-    {l:"P",h:ih.min&&ih.min.P,r:r2(r.P*1000),b:"g/gün"},
-    {l:"Mg",h:ih.min&&ih.min.Mg,r:r2(r.Mg*1000),b:"g/gün"},
+    {l:"Ca",h:ih.min&&ih.min.Ca,r:r.Ca*1000,b:"g/gün"},
+    {l:"P",h:ih.min&&ih.min.P,r:r.P*1000,b:"g/gün"},
+    {l:"Mg",h:ih.min&&ih.min.Mg,r:r.Mg*1000,b:"g/gün"},
   ].map(it=>{
     const oran=it.h>0?Math.min((it.r/it.h)*100,130):0;
     const renk=oran<90?'var(--red)':oran>115?'var(--yellow)':'var(--green)';
     return `<div class="mb8">
       <div class="flex-between fs11 mb4">
         <span class="c-text3">${it.l}</span>
-        <span class="c-text3">${it.r||0} / <span class="c-text2">${it.h||0}</span> ${it.b}</span>
+        <span class="c-text3">${fmt2(it.r||0)} / <span class="c-text2">${fmt2(it.h||0)}</span> ${it.b}</span>
         <span style="color:${renk};font-weight:700;font-size:10px">${oran.toFixed(0)}%</span>
       </div>
       <div class="bar-wrap"><div class="bar-fill" style="width:${oran}%;background:${renk}"></div></div>
@@ -3381,10 +3392,10 @@ function degerlendirmeSayfasiRender() {
 
   // Maliyet
   document.getElementById('maliyet-kartlar').innerHTML = [
-    {l:"Günlük Maliyet",v:`₺${r.maliyet||0}`,u:"/gün",c:"var(--teal)"},
-    {l:"₺ / kg Süt",v:`₺${profil.sutVerimi>0?r2(r.maliyet/profil.sutVerimi):'—'}`,u:"/kg",c:"var(--green)"},
-    {l:"₺ / kg KM",v:`₺${km>0?r2(r.maliyet/km):'—'}`,u:"/kgKM",c:"var(--green)"},
-    {l:"₺ / Mcal NEL",v:`₺${r.NEL>0?r2(r.maliyet/r.NEL):'—'}`,u:"/Mcal",c:"var(--green)"},
+    {l:"Günlük Maliyet",v:`₺${fmt2(r.maliyet||0)}`,u:"/gün",c:"var(--teal)"},
+    {l:"₺ / kg Süt",v:`₺${profil.sutVerimi>0?fmt2(r.maliyet/profil.sutVerimi):'—'}`,u:"/kg",c:"var(--green)"},
+    {l:"₺ / kg KM",v:`₺${km>0?fmt2(r.maliyet/km):'—'}`,u:"/kgKM",c:"var(--green)"},
+    {l:"₺ / Mcal NEL",v:`₺${r.NEL>0?fmt2(r.maliyet/r.NEL):'—'}`,u:"/Mcal",c:"var(--green)"},
   ].map(it=>`
     <div class="stat" style="text-align:center">
       <div class="lbl">${it.l}</div>
@@ -3462,10 +3473,10 @@ function optimizasyonSayfasiRender() {
   }).join('');
 
   document.getElementById('opt-otomatik').innerHTML=`
-    Hayvan profilinden: <b style="color:var(--yellow)">NEL ≥ ${ihtiyac.NEL_ihtiyac} Mcal/gün</b> &nbsp;
-    <b style="color:var(--green)">Ca ≥ ${ihtiyac.min&&ihtiyac.min.Ca} g</b> &nbsp;
-    <b style="color:var(--green)">P ≥ ${ihtiyac.min&&ihtiyac.min.P} g</b> &nbsp;
-    <b style="color:var(--blue2)">KM: ${r2(ihtiyac.DMI*0.85)}–${r2(ihtiyac.DMI*1.15)} kg</b>`;
+    Hayvan profilinden: <b style="color:var(--yellow)">NEL ≥ ${fmt2(ihtiyac.NEL_ihtiyac)} Mcal/gün</b> &nbsp;
+    <b style="color:var(--green)">Ca ≥ ${fmt2(ihtiyac.min&&ihtiyac.min.Ca)} g</b> &nbsp;
+    <b style="color:var(--green)">P ≥ ${fmt2(ihtiyac.min&&ihtiyac.min.P)} g</b> &nbsp;
+    <b style="color:var(--blue2)">KM: ${fmt2(ihtiyac.DMI*0.85)}–${fmt2(ihtiyac.DMI*1.15)} kg</b>`;
 
   // ---- Yem havuzu: sadece rasyondaki yemler ----
   const havuz = optYemHavuzu();
@@ -3758,20 +3769,20 @@ function optimize() {
           <div class="mb8">${sonuc.yemler.map(y=>`
             <div style="display:flex;justify-content:space-between;padding:6px 10px;margin-bottom:3px;background:var(--bg2);border-radius:6px">
               <span class="fs12 c-text2">${y.isim}</span>
-              <div class="flex-gap"><span class="fs12 fw7 c-blue2">${y.miktar} kg</span><span class="fs11 c-text3">${y.km} kgKM</span></div>
+              <div class="flex-gap"><span class="fs12 fw7 c-blue2">${fmt2(y.miktar)} kg</span><span class="fs11 c-text3">${fmt2(y.km)} kgKM</span></div>
             </div>`).join('')}
           </div>
           <div class="grid-2 mb8">
-            ${[{l:"KM",v:oz.KM+" kg/gün",c:"var(--blue2)"},{l:"NEL",v:oz.NEL+" Mcal/gün",c:"var(--yellow)"},
-               {l:"HP",v:"%"+oz.HP_yuz+" KM",c:"var(--pink)"},{l:"NDF",v:"%"+oz.NDF_yuz+" KM",c:"var(--green)"},
-               {l:"Nişasta",v:"%"+oz.nisasta_yuz+" KM",c:"var(--orange)"},{l:"peNDF",v:"%"+oz.peNDF_yuz+" KM",c:"var(--teal)"}]
+            ${[{l:"KM",v:fmt2(oz.KM)+" kg/gün",c:"var(--blue2)"},{l:"NEL",v:fmt2(oz.NEL)+" Mcal/gün",c:"var(--yellow)"},
+               {l:"HP",v:"%"+fmt2(oz.HP_yuz)+" KM",c:"var(--pink)"},{l:"NDF",v:"%"+fmt2(oz.NDF_yuz)+" KM",c:"var(--green)"},
+               {l:"Nişasta",v:"%"+fmt2(oz.nisasta_yuz)+" KM",c:"var(--orange)"},{l:"peNDF",v:"%"+fmt2(oz.peNDF_yuz)+" KM",c:"var(--teal)"}]
               .map(it=>`<div style="display:flex;justify-content:space-between;padding:6px 10px;background:var(--bg2);border-radius:6px">
                 <span class="fs11 c-text3">${it.l}</span><span class="fs12 fw7" style="color:${it.c}">${it.v}</span></div>`).join('')}
           </div>
           <div style="text-align:center;padding:14px;background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.3);border-radius:8px">
             <div class="fs11 c-text3">Günlük Rasyon Maliyeti</div>
-            <div style="font-size:28px;font-weight:700;color:var(--teal)">₺${sonuc.maliyet}</div>
-            <div class="fs11 c-text3">₺${profil.sutVerimi>0?r2(sonuc.maliyet/profil.sutVerimi):'—'} / kg süt</div>
+            <div style="font-size:28px;font-weight:700;color:var(--teal)">₺${fmt2(sonuc.maliyet)}</div>
+            <div class="fs11 c-text3">₺${profil.sutVerimi>0?fmt2(sonuc.maliyet/profil.sutVerimi):'—'} / kg süt</div>
           </div>
           <button class="btn btn-outline mt12" style="width:100%" onclick="sekmeAc('rasyon')">🌾 Rasyon Tasarımına Git</button>`;
       } else {
@@ -3868,7 +3879,7 @@ function yemListesiGuncelle() {
             {l:'P',v:y.P,u:'%',c:'var(--teal)'},
           ].map(it=>`<div style="background:var(--bg2);border-radius:4px;padding:3px 5px;text-align:center">
             <div style="font-size:9px;color:var(--text4)">${it.l}</div>
-            <div style="font-size:11px;font-weight:700;color:${it.c}">${it.v}</div>
+            <div style="font-size:11px;font-weight:700;color:${it.c}">${fmt2(it.v)}</div>
           </div>`).join('')}
         </div>
       </div>
@@ -4903,19 +4914,19 @@ function besiRaporRender() {
             ${yemSatirlari.map((s,i) => `
               <tr style="background:${i%2===0?'var(--bg3)':'transparent'}">
                 <td style="padding:6px 8px;color:var(--text2)">${s.isim}</td>
-                <td style="text-align:right;padding:6px 8px;color:var(--text3)">${s.dhTek}</td>
-                <td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--blue2)">${s.dhToplam}</td>
-                <td style="text-align:right;padding:6px 8px;color:var(--green)">${s.kmToplam}</td>
-                <td style="text-align:right;padding:6px 8px;color:var(--teal)">₺${s.fiyatBirim}</td>
+                <td style="text-align:right;padding:6px 8px;color:var(--text3)">${fmt2(s.dhTek)}</td>
+                <td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--blue2)">${fmt2(s.dhToplam)}</td>
+                <td style="text-align:right;padding:6px 8px;color:var(--green)">${fmt2(s.kmToplam)}</td>
+                <td style="text-align:right;padding:6px 8px;color:var(--teal)">₺${fmt2(s.fiyatBirim)}</td>
                 <td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--teal)">₺${s.maliyetToplam.toLocaleString('tr-TR')}</td>
               </tr>`).join('')}
           </tbody>
           <tfoot>
             <tr style="background:var(--bg4);font-weight:700">
               <td style="padding:8px">TOPLAM</td>
-              <td style="text-align:right;padding:8px">${r2(dh)}</td>
-              <td style="text-align:right;padding:8px;color:var(--blue2)">${r2(dh*carpan)}</td>
-              <td style="text-align:right;padding:8px;color:var(--green)">${r2(km*carpan)}</td>
+              <td style="text-align:right;padding:8px">${fmt2(dh)}</td>
+              <td style="text-align:right;padding:8px;color:var(--blue2)">${fmt2(dh*carpan)}</td>
+              <td style="text-align:right;padding:8px;color:var(--green)">${fmt2(km*carpan)}</td>
               <td></td>
               <td style="text-align:right;padding:8px;color:var(--teal)">₺${r2((rt.maliyet||0)*carpan).toLocaleString('tr-TR')}</td>
             </tr>
@@ -4930,14 +4941,14 @@ function besiRaporRender() {
       <div class="card-title">📊 Genel Özet — ${carpanEtiket}</div>
       <div class="grid-4">
         ${[
-          { l:'Toplam DH', v:r2(dh*carpan)+' kg/gün', c:'var(--blue2)' },
-          { l:'Toplam KM', v:r2(km*carpan)+' kg/gün', c:'var(--green)' },
+          { l:'Toplam DH', v:fmt2(dh*carpan)+' kg/gün', c:'var(--blue2)' },
+          { l:'Toplam KM', v:fmt2(km*carpan)+' kg/gün', c:'var(--green)' },
           { l:'Toplam Maliyet', v:'₺'+r2((rt.maliyet||0)*carpan).toLocaleString('tr-TR')+'/gün', c:'var(--teal)' },
-          { l:'Birim Maliyet', v:'₺'+r2(rt.maliyet||0)+' / '+(mod==='hayvan'?'baş':'porsiyon'), c:'var(--teal)' },
-          { l:'ME Yoğunluğu', v:(ry.ME_yog||0)+' Mcal/kg', c:'var(--yellow)' },
-          { l:'UFV Yoğunluğu', v:(ry.UFV_yog||0)+' UFV/kg', c:'var(--orange)' },
-          { l:'Ham Protein', v:(ry.HP||0)+' %KM', c:'var(--pink)' },
-          { l:'Kaba:Kesif', v:(ry.kabaKonsan||0)+' ('+(ry.kaba||0)+'%/'+(ry.konsan||0)+'%)', c:'var(--purple)' },
+          { l:'Birim Maliyet', v:'₺'+fmt2(rt.maliyet||0)+' / '+(mod==='hayvan'?'baş':'porsiyon'), c:'var(--teal)' },
+          { l:'ME Yoğunluğu', v:fmt2(ry.ME_yog||0)+' Mcal/kg', c:'var(--yellow)' },
+          { l:'UFV Yoğunluğu', v:fmt2(ry.UFV_yog||0)+' UFV/kg', c:'var(--orange)' },
+          { l:'Ham Protein', v:fmt2(ry.HP||0)+' %KM', c:'var(--pink)' },
+          { l:'Kaba:Kesif', v:fmt2(ry.kabaKonsan||0)+' ('+fmt2(ry.kaba||0)+'%/'+fmt2(ry.konsan||0)+'%)', c:'var(--purple)' },
         ].map(k => `<div style="background:var(--bg3);border-radius:8px;padding:10px;text-align:center">
           <div class="fs10 c-text3">${k.l}</div>
           <div class="fs14 fw7" style="color:${k.c}">${k.v}</div>
@@ -4977,18 +4988,18 @@ function besiRaporRender() {
           </tr></thead>
           <tbody>
             ${[
-              { l:'ME (Mcal/gün)', des:r2(rt.ME||0), ger:ih.ME_ihtiyac },
-              { l:'UFV (INRA)', des:r2(rt.UFV||0), ger:ih.UFV_ihtiyac },
-              { l:'PDI (g/gün)', des:Math.round(ry.PDI_min||0), ger:ih.PDI_ihtiyac },
-              { l:'KM Alımı (kg/gün)', des:r2(km), ger:ih.DMI },
+              { l:'ME (Mcal/gün)', des:rt.ME||0, ger:ih.ME_ihtiyac },
+              { l:'UFV (INRA)', des:rt.UFV||0, ger:ih.UFV_ihtiyac },
+              { l:'PDI (g/gün)', des:ry.PDI_min||0, ger:ih.PDI_ihtiyac },
+              { l:'KM Alımı (kg/gün)', des:km, ger:ih.DMI },
             ].map((s,i) => {
-              const denge = r2(s.des - s.ger);
-              const renk = denge >= 0 ? 'var(--green)' : 'var(--red)';
+              const dengeRaw = s.des - s.ger;
+              const renk = dengeRaw >= 0 ? 'var(--green)' : 'var(--red)';
               return `<tr style="background:${i%2===0?'var(--bg3)':'transparent'}">
                 <td style="padding:6px 8px;color:var(--text2)">${s.l}</td>
-                <td style="text-align:right;padding:6px 8px;color:var(--blue2);font-weight:600">${s.des}</td>
-                <td style="text-align:right;padding:6px 8px;color:var(--text3)">${s.ger}</td>
-                <td style="text-align:right;padding:6px 8px;font-weight:700;color:${renk}">${denge>=0?'+':''}${denge}</td>
+                <td style="text-align:right;padding:6px 8px;color:var(--blue2);font-weight:600">${fmt2(s.des)}</td>
+                <td style="text-align:right;padding:6px 8px;color:var(--text3)">${fmt2(s.ger)}</td>
+                <td style="text-align:right;padding:6px 8px;font-weight:700;color:${renk}">${dengeRaw>=0?'+':''}${fmt2(dengeRaw)}</td>
               </tr>`;
             }).join('')}
           </tbody>
@@ -5029,10 +5040,10 @@ function besiRaporKopyala() {
     if (!s.yemId || s.miktar<=0) return;
     const y = s.ozelYem || YEMLER.find(y=>y.id===s.yemId);
     if (!y) return;
-    metin += `  ${y.isim}: ${s.miktar} kg/${etiket==='baş'?'baş':'porsiyon'} → ${r2(s.miktar*carpan)} kg toplam\n`;
+    metin += `  ${y.isim}: ${fmt2(s.miktar)} kg/${etiket==='baş'?'baş':'porsiyon'} → ${fmt2(s.miktar*carpan)} kg toplam\n`;
   });
-  metin += `\nToplam KM: ${r2((besiRasyon.toplamKM||0)*carpan)} kg/gün\n`;
-  metin += `Toplam Maliyet: ₺${r2((rt.maliyet||0)*carpan)}/gün\n`;
+  metin += `\nToplam KM: ${fmt2((besiRasyon.toplamKM||0)*carpan)} kg/gün\n`;
+  metin += `Toplam Maliyet: ₺${fmt2((rt.maliyet||0)*carpan)}/gün\n`;
 
   navigator.clipboard?.writeText(metin).then(() => {
     const b = document.createElement('div');
@@ -5110,8 +5121,8 @@ function besiVagonRender() {
     return {
       satirId: s.id,
       isim: y.ozelYem ? `[Özel] ${y.isim}` : y.isim,
-      afTek: r3(afTek),
-      dmTek: dmTek.toFixed(2).replace('.', ','),
+      afTek: fmt2(afTek),
+      dmTek: fmt2(dmTek),
       afToplam: yuvarlaKg(r2(afTek * carpan), adim),
       dmToplam: r2(dmTek * carpan),
     };
@@ -5142,8 +5153,8 @@ function besiVagonRender() {
       <div style="font-size:14px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${s.isim}">${s.isim}</div>
       <div style="text-align:right;font-size:14px;font-weight:600;color:var(--text2)">${s.afTek}</div>
       <div style="text-align:right;font-size:14px;font-weight:600;color:var(--text2)">${s.dmTek}</div>
-      <div style="text-align:right;font-size:15px;font-weight:800;color:var(--blue2)">${s.afToplam}</div>
-      <div style="text-align:right;font-size:14px;font-weight:600;color:var(--purple)">${r2(kumulatif)}</div>
+      <div style="text-align:right;font-size:15px;font-weight:800;color:var(--blue2)">${fmt2(s.afToplam)}</div>
+      <div style="text-align:right;font-size:14px;font-weight:600;color:var(--purple)">${fmt2(kumulatif)}</div>
     </div>`;
   }).join('');
 
@@ -5166,10 +5177,10 @@ function besiVagonRender() {
       <div style="${GRID};padding:9px 6px;margin-top:4px;background:var(--bg4);border-radius:6px;font-weight:800">
         <div></div>
         <div style="font-size:14px;color:var(--text)">TOPLAM</div>
-        <div style="text-align:right;font-size:14px;color:var(--text2)">${r3(besiRasyon.toplamDH||0)}</div>
-        <div style="text-align:right;font-size:14px;color:var(--text2)">${r3(km)}</div>
-        <div style="text-align:right;font-size:15px;color:var(--blue2)">${r2(toplamAF)}</div>
-        <div style="text-align:right;font-size:14px;color:var(--purple)">${r2(toplamAF)}</div>
+        <div style="text-align:right;font-size:14px;color:var(--text2)">${fmt2(besiRasyon.toplamDH||0)}</div>
+        <div style="text-align:right;font-size:14px;color:var(--text2)">${fmt2(km)}</div>
+        <div style="text-align:right;font-size:15px;color:var(--blue2)">${fmt2(toplamAF)}</div>
+        <div style="text-align:right;font-size:14px;color:var(--purple)">${fmt2(toplamAF)}</div>
       </div>
     </div>`;
 }
@@ -5209,9 +5220,9 @@ function besiVagonKopyala() {
     const kgToplam = r2(s.miktar*carpan);
     const dmToplam = r2(s.miktar*(y.KM/100)*carpan);
     toplam += kgToplam;
-    metin += `  ${y.isim}: AF ${kgToplam} kg (DM ${dmToplam} kg)\n`;
+    metin += `  ${y.isim}: AF ${fmt2(kgToplam)} kg (DM ${fmt2(dmToplam)} kg)\n`;
   });
-  metin += `\nTOPLAM: ${r2(toplam)} kg\n`;
+  metin += `\nTOPLAM: ${fmt2(toplam)} kg\n`;
 
   navigator.clipboard?.writeText(metin).then(() => {
     const b = document.createElement('div');
@@ -5280,8 +5291,8 @@ function sagmalVagonRender() {
     return {
       satirId: s.id,
       isim: y.ozelYem ? `[Özel] ${y.isim}` : y.isim,
-      afTek: r3(afTek),
-      dmTek: dmTek.toFixed(2).replace('.', ','),
+      afTek: fmt2(afTek),
+      dmTek: fmt2(dmTek),
       afToplam: yuvarlaKg(r2(afTek * carpan), adim),
       dmToplam: r2(dmTek * carpan),
     };
@@ -5312,8 +5323,8 @@ function sagmalVagonRender() {
       <div style="font-size:14px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${s.isim}">${s.isim}</div>
       <div style="text-align:right;font-size:14px;font-weight:600;color:var(--text2)">${s.afTek}</div>
       <div style="text-align:right;font-size:14px;font-weight:600;color:var(--text2)">${s.dmTek}</div>
-      <div style="text-align:right;font-size:15px;font-weight:800;color:var(--blue2)">${s.afToplam}</div>
-      <div style="text-align:right;font-size:14px;font-weight:600;color:var(--purple)">${r2(kumulatif)}</div>
+      <div style="text-align:right;font-size:15px;font-weight:800;color:var(--blue2)">${fmt2(s.afToplam)}</div>
+      <div style="text-align:right;font-size:14px;font-weight:600;color:var(--purple)">${fmt2(kumulatif)}</div>
     </div>`;
   }).join('');
 
@@ -5336,10 +5347,10 @@ function sagmalVagonRender() {
       <div style="${GRID};padding:9px 6px;margin-top:4px;background:var(--bg4);border-radius:6px;font-weight:800">
         <div></div>
         <div style="font-size:14px;color:var(--text)">TOPLAM</div>
-        <div style="text-align:right;font-size:14px;color:var(--text2)">${r3(toplamDH_)}</div>
-        <div style="text-align:right;font-size:14px;color:var(--text2)">${r3(km)}</div>
-        <div style="text-align:right;font-size:15px;color:var(--blue2)">${r2(toplamAF)}</div>
-        <div style="text-align:right;font-size:14px;color:var(--purple)">${r2(toplamAF)}</div>
+        <div style="text-align:right;font-size:14px;color:var(--text2)">${fmt2(toplamDH_)}</div>
+        <div style="text-align:right;font-size:14px;color:var(--text2)">${fmt2(km)}</div>
+        <div style="text-align:right;font-size:15px;color:var(--blue2)">${fmt2(toplamAF)}</div>
+        <div style="text-align:right;font-size:14px;color:var(--purple)">${fmt2(toplamAF)}</div>
       </div>
     </div>`;
 }
@@ -5379,9 +5390,9 @@ function sagmalVagonKopyala() {
     const kgToplam = r2(s.miktar*carpan);
     const dmToplam = r2(s.miktar*(y.KM/100)*carpan);
     toplam += kgToplam;
-    metin += `  ${y.isim}: AF ${kgToplam} kg (DM ${dmToplam} kg)\n`;
+    metin += `  ${y.isim}: AF ${fmt2(kgToplam)} kg (DM ${fmt2(dmToplam)} kg)\n`;
   });
-  metin += `\nTOPLAM: ${r2(toplam)} kg\n`;
+  metin += `\nTOPLAM: ${fmt2(toplam)} kg\n`;
 
   navigator.clipboard?.writeText(metin).then(() => {
     const b = document.createElement('div');
@@ -5494,7 +5505,25 @@ function besiKarsilastirmaAcKapa() {
   const acBtn = document.getElementById('besi-karsilastirma-ac-wrap');
   if (blok) blok.classList.toggle('hidden', !besiKarsilastirmaAcik);
   if (acBtn) acBtn.style.display = besiKarsilastirmaAcik ? 'none' : '';
-  if (besiKarsilastirmaAcik) besiSayfasiRenderB();
+  if (besiKarsilastirmaAcik) {
+    // Panel ilk kez açılıyorsa (B rasyonu hâlâ tamamen boşsa — hiç yem seçilmemiş),
+    // sıfırdan başlatmak yerine mevcut A rasyonunun bir kopyasını B'ye yükle.
+    // Böylece kullanıcı mevcut rasyonu görüp üzerinde ekleme/çıkarma yapabilir.
+    const bTamamenBos = besiRasyonSatirlariB.every(s => !s.yemId);
+    if (bTamamenBos) {
+      besiRasyonSatirlariB = besiRasyonSatirlari
+        .filter(s => s.yemId) // boş satırları kopyalama
+        .map(s => ({
+          id: besiNextSatirIdB++,
+          yemId: s.yemId,
+          miktar: s.miktar,
+          ozelYem: s.ozelYem ? Object.assign({}, s.ozelYem) : undefined
+        }));
+      // Yeni yem eklemek için sonda her zaman bir boş satır bulunsun
+      besiRasyonSatirlariB.push({ id: besiNextSatirIdB++, yemId: null, miktar: 0 });
+    }
+    besiSayfasiRenderB();
+  }
 }
 
 function besiSatirEkleB() {
@@ -5602,10 +5631,10 @@ function besiKarsilastirmaTabloRender() {
       const farkRenk = Math.abs(fark) < 0.01 ? 'var(--text3)' : (fark > 0 ? 'var(--orange)' : 'var(--green)');
       return `<div style="display:grid;grid-template-columns:1fr 70px 70px;gap:4px;padding:5px 0;background:${i%2===0?'var(--bg2)':'transparent'};border-radius:5px;align-items:center">
         <div class="fs11 c-text2">${s.l}</div>
-        <div style="text-align:right;font-size:11px;font-weight:700;color:var(--blue2)">${s.av ?? '—'} ${s.u}</div>
-        <div style="text-align:right;font-size:11px;font-weight:700;color:var(--purple)">${s.bv ?? '—'} ${s.u}</div>
+        <div style="text-align:right;font-size:11px;font-weight:700;color:var(--blue2)">${fmt2(s.av)} ${s.u}</div>
+        <div style="text-align:right;font-size:11px;font-weight:700;color:var(--purple)">${fmt2(s.bv)} ${s.u}</div>
       </div>
-      <div style="text-align:right;font-size:9px;color:${farkRenk};padding:0 0 4px;grid-column:3/4">${fark>0?'+':''}${r2(fark)} fark</div>`;
+      <div style="text-align:right;font-size:9px;color:${farkRenk};padding:0 0 4px;grid-column:3/4">${fark>0?'+':''}${fmt2(fark)} fark</div>`;
     }).join('');
 }
 
@@ -5668,25 +5697,25 @@ function besiSayfasiGuncelle() {
   if (dengeEl) {
     const HP_g = Math.round((rt.HP||0)*1000);
     const satirlar = [
-      { l:'KM Alımı',              des:r2(km), ger:ih.DMI, b:'kg/gün' },
+      { l:'KM Alımı',              des:km, ger:ih.DMI, b:'kg/gün' },
       { l:'Ham Protein',           des:ry.HP||0, ger:'—', b:'%KM' },
-      { l:'ME (Metabolik Enerji)', des:r2(rt.ME||0), ger:ih.ME_ihtiyac, b:'Mcal/gün', kritik:true },
+      { l:'ME (Metabolik Enerji)', des:rt.ME||0, ger:ih.ME_ihtiyac, b:'Mcal/gün', kritik:true },
       { l:'ME Yoğunluğu',          des:ry.ME_yog||0, ger:ih.ME_yogunluk_hedef, b:'Mcal/kgKM' },
-      { l:'UFV (INRA)',            des:r2(rt.UFV||0), ger:ih.UFV_ihtiyac, b:'UFV/gün', kritik:true },
-      { l:'PDI (INRA, min N/E)',   des:Math.round(ry.PDI_min||0), ger:ih.PDI_ihtiyac, b:'g/gün', kritik:true },
+      { l:'UFV (INRA)',            des:rt.UFV||0, ger:ih.UFV_ihtiyac, b:'UFV/gün', kritik:true },
+      { l:'PDI (INRA, min N/E)',   des:ry.PDI_min||0, ger:ih.PDI_ihtiyac, b:'g/gün', kritik:true },
       { l:'Ham Protein',           des:HP_g, ger:ih.HP, b:'g/gün' },
-      { l:'Ca (soğurulabilir)',    des:r2((rt.Ca||0)*1000), ger:ih.Ca_abs_ihtiyac ?? ih.Ca, b:'g/gün' },
-      { l:'P (soğurulabilir)',     des:r2((rt.P||0)*1000), ger:ih.P_abs_ihtiyac ?? ih.P, b:'g/gün' },
+      { l:'Ca (soğurulabilir)',    des:(rt.Ca||0)*1000, ger:ih.Ca_abs_ihtiyac ?? ih.Ca, b:'g/gün' },
+      { l:'P (soğurulabilir)',     des:(rt.P||0)*1000, ger:ih.P_abs_ihtiyac ?? ih.P, b:'g/gün' },
     ];
     const inraNotu = document.getElementById('inra-kaynak-uyari');
     const inraNotuBp = document.getElementById('bp-inra-kaynak-uyari');
     [inraNotu, inraNotuBp].forEach(el => {
       if (!el) return;
       if (ih.inraKaynak === 'tablo') {
-        el.innerHTML = `📗 <b>${ih.irkEtiket}</b> — INRA 2001 tablo verisi kullanılıyor (interpolasyonlu). Kapasité d'ingestion (UEB): <b>${ih.UEB_kapasite}</b>`;
+        el.innerHTML = `📗 <b>${ih.irkEtiket}</b> — INRA 2001 tablo verisi kullanılıyor (interpolasyonlu). Kapasité d'ingestion (UEB): <b>${fmt2(ih.UEB_kapasite)}</b>`;
         el.style.color = 'var(--green)';
       } else if (ih.inraKaynak === 'ekstrapole') {
-        el.innerHTML = `⚠️ <b>${ih.irkEtiket}</b> — CA/GMQ tablo aralığının dışında, dikkatli ekstrapolasyon uygulanıyor. UEB: <b>${ih.UEB_kapasite}</b>`;
+        el.innerHTML = `⚠️ <b>${ih.irkEtiket}</b> — CA/GMQ tablo aralığının dışında, dikkatli ekstrapolasyon uygulanıyor. UEB: <b>${fmt2(ih.UEB_kapasite)}</b>`;
         el.style.color = 'var(--yellow)';
       } else {
         el.innerHTML = `INRA tablo verisi bulunamadı, formül tahmini kullanılıyor.`;
@@ -5702,15 +5731,15 @@ function besiSayfasiGuncelle() {
       </div>` +
       satirlar.map((s,i) => {
         const bilgiSatiri = s.ger === '—';
-        const denge = bilgiSatiri ? '' : r2(s.des - s.ger);
+        const dengeRaw = bilgiSatiri ? undefined : s.des - s.ger;
         const oran = !bilgiSatiri && s.ger>0 ? s.des/s.ger : 1;
         const renk = bilgiSatiri ? 'var(--text3)' : (oran<0.92 ? 'var(--red)' : oran>1.25 ? 'var(--yellow)' : 'var(--green)');
         return `<div style="display:grid;grid-template-columns:1fr 60px 60px 56px;gap:3px;padding:5px 4px;
           background:${i%2===0?'var(--bg3)':'transparent'};border-radius:5px;align-items:center">
           <div class="fs11 c-text2">${s.l} <span class="fs9 c-text4">${s.b}</span></div>
-          <div style="text-align:right;font-size:11px;font-weight:600;color:var(--blue2)">${s.des}</div>
-          <div style="text-align:right;font-size:11px;color:var(--text3)">${s.ger}</div>
-          <div style="text-align:right;font-size:11px;font-weight:700;color:${renk}">${bilgiSatiri ? '' : (denge>=0?'+':'')+denge}</div>
+          <div style="text-align:right;font-size:11px;font-weight:600;color:var(--blue2)">${fmt2(s.des)}</div>
+          <div style="text-align:right;font-size:11px;color:var(--text3)">${bilgiSatiri ? s.ger : fmt2(s.ger)}</div>
+          <div style="text-align:right;font-size:11px;font-weight:700;color:${renk}">${bilgiSatiri ? '' : (dengeRaw>=0?'+':'')+fmt2(dengeRaw)}</div>
         </div>`;
       }).join('');
   }
@@ -5731,7 +5760,7 @@ function besiSayfasiGuncelle() {
       }
       return `<div style="display:flex;justify-content:space-between;padding:6px 8px;margin-bottom:4px;background:${i%2===0?'var(--bg2)':'transparent'};border-radius:6px">
         <span class="fs12 c-text2">${s.l}</span>
-        <span class="fs13 fw7" style="color:${renk}">${s.v!==undefined?s.v:'—'} <span class="fs9 c-text4">${s.u}</span></span>
+        <span class="fs13 fw7" style="color:${renk}">${s.v!==undefined?fmt2(s.v):'—'} <span class="fs9 c-text4">${s.u}</span></span>
       </div>`;
     }).join('');
   }
@@ -5753,7 +5782,7 @@ function besiSayfasiGuncelle() {
       if (s.v!==undefined) renk = s.v<s.min ? 'var(--red)' : s.v>s.max ? 'var(--yellow)' : 'var(--green)';
       return `<div style="display:grid;grid-template-columns:1fr 60px 70px;gap:3px;padding:5px 6px;background:${i%2===0?'var(--bg2)':'transparent'};border-radius:5px;align-items:center">
         <div class="fs12 c-text2">${s.l}</div>
-        <div style="text-align:right;font-size:12px;font-weight:700;color:${renk}">${s.v!==undefined?s.v:'—'}</div>
+        <div style="text-align:right;font-size:12px;font-weight:700;color:${renk}">${s.v!==undefined?fmt2(s.v):'—'}</div>
         <div style="text-align:right;font-size:9px;color:var(--text4)">${s.min}–${s.max}%</div>
       </div>`;
     }).join('');
@@ -5852,33 +5881,33 @@ function rasyonBesinTabloGuncelle() {
   const topMikDeg = rasyonSatirlari.reduce((a,s)=>a+(s.miktar||0),0);
 
   const tümSatirlar = {
-    "K.M.":       {birim:"%",       km:topMikDeg>0?r4(km/topMikDeg*100):"—", destek:r4(km),          dBirim:"kg/gün"},
-    "Kaba Yem":   {birim:"%",       km:yuz.kaba?.toFixed(2)||"—",             destek:r2(r.kabaKM||0),   dBirim:"kg KM", min:40, max:60},
-    "Kesif Yem":  {birim:"%",       km:yuz.konsan?.toFixed(2)||"—",           destek:r2(r.konsanKM||0), dBirim:"kg KM", min:40, max:60},
-    "Kaba:Kesif": {birim:"",        km:yuz.kabaKonsan?.toFixed(2)||"—",       destek:"—",               dBirim:""},
-    "HP":         {birim:"%",       km:yuz.HP?.toFixed(2)||"—",               destek:r4(r.HP*1000),   dBirim:"g/gün", min:14, max:18},
-    "Sol Prot/CP":{birim:"%",       km:km>0?r2(r.HP*1000*0.65/km/10):"—",   destek:"—",             dBirim:""},
-    "NEL 3x NRC": {birim:"Mcal/kg", km:yuz.NEL_yog?.toFixed(4)||"—",         destek:r2(r.NEL||0),    dBirim:"Mcal/gün", min:1.55, max:1.80},
-    "Nişasta":    {birim:"%",       km:yuz.nisasta?.toFixed(2)||"—",          destek:r4(r.nist||0), dBirim:"kg/gün", min:20, max:30},
-    "aNDFom":     {birim:"%",       km:yuz.NDF?.toFixed(2)||"—",              destek:r4(r.NDF||0),    dBirim:"kg/gün", min:28, max:40},
-    "Kaba Yem NDF":{birim:"%",      km:yuz.kabaNDF?.toFixed(2)||"—",          destek:r2(r.kabaNDF||0), dBirim:"kg/gün", min:19, max:26},
-    "Kesif NDF":  {birim:"%",       km:yuz.konsanNDF?.toFixed(2)||"—",        destek:r2(r.konsanNDF||0), dBirim:"kg/gün"},
-    "NDF Kaba Payı":{birim:"%NDF",  km:yuz.kabaNDF_pay?.toFixed(1)||"—",      destek:"—",             dBirim:"", min:60},
-    "peNDF":      {birim:"%",       km:yuz.peNDF?.toFixed(2)||"—",            destek:r4(r.peNDF||0),  dBirim:"kg/gün", min:22, max:35},
-    "RDP 3X 1.Dz":{birim:"%",      km:km>0?r2(r.HP*1000*0.65/km/10):"—",   destek:r2(r.HP*1000*0.65), dBirim:"g/gün"},
-    "Ham Yağ (EE)":{birim:"%",     km:yuz.HY?.toFixed(2)||"—",               destek:r4(r.HY||0),     dBirim:"kg/gün", min:3, max:6},
-    "ADF":        {birim:"%",       km:yuz.ADF?.toFixed(2)||"—",              destek:r2(r.ADF||0),    dBirim:"kg/gün", min:17, max:24},
-    "Lignin (ADL)":{birim:"%",      km:yuz.ADL?.toFixed(2)||"—",              destek:r2(r.ADL||0),    dBirim:"kg/gün"},
-    "NFC":        {birim:"%",       km:yuz.NFC?.toFixed(2)||"—",              destek:"—",             dBirim:""},
-    "Ca":         {birim:"%",       km:km>0?r2(r.Ca/km*100):"—",             destek:r2(r.Ca*1000),   dBirim:"g/gün", hedef:ih3.min&&ih3.min.Ca},
-    "P":          {birim:"%",       km:km>0?r2(r.P/km*100):"—",              destek:r2(r.P*1000),    dBirim:"g/gün", hedef:ih3.min&&ih3.min.P},
-    "Mg":         {birim:"%",       km:km>0?r2(r.Mg/km*100):"—",             destek:r2(r.Mg*1000),   dBirim:"g/gün", hedef:ih3.min&&ih3.min.Mg},
-    "K":          {birim:"%",       km:km>0?r2(r.K/km*100):"—",              destek:r2(r.K*1000),    dBirim:"g/gün"},
-    "Na":         {birim:"%",       km:km>0?r2(r.Na/km*100):"—",             destek:r2(r.Na*1000),   dBirim:"g/gün"},
-    "S":          {birim:"%",       km:km>0?r2(r.S/km*100):"—",              destek:r2(r.S*1000),    dBirim:"g/gün", max:0.4},
-    "Ca:P":       {birim:"",        km:yuz.CaP?.toFixed(2)||"—",              destek:"—",             dBirim:"", min:1.5, max:2.5},
-    "Toplam KM":  {birim:"kg/gün",  km:"—",                                   destek:r4(km),          dBirim:"kg/gün"},
-    "Maliyet":    {birim:"₺/gün",   km:"—",                                   destek:r2(r.maliyet||0), dBirim:"₺/gün", maliyetSatiri:true},
+    "K.M.":       {birim:"%",       km:topMikDeg>0?fmt2(km/topMikDeg*100):"—", kmRaw:topMikDeg>0?km/topMikDeg*100:undefined, destek:fmt2(km), destekRaw:km, dBirim:"kg/gün"},
+    "Kaba Yem":   {birim:"%",       km:fmt2(yuz.kaba), kmRaw:yuz.kaba,             destek:fmt2(r.kabaKM||0), destekRaw:r.kabaKM||0,   dBirim:"kg KM", min:40, max:60},
+    "Kesif Yem":  {birim:"%",       km:fmt2(yuz.konsan), kmRaw:yuz.konsan,           destek:fmt2(r.konsanKM||0), destekRaw:r.konsanKM||0, dBirim:"kg KM", min:40, max:60},
+    "Kaba:Kesif": {birim:"",        km:fmt2(yuz.kabaKonsan), kmRaw:yuz.kabaKonsan,       destek:"—", destekRaw:undefined,               dBirim:""},
+    "HP":         {birim:"%",       km:fmt2(yuz.HP), kmRaw:yuz.HP,               destek:fmt2(r.HP*1000), destekRaw:r.HP*1000,   dBirim:"g/gün", min:14, max:18},
+    "Sol Prot/CP":{birim:"%",       km:km>0?fmt2(r.HP*1000*0.65/km/10):"—", kmRaw:km>0?r.HP*1000*0.65/km/10:undefined, destek:"—", destekRaw:undefined, dBirim:""},
+    "NEL 3x NRC": {birim:"Mcal/kg", km:fmt2(yuz.NEL_yog), kmRaw:yuz.NEL_yog,         destek:fmt2(r.NEL||0), destekRaw:r.NEL||0,    dBirim:"Mcal/gün", min:1.55, max:1.80},
+    "Nişasta":    {birim:"%",       km:fmt2(yuz.nisasta), kmRaw:yuz.nisasta,          destek:fmt2(r.nist||0), destekRaw:r.nist||0, dBirim:"kg/gün", min:20, max:30},
+    "aNDFom":     {birim:"%",       km:fmt2(yuz.NDF), kmRaw:yuz.NDF,              destek:fmt2(r.NDF||0), destekRaw:r.NDF||0,    dBirim:"kg/gün", min:28, max:40},
+    "Kaba Yem NDF":{birim:"%",      km:fmt2(yuz.kabaNDF), kmRaw:yuz.kabaNDF,          destek:fmt2(r.kabaNDF||0), destekRaw:r.kabaNDF||0, dBirim:"kg/gün", min:19, max:26},
+    "Kesif NDF":  {birim:"%",       km:fmt2(yuz.konsanNDF), kmRaw:yuz.konsanNDF,        destek:fmt2(r.konsanNDF||0), destekRaw:r.konsanNDF||0, dBirim:"kg/gün"},
+    "NDF Kaba Payı":{birim:"%NDF",  km:fmt2(yuz.kabaNDF_pay), kmRaw:yuz.kabaNDF_pay,      destek:"—", destekRaw:undefined,             dBirim:"", min:60},
+    "peNDF":      {birim:"%",       km:fmt2(yuz.peNDF), kmRaw:yuz.peNDF,            destek:fmt2(r.peNDF||0), destekRaw:r.peNDF||0,  dBirim:"kg/gün", min:22, max:35},
+    "RDP 3X 1.Dz":{birim:"%",      km:km>0?fmt2(r.HP*1000*0.65/km/10):"—", kmRaw:km>0?r.HP*1000*0.65/km/10:undefined,   destek:fmt2(r.HP*1000*0.65), destekRaw:r.HP*1000*0.65, dBirim:"g/gün"},
+    "Ham Yağ (EE)":{birim:"%",     km:fmt2(yuz.HY), kmRaw:yuz.HY,               destek:fmt2(r.HY||0), destekRaw:r.HY||0,     dBirim:"kg/gün", min:3, max:6},
+    "ADF":        {birim:"%",       km:fmt2(yuz.ADF), kmRaw:yuz.ADF,              destek:fmt2(r.ADF||0), destekRaw:r.ADF||0,    dBirim:"kg/gün", min:17, max:24},
+    "Lignin (ADL)":{birim:"%",      km:fmt2(yuz.ADL), kmRaw:yuz.ADL,              destek:fmt2(r.ADL||0), destekRaw:r.ADL||0,    dBirim:"kg/gün"},
+    "NFC":        {birim:"%",       km:fmt2(yuz.NFC), kmRaw:yuz.NFC,              destek:"—", destekRaw:undefined,             dBirim:""},
+    "Ca":         {birim:"%",       km:km>0?fmt2(r.Ca/km*100):"—", kmRaw:km>0?r.Ca/km*100:undefined,             destek:fmt2(r.Ca*1000), destekRaw:r.Ca*1000,   dBirim:"g/gün", hedef:ih3.min&&ih3.min.Ca},
+    "P":          {birim:"%",       km:km>0?fmt2(r.P/km*100):"—", kmRaw:km>0?r.P/km*100:undefined,              destek:fmt2(r.P*1000), destekRaw:r.P*1000,    dBirim:"g/gün", hedef:ih3.min&&ih3.min.P},
+    "Mg":         {birim:"%",       km:km>0?fmt2(r.Mg/km*100):"—", kmRaw:km>0?r.Mg/km*100:undefined,             destek:fmt2(r.Mg*1000), destekRaw:r.Mg*1000,   dBirim:"g/gün", hedef:ih3.min&&ih3.min.Mg},
+    "K":          {birim:"%",       km:km>0?fmt2(r.K/km*100):"—", kmRaw:km>0?r.K/km*100:undefined,              destek:fmt2(r.K*1000), destekRaw:r.K*1000,    dBirim:"g/gün"},
+    "Na":         {birim:"%",       km:km>0?fmt2(r.Na/km*100):"—", kmRaw:km>0?r.Na/km*100:undefined,             destek:fmt2(r.Na*1000), destekRaw:r.Na*1000,   dBirim:"g/gün"},
+    "S":          {birim:"%",       km:km>0?fmt2(r.S/km*100):"—", kmRaw:km>0?r.S/km*100:undefined,              destek:fmt2(r.S*1000), destekRaw:r.S*1000,    dBirim:"g/gün", max:0.4},
+    "Ca:P":       {birim:"",        km:fmt2(yuz.CaP), kmRaw:yuz.CaP,              destek:"—", destekRaw:undefined,             dBirim:"", min:1.5, max:2.5},
+    "Toplam KM":  {birim:"kg/gün",  km:"—", kmRaw:undefined,                                   destek:fmt2(km), destekRaw:km,          dBirim:"kg/gün"},
+    "Maliyet":    {birim:"₺/gün",   km:"—", kmRaw:undefined,                                   destek:fmt2(r.maliyet||0), destekRaw:r.maliyet||0, dBirim:"₺/gün", maliyetSatiri:true},
   };
 
   const siraliAnahtar = (typeof degSirasi !== 'undefined' ? degSirasi : Object.keys(tümSatirlar))
@@ -5886,10 +5915,13 @@ function rasyonBesinTabloGuncelle() {
 
   degTabloEl.innerHTML = siraliAnahtar.map((ad, idx) => {
     const satir = tümSatirlar[ad];
-    const kmVal = parseFloat(satir.km);
-    const destekVal = parseFloat(satir.destek);
+    // Renk hesabı ham sayısal değerlerden (kmRaw/destekRaw) yapılır — satir.km/destek
+    // virgüllü gösterim stringidir ("14,52"), parseFloat virgülü tanımayıp yarım
+    // okuyacağı için buradan renk hesaplamak yanlış sonuç verirdi.
+    const kmVal = satir.kmRaw;
+    const destekVal = satir.destekRaw;
     let renk = 'var(--text2)';
-    if (satir.hedef && !isNaN(destekVal)) {
+    if (satir.hedef && destekVal !== undefined && !isNaN(destekVal)) {
       const oran = destekVal / satir.hedef;
       if (oran < 0.90) renk = 'var(--red)';
       else if (oran > 1.15) renk = 'var(--yellow)';
@@ -6312,9 +6344,9 @@ window.besiNotSil = besiNotSil;
 function kayitOzetGuncelle() {
   const el = document.getElementById('kayit-ozet');
   if (!el) return;
-  const km = r2(rasyon.toplamKM);
-  const nel = r2(rasyon.toplam.NEL || 0);
-  const mal = r2(rasyon.toplam.maliyet || 0);
+  const km = fmt2(rasyon.toplamKM);
+  const nel = fmt2(rasyon.toplam.NEL || 0);
+  const mal = fmt2(rasyon.toplam.maliyet || 0);
   el.innerHTML = `
     <div style="display:flex;gap:12px;flex-wrap:wrap">
       <span class="fs11"><span class="c-text3">Süt: </span><b class="c-green">${profil.sutVerimi} kg</b></span>
