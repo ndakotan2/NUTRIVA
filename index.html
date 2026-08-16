@@ -710,7 +710,7 @@ select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
             <option value="charolais">Charolais / ×Salers / ×Aubrac</option>
             <option value="limousin">Limousin / Blonde d'Aquitaine</option>
             <option value="holstein">Holstein (süt ırkı)</option>
-            <option value="simental">Simental</option>
+            <option value="simental" selected>Simental</option>
             <option value="angus">Angus</option>
             <option value="brangus">Brangus</option>
             <option value="melez">Yerli / Melez</option>
@@ -719,7 +719,7 @@ select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
         <div class="field"><label>Mevcut CA (kg)</label>
           <input type="text" inputmode="decimal" id="bp-ca" value="350" oninput="besiProfilGuncelle(this)"></div>
         <div class="field"><label>Hedef CA (kg)</label>
-          <input type="text" inputmode="decimal" id="bp-ca-hedef" value="500" oninput="besiProfilGuncelle(this)"></div>
+          <input type="text" inputmode="decimal" id="bp-ca-hedef" value="650" oninput="besiProfilGuncelle(this)"></div>
         <div class="field"><label>Hedef GCAA (kg/gün)</label>
           <input type="text" inputmode="decimal" id="bp-gcaa" value="1.4" oninput="besiProfilGuncelle(this)"></div>
         <div class="field"><label>Cinsiyet</label>
@@ -787,6 +787,7 @@ select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
       <button class="btn btn-outline" onclick="satirEkle()">+ Yem Ekle</button>
       <button class="btn btn-primary" onclick="sekmeAc('optimizasyon')">⚡ Optimize</button>
       <button onclick="hizliKaydet()" style="padding:6px 14px;background:rgba(52,211,153,0.15);border:1px solid rgba(52,211,153,0.4);border-radius:7px;color:var(--teal);font-size:12px;cursor:pointer;font-weight:600">💾 Kaydet</button>
+      <button onclick="esikModalAc()" style="padding:6px 14px;background:var(--bg4);border:1px solid var(--border2);border-radius:7px;color:var(--text2);font-size:12px;cursor:pointer" title="Gösterge min/max eşiklerini ayarla">⚙️ Eşik Ayarları</button>
     </div>
     <div style="display:flex;gap:8px;align-items:center">
       <div id="rs-toplam-badge" style="padding:5px 14px;background:var(--bg4);border-radius:8px;font-size:11px;color:var(--text2)">Toplam: — kg</div>
@@ -1156,7 +1157,7 @@ select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
               <option value="charolais">Charolais / ×Salers / ×Aubrac</option>
               <option value="limousin">Limousin / Blonde d'Aquitaine</option>
               <option value="holstein">Holstein (süt ırkı)</option>
-              <option value="simental">Simental</option>
+              <option value="simental" selected>Simental</option>
               <option value="angus">Angus</option>
               <option value="brangus">Brangus</option>
               <option value="melez">Yerli / Melez</option>
@@ -1165,7 +1166,7 @@ select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
           <div class="field"><label>Mevcut CA (kg)</label>
             <input type="text" inputmode="decimal" id="b-ca" value="350" oninput="besiProfilGuncelle(this)"></div>
           <div class="field"><label>Hedef CA (kg)</label>
-            <input type="text" inputmode="decimal" id="b-ca-hedef" value="500" oninput="besiProfilGuncelle(this)"></div>
+            <input type="text" inputmode="decimal" id="b-ca-hedef" value="650" oninput="besiProfilGuncelle(this)"></div>
           <div class="field"><label>Hedef GCAA (kg/gün)</label>
             <input type="text" inputmode="decimal" id="b-gcaa" value="1.4" oninput="besiProfilGuncelle(this)"></div>
           <div class="field"><label>Cinsiyet</label>
@@ -1187,6 +1188,7 @@ select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
             <button class="btn btn-outline" onclick="besiSatirEkle()" style="padding:5px 10px;font-size:11px">+ Yem Ekle</button>
             <button class="btn btn-success" onclick="besiOptimize()" style="padding:5px 10px;font-size:11px">⚡ Optimize</button>
             <button onclick="hizliKaydet()" style="padding:5px 10px;background:rgba(52,211,153,0.15);border:1px solid rgba(52,211,153,0.4);border-radius:7px;color:var(--teal);font-size:11px;cursor:pointer">💾 Kaydet</button>
+            <button onclick="esikModalAc()" style="padding:5px 10px;background:var(--bg4);border:1px solid var(--border2);border-radius:7px;color:var(--text2);font-size:11px;cursor:pointer" title="Gösterge min/max eşiklerini ayarla">⚙️ Eşik</button>
           </div>
         </div>
         <div id="besi-tablo-baslik" style="display:grid;grid-template-columns:minmax(0,1fr) 58px 62px 50px 46px 26px 22px;gap:4px;padding:6px 8px;background:var(--bg4);align-items:center">
@@ -1558,6 +1560,30 @@ select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
             ✓ Uygula
           </button>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== GÖSTERGE EŞİK AYARLARI MODALI ==================== -->
+<div id="esik-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:1000;overflow-y:auto">
+  <div style="max-width:620px;margin:40px auto;padding:0 16px 40px">
+    <div style="background:var(--bg);border:1px solid var(--border2);border-radius:14px;overflow:hidden">
+      <div style="background:var(--bg4);padding:14px 18px;display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-size:14px;font-weight:700;color:var(--blue2)">⚙️ Gösterge Eşik Ayarları</div>
+          <div class="fs11 c-text3 mt4">Min-Maks değerlerini değiştirin — tüm tablolar ve göstergeler otomatik güncellenir</div>
+        </div>
+        <button onclick="esikModalKapat()" style="background:transparent;border:none;color:var(--text3);font-size:20px;cursor:pointer;padding:0 4px">✕</button>
+      </div>
+      <div style="padding:10px 18px;max-height:60vh;overflow-y:auto" id="esik-modal-liste"></div>
+      <div style="padding:14px 18px;background:var(--bg2);display:flex;gap:8px;justify-content:space-between;align-items:center">
+        <button onclick="esikleriVarsayilanaDondur(); esikModalRender();" style="padding:7px 16px;background:var(--bg4);border:1px solid var(--border2);border-radius:7px;color:var(--text3);font-size:12px;cursor:pointer">
+          ↺ Varsayılanlara Dön
+        </button>
+        <button onclick="esikModalKapat()" style="padding:7px 20px;background:var(--green);border:none;border-radius:7px;color:#000;font-size:12px;font-weight:700;cursor:pointer">
+          ✓ Kapat
+        </button>
       </div>
     </div>
   </div>
@@ -2143,6 +2169,112 @@ let optKisitlar = { HP_min:14, HP_max:18, NDF_min:28, NDF_max:40, nisasta_min:15
 let optKisitBarBilgi = {};
 let yemKisitMap = {};
 let optSonuc = null;
+
+// ============================================================
+// GÖSTERGE EŞİK AYARLARI — kullanıcının değiştirebildiği min/max
+// değerleri. Tüm Değerlendirme/Fraksiyon/Denge tabloları ve göstergeler
+// (sağmal+besi, masaüstü+mobil) bu tek nesneden okur; kullanıcı bir
+// parametreyi bir kez ayarladığında her yerde otomatik yansır.
+// ============================================================
+const ESIK_VARSAYILAN = {
+  HP:          { l:'Ham Protein',        min:14,  max:18,  u:'%KM' },
+  NDF:         { l:'aNDFom (NDF)',       min:28,  max:40,  u:'%KM' },
+  Nisasta:     { l:'Nişasta',            min:20,  max:30,  u:'%KM' },
+  peNDF:       { l:'peNDF',              min:22,  max:35,  u:'%KM' },
+  NEL_yog:     { l:'NEL Yoğunluğu',      min:1.55,max:1.80,u:'Mcal/kg' },
+  KabaYem:     { l:'Kaba Yem',           min:40,  max:60,  u:'%KM' },
+  KesifYem:    { l:'Kesif Yem',          min:40,  max:60,  u:'%KM' },
+  KabaYemNDF:  { l:'Kaba Yem NDF',       min:19,  max:26,  u:'%KM' },
+  HamYag:      { l:'Ham Yağ (EE)',       min:3,   max:6,   u:'%KM' },
+  ADF:         { l:'ADF',                min:17,  max:24,  u:'%KM' },
+  CaP:         { l:'Ca:P Oranı',         min:1.5, max:2.5, u:':1' },
+  MP:          { l:'MP (Yem Kütüphanesi)', min:10, max:12, u:'%KM' },
+  NDFKabaPayi: { l:'NDF Kaba Payı',      min:60,  max:100, u:'%NDF' },
+  NFC:         { l:'NFC',                min:30,  max:50,  u:'%KM' },
+  ForageNDF:   { l:'Forage NDF',         min:15,  max:30,  u:'%KM' },
+};
+const ESIK_STORAGE_KEY = 'nutriva_esik_ayarlari_v1';
+
+function esikleriYukle() {
+  try {
+    const kayitli = JSON.parse(localStorage.getItem(ESIK_STORAGE_KEY) || '{}');
+    const sonuc = {};
+    Object.keys(ESIK_VARSAYILAN).forEach(k => {
+      sonuc[k] = Object.assign({}, ESIK_VARSAYILAN[k], kayitli[k] || {});
+    });
+    return sonuc;
+  } catch (e) {
+    return JSON.parse(JSON.stringify(ESIK_VARSAYILAN));
+  }
+}
+
+let ESIKLER = esikleriYukle();
+
+function esikKaydet(anahtar, min, max) {
+  if (!ESIKLER[anahtar]) return;
+  ESIKLER[anahtar].min = min;
+  ESIKLER[anahtar].max = max;
+  const kayitli = {};
+  Object.keys(ESIKLER).forEach(k => { kayitli[k] = { min: ESIKLER[k].min, max: ESIKLER[k].max }; });
+  localStorage.setItem(ESIK_STORAGE_KEY, JSON.stringify(kayitli));
+}
+
+function esikleriVarsayilanaDondur() {
+  ESIKLER = JSON.parse(JSON.stringify(ESIK_VARSAYILAN));
+  localStorage.removeItem(ESIK_STORAGE_KEY);
+}
+window.esikKaydet = esikKaydet;
+window.esikleriVarsayilanaDondur = esikleriVarsayilanaDondur;
+
+function esikModalAc() {
+  esikModalRender();
+  const modal = document.getElementById('esik-modal');
+  if (modal) modal.style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function esikModalKapat() {
+  const modal = document.getElementById('esik-modal');
+  if (modal) modal.style.display = 'none';
+  document.body.style.overflow = '';
+  // Kapanışta tüm ekranları güncel eşiklerle yeniden çiz
+  if (typeof rasyonSonucGuncelle === 'function' && document.getElementById('deg-tablo')) rasyonSonucGuncelle();
+  if (typeof besiSayfasiGuncelle === 'function' && document.getElementById('besi-fraksiyonlar')) besiSayfasiGuncelle();
+}
+
+function esikModalRender() {
+  const liste = document.getElementById('esik-modal-liste');
+  if (!liste) return;
+  liste.innerHTML = Object.keys(ESIKLER).map(k => {
+    const e = ESIKLER[k];
+    return `<div style="display:grid;grid-template-columns:1fr 70px 70px 50px;gap:6px;padding:7px 0;align-items:center;border-bottom:1px solid var(--border)">
+      <div class="fs12" style="color:var(--text2)">${e.l}</div>
+      <input type="number" step="any" value="${e.min}" data-esik="${k}" data-tip="min"
+        style="width:100%;padding:5px 6px;background:var(--bg4);border:1px solid var(--border2);border-radius:5px;color:var(--text);font-size:12px;text-align:right"
+        onchange="esikInputDegisti(this)">
+      <input type="number" step="any" value="${e.max}" data-esik="${k}" data-tip="max"
+        style="width:100%;padding:5px 6px;background:var(--bg4);border:1px solid var(--border2);border-radius:5px;color:var(--text);font-size:12px;text-align:right"
+        onchange="esikInputDegisti(this)">
+      <div class="fs10" style="color:var(--text4);text-align:right">${e.u}</div>
+    </div>`;
+  }).join('');
+}
+
+function esikInputDegisti(el) {
+  const anahtar = el.dataset.esik;
+  const tip = el.dataset.tip;
+  const deger = sayiOku(el.value, undefined);
+  if (deger === undefined || !ESIKLER[anahtar]) return;
+  const digerTip = tip === 'min' ? 'max' : 'min';
+  const digerDeger = ESIKLER[anahtar][digerTip];
+  if (tip === 'min') esikKaydet(anahtar, deger, digerDeger);
+  else esikKaydet(anahtar, digerDeger, deger);
+}
+window.esikModalAc = esikModalAc;
+window.esikModalKapat = esikModalKapat;
+window.esikModalRender = esikModalRender;
+window.esikInputDegisti = esikInputDegisti;
+
 let dragSrc = null;
 let nextSatirId = 20;
 
@@ -3277,30 +3409,30 @@ function degerlendirmeSayfasiRender() {
 
   const tümSatirlar = {
     "K.M.":     { birim:"%",        km: topMik>0?fmt2(km/topMik*100):"—", kmRaw: topMik>0?km/topMik*100:undefined, destek:fmt2(km), destekRaw:km, dBirim:"kg/gün" },
-    "Kaba Yem":  { birim:"%",        km: fmt2(yuz.kaba), kmRaw:yuz.kaba, destek: fmt2(r.kabaKM||0), destekRaw:r.kabaKM||0, dBirim:"kg KM", min:40, max:60 },
-    "Kesif Yem": { birim:"%",        km: fmt2(yuz.konsan), kmRaw:yuz.konsan, destek: fmt2(r.konsanKM||0), destekRaw:r.konsanKM||0, dBirim:"kg KM", min:40, max:60 },
+    "Kaba Yem":  { birim:"%",        km: fmt2(yuz.kaba), kmRaw:yuz.kaba, destek: fmt2(r.kabaKM||0), destekRaw:r.kabaKM||0, dBirim:"kg KM", min:ESIKLER.KabaYem.min, max:ESIKLER.KabaYem.max },
+    "Kesif Yem": { birim:"%",        km: fmt2(yuz.konsan), kmRaw:yuz.konsan, destek: fmt2(r.konsanKM||0), destekRaw:r.konsanKM||0, dBirim:"kg KM", min:ESIKLER.KesifYem.min, max:ESIKLER.KesifYem.max },
     "Kaba:Kesif":{ birim:"",         km: fmt2(yuz.kabaKonsan), kmRaw:yuz.kabaKonsan, destek:"—", destekRaw:undefined, dBirim:"" },
-    "HP":        { birim:"%",        km: fmt2(yuz.HP), kmRaw:yuz.HP, destek: fmt2(r.HP*1000), destekRaw:r.HP*1000, dBirim:"g/gün", min:14, max:18 },
+    "HP":        { birim:"%",        km: fmt2(yuz.HP), kmRaw:yuz.HP, destek: fmt2(r.HP*1000), destekRaw:r.HP*1000, dBirim:"g/gün", min:ESIKLER.HP.min, max:ESIKLER.HP.max },
     "Sol Prot/RDP":{ birim:"%",     km: km>0?fmt2(r.HP*1000*0.65/km/10):"—", kmRaw: km>0?r.HP*1000*0.65/km/10:undefined, destek:"—", destekRaw:undefined, dBirim:"" },
-    "NEL 3x NRC":{ birim:"Mcal/kg", km: fmt2(yuz.NEL_yog), kmRaw:yuz.NEL_yog, destek: fmt2(r.NEL), destekRaw:r.NEL, dBirim:"Mcal/gün", min:1.55, max:1.80 },
-    "Nişasta":   { birim:"%",        km: fmt2(yuz.nisasta), kmRaw:yuz.nisasta, destek: fmt2(r.nist||0), destekRaw:r.nist||0, dBirim:"kg/gün", min:20, max:30 },
-    "aNDFom":    { birim:"%",        km: fmt2(yuz.NDF), kmRaw:yuz.NDF, destek: fmt2(r.NDF||0), destekRaw:r.NDF||0, dBirim:"kg/gün", min:28, max:40 },
-    "Kaba Yem NDF":{ birim:"%",      km: fmt2(yuz.kabaNDF), kmRaw:yuz.kabaNDF,   destek: fmt2(r.kabaNDF||0), destekRaw:r.kabaNDF||0,   dBirim:"kg/gün", min:19, max:26 },
+    "NEL 3x NRC":{ birim:"Mcal/kg", km: fmt2(yuz.NEL_yog), kmRaw:yuz.NEL_yog, destek: fmt2(r.NEL), destekRaw:r.NEL, dBirim:"Mcal/gün", min:ESIKLER.NEL_yog.min, max:ESIKLER.NEL_yog.max },
+    "Nişasta":   { birim:"%",        km: fmt2(yuz.nisasta), kmRaw:yuz.nisasta, destek: fmt2(r.nist||0), destekRaw:r.nist||0, dBirim:"kg/gün", min:ESIKLER.Nisasta.min, max:ESIKLER.Nisasta.max },
+    "aNDFom":    { birim:"%",        km: fmt2(yuz.NDF), kmRaw:yuz.NDF, destek: fmt2(r.NDF||0), destekRaw:r.NDF||0, dBirim:"kg/gün", min:ESIKLER.NDF.min, max:ESIKLER.NDF.max },
+    "Kaba Yem NDF":{ birim:"%",      km: fmt2(yuz.kabaNDF), kmRaw:yuz.kabaNDF,   destek: fmt2(r.kabaNDF||0), destekRaw:r.kabaNDF||0,   dBirim:"kg/gün", min:ESIKLER.KabaYemNDF.min, max:ESIKLER.KabaYemNDF.max },
     "Kesif NDF": { birim:"%",        km: fmt2(yuz.konsanNDF), kmRaw:yuz.konsanNDF, destek: fmt2(r.konsanNDF||0), destekRaw:r.konsanNDF||0, dBirim:"kg/gün" },
-    "NDF Kaba Payı":{ birim:"%NDF",  km: fmt2(yuz.kabaNDF_pay), kmRaw:yuz.kabaNDF_pay, destek:"—", destekRaw:undefined, dBirim:"", min:60 },
-    "peNDF":     { birim:"%",        km: fmt2(yuz.peNDF), kmRaw:yuz.peNDF, destek: fmt2(r.peNDF||0), destekRaw:r.peNDF||0, dBirim:"kg/gün", min:22, max:35 },
+    "NDF Kaba Payı":{ birim:"%NDF",  km: fmt2(yuz.kabaNDF_pay), kmRaw:yuz.kabaNDF_pay, destek:"—", destekRaw:undefined, dBirim:"", min:ESIKLER.NDFKabaPayi.min },
+    "peNDF":     { birim:"%",        km: fmt2(yuz.peNDF), kmRaw:yuz.peNDF, destek: fmt2(r.peNDF||0), destekRaw:r.peNDF||0, dBirim:"kg/gün", min:ESIKLER.peNDF.min, max:ESIKLER.peNDF.max },
     "RDP 3X 1.Düzey":{ birim:"%",   km: km>0?fmt2(r.HP*1000*0.65/km/10):"—", kmRaw: km>0?r.HP*1000*0.65/km/10:undefined, destek: fmt2(r.HP*1000*0.65), destekRaw:r.HP*1000*0.65, dBirim:"g/gün" },
-    "Ham Yağ (EE)":{ birim:"%",     km: fmt2(yuz.HY), kmRaw:yuz.HY, destek: fmt2(r.HY||0), destekRaw:r.HY||0, dBirim:"kg/gün", min:3, max:6 },
-    "ADF":       { birim:"%",        km: fmt2(yuz.ADF), kmRaw:yuz.ADF, destek: fmt2(r.ADF||0), destekRaw:r.ADF||0, dBirim:"kg/gün", min:17, max:24 },
+    "Ham Yağ (EE)":{ birim:"%",     km: fmt2(yuz.HY), kmRaw:yuz.HY, destek: fmt2(r.HY||0), destekRaw:r.HY||0, dBirim:"kg/gün", min:ESIKLER.HamYag.min, max:ESIKLER.HamYag.max },
+    "ADF":       { birim:"%",        km: fmt2(yuz.ADF), kmRaw:yuz.ADF, destek: fmt2(r.ADF||0), destekRaw:r.ADF||0, dBirim:"kg/gün", min:ESIKLER.ADF.min, max:ESIKLER.ADF.max },
     "Lignin (ADL)":{ birim:"%",      km: fmt2(yuz.ADL), kmRaw:yuz.ADL, destek: fmt2(r.ADL||0), destekRaw:r.ADL||0, dBirim:"kg/gün" },
-    "NFC":       { birim:"%",        km: fmt2(yuz.NFC), kmRaw:yuz.NFC, destek:"—", destekRaw:undefined, dBirim:"" },
+    "NFC":       { birim:"%",        km: fmt2(yuz.NFC), kmRaw:yuz.NFC, destek:"—", destekRaw:undefined, dBirim:"", min:ESIKLER.NFC.min, max:ESIKLER.NFC.max },
     "Ca":        { birim:"%",        km: km>0?fmt2(r.Ca/km*100):"—", kmRaw: km>0?r.Ca/km*100:undefined, destek: fmt2(r.Ca*1000), destekRaw:r.Ca*1000, dBirim:"g/gün", hedef:ih.min&&ih.min.Ca },
     "P":         { birim:"%",        km: km>0?fmt2(r.P/km*100):"—", kmRaw: km>0?r.P/km*100:undefined, destek: fmt2(r.P*1000), destekRaw:r.P*1000, dBirim:"g/gün", hedef:ih.min&&ih.min.P },
     "Mg":        { birim:"%",        km: km>0?fmt2(r.Mg/km*100):"—", kmRaw: km>0?r.Mg/km*100:undefined, destek: fmt2(r.Mg*1000), destekRaw:r.Mg*1000, dBirim:"g/gün", hedef:ih.min&&ih.min.Mg },
     "K":         { birim:"%",        km: km>0?fmt2(r.K/km*100):"—", kmRaw: km>0?r.K/km*100:undefined, destek: fmt2(r.K*1000), destekRaw:r.K*1000, dBirim:"g/gün", hedef:ih.min&&ih.min.K },
     "Na":        { birim:"%",        km: km>0?fmt2(r.Na/km*100):"—", kmRaw: km>0?r.Na/km*100:undefined, destek: fmt2(r.Na*1000), destekRaw:r.Na*1000, dBirim:"g/gün", hedef:ih.min&&ih.min.Na },
     "S":         { birim:"%",        km: km>0?fmt2(r.S/km*100):"—", kmRaw: km>0?r.S/km*100:undefined, destek: fmt2(r.S*1000), destekRaw:r.S*1000, dBirim:"g/gün", max:0.4 },
-    "Ca:P Oranı":{ birim:"",         km: fmt2(yuz.CaP), kmRaw:yuz.CaP, destek:"—", destekRaw:undefined, dBirim:"", min:1.5, max:2.5 },
+    "Ca:P Oranı":{ birim:"",         km: fmt2(yuz.CaP), kmRaw:yuz.CaP, destek:"—", destekRaw:undefined, dBirim:"", min:ESIKLER.CaP.min, max:ESIKLER.CaP.max },
     "Toplam KM": { birim:"kg/gün",   km:"—", kmRaw:undefined, destek: fmt2(km), destekRaw:km, dBirim:"kg/gün" },
     "Maliyet":   { birim:"₺/gün",    km:"—", kmRaw:undefined, destek: fmt2(r.maliyet), destekRaw:r.maliyet, dBirim:"₺/gün", maliyetSatiri:true },
   };
@@ -3592,21 +3724,21 @@ function optDegerlendirmeRender() {
   const besinEl = document.getElementById('opt-besin');
   if (besinEl) {
     const satirlar = [
-      { l:'HP',            v:y.HP,        b:'%KM', min:14,  max:18 },
+      { l:'HP',            v:y.HP,        b:'%KM', min:ESIKLER.HP.min,  max:ESIKLER.HP.max },
       { l:'RDP',           v:y.RDP,       b:'%KM' },
       { l:'RUP',           v:y.RUP,       b:'%KM' },
-      { l:'MP',            v:y.MP,        b:'%KM', min:10,  max:12 },
-      { l:'NEL',           v:y.NEL_yog,   b:'Mcal/kg', min:1.55, max:1.80 },
+      { l:'MP',            v:y.MP,        b:'%KM', min:ESIKLER.MP.min,  max:ESIKLER.MP.max },
+      { l:'NEL',           v:y.NEL_yog,   b:'Mcal/kg', min:ESIKLER.NEL_yog.min, max:ESIKLER.NEL_yog.max },
       { l:'TDN',           v:y.TDN,       b:'%KM' },
-      { l:'Nişasta',       v:y.nisasta,   b:'%KM', min:20, max:30 },
-      { l:'aNDFom',        v:y.NDF,       b:'%KM', min:28, max:40 },
-      { l:'Kaba Yem NDF',  v:y.kabaNDF,   b:'%KM', min:19, max:26 },
-      { l:'peNDF',         v:y.peNDF,     b:'%KM', min:22, max:35 },
-      { l:'ADF',           v:y.ADF,       b:'%KM', min:17, max:24 },
-      { l:'Ham Yağ',       v:y.HY,        b:'%KM', min:3,  max:6 },
-      { l:'Kaba Yem',      v:y.kaba,      b:'%KM', min:40, max:60 },
-      { l:'Kesif Yem',     v:y.konsan,    b:'%KM', min:40, max:60 },
-      { l:'Ca:P Oranı',    v:y.CaP,       b:'',    min:1.5, max:2.5 },
+      { l:'Nişasta',       v:y.nisasta,   b:'%KM', min:ESIKLER.Nisasta.min, max:ESIKLER.Nisasta.max },
+      { l:'aNDFom',        v:y.NDF,       b:'%KM', min:ESIKLER.NDF.min, max:ESIKLER.NDF.max },
+      { l:'Kaba Yem NDF',  v:y.kabaNDF,   b:'%KM', min:ESIKLER.KabaYemNDF.min, max:ESIKLER.KabaYemNDF.max },
+      { l:'peNDF',         v:y.peNDF,     b:'%KM', min:ESIKLER.peNDF.min, max:ESIKLER.peNDF.max },
+      { l:'ADF',           v:y.ADF,       b:'%KM', min:ESIKLER.ADF.min, max:ESIKLER.ADF.max },
+      { l:'Ham Yağ',       v:y.HY,        b:'%KM', min:ESIKLER.HamYag.min,  max:ESIKLER.HamYag.max },
+      { l:'Kaba Yem',      v:y.kaba,      b:'%KM', min:ESIKLER.KabaYem.min, max:ESIKLER.KabaYem.max },
+      { l:'Kesif Yem',     v:y.konsan,    b:'%KM', min:ESIKLER.KesifYem.min, max:ESIKLER.KesifYem.max },
+      { l:'Ca:P Oranı',    v:y.CaP,       b:'',    min:ESIKLER.CaP.min, max:ESIKLER.CaP.max },
     ];
     besinEl.innerHTML = satirlar.map((s,i) => {
       const v = s.v;
@@ -4375,8 +4507,8 @@ function modalKutuphaneyeEkle() {
 // BESİ MODÜLÜ — NASEM 2021 NEm + NEg
 // ============================================================
 let besiProfil = {
-  ca: 350, caBaslangic: 250, caHedef: 500,
-  gcaa: 1.2, yas: 12, cinsiyet: 'erkek', irk: 'charolais'
+  ca: 350, caBaslangic: 250, caHedef: 650,
+  gcaa: 1.2, yas: 12, cinsiyet: 'erkek', irk: 'simental'
 };
 
 // ============================================================
@@ -4631,7 +4763,7 @@ const BESI_ME = {
 function besiIhtiyacHesapla() {
   const CA = besiProfil.ca || 350;
   const GCAA = besiProfil.gcaa || 1.2;
-  const irk = besiProfil.irk || 'charolais';
+  const irk = besiProfil.irk || 'simental';
 
   const NEm_ham = BESI_ME.NEm(CA);
 
@@ -4718,7 +4850,7 @@ function besiProfilGuncelle(kaynakEl) {
     if (kaynakEl === bCaHedef || kaynakEl === bpCaHedef) besiProfil.caHedef = sayiOku(kaynakEl.value, besiProfil.caHedef);
     if (kaynakEl === bGcaa || kaynakEl === bpGcaa) besiProfil.gcaa = sayiOku(kaynakEl.value, besiProfil.gcaa);
     if (kaynakEl === bCinsiyet || kaynakEl === bpCinsiyet) besiProfil.cinsiyet = kaynakEl.value || 'erkek';
-    if (kaynakEl === bIrk || kaynakEl === bpIrk) besiProfil.irk = kaynakEl.value || 'charolais';
+    if (kaynakEl === bIrk || kaynakEl === bpIrk) besiProfil.irk = kaynakEl.value || 'simental';
   } else {
     // Kaynak belirtilmemiş (örn. sekme açılışı) — besiProfil zaten günceldir, değiştirme
   }
@@ -5748,8 +5880,8 @@ function besiSayfasiGuncelle() {
   const kkEl = document.getElementById('besi-kaba-kesif');
   if (kkEl) {
     const satirlar = [
-      { l:'Kaba Yem', v:ry.kaba, u:'%KM', c:'var(--green)', min:20, max:60 },
-      { l:'Kesif Yem', v:ry.konsan, u:'%KM', c:'var(--orange)', min:40, max:80 },
+      { l:'Kaba Yem', v:ry.kaba, u:'%KM', c:'var(--green)', min:ESIKLER.KabaYem.min, max:ESIKLER.KabaYem.max },
+      { l:'Kesif Yem', v:ry.konsan, u:'%KM', c:'var(--orange)', min:ESIKLER.KesifYem.min, max:ESIKLER.KesifYem.max },
       { l:'Kaba:Kesif Oranı', v:ry.kabaKonsan, u:'', c:'var(--blue2)' },
       { l:'Rasyon Nemi', v:ry.nem, u:'%', c:'var(--teal)' },
     ];
@@ -5769,13 +5901,13 @@ function besiSayfasiGuncelle() {
   const frEl = document.getElementById('besi-fraksiyonlar');
   if (frEl) {
     const satirlar = [
-      { l:'Nişasta',    v:ry.nisasta,   u:'%KM', min:20, max:40 },
-      { l:'peNDF',       v:ry.peNDF,     u:'%KM', min:15, max:30 },
-      { l:'NFC',        v:ry.NFC,       u:'%KM', min:30, max:50 },
-      { l:'NDF',        v:ry.NDF,       u:'%KM', min:25, max:50 },
-      { l:'Forage NDF', v:ry.ForageNDF, u:'%KM', min:15, max:30 },
-      { l:'ADF',        v:ry.ADF,       u:'%KM', min:15, max:28 },
-      { l:'Ham Yağ',    v:ry.HY,        u:'%KM', min:2,  max:6 },
+      { l:'Nişasta',    v:ry.nisasta,   u:'%KM', min:ESIKLER.Nisasta.min, max:ESIKLER.Nisasta.max },
+      { l:'peNDF',       v:ry.peNDF,     u:'%KM', min:ESIKLER.peNDF.min, max:ESIKLER.peNDF.max },
+      { l:'NFC',        v:ry.NFC,       u:'%KM', min:ESIKLER.NFC.min, max:ESIKLER.NFC.max },
+      { l:'NDF',        v:ry.NDF,       u:'%KM', min:ESIKLER.NDF.min, max:ESIKLER.NDF.max },
+      { l:'Forage NDF', v:ry.ForageNDF, u:'%KM', min:ESIKLER.ForageNDF.min, max:ESIKLER.ForageNDF.max },
+      { l:'ADF',        v:ry.ADF,       u:'%KM', min:ESIKLER.ADF.min, max:ESIKLER.ADF.max },
+      { l:'Ham Yağ',    v:ry.HY,        u:'%KM', min:ESIKLER.HamYag.min,  max:ESIKLER.HamYag.max },
     ];
     frEl.innerHTML = satirlar.map((s,i) => {
       let renk = 'var(--text2)';
@@ -5882,30 +6014,30 @@ function rasyonBesinTabloGuncelle() {
 
   const tümSatirlar = {
     "K.M.":       {birim:"%",       km:topMikDeg>0?fmt2(km/topMikDeg*100):"—", kmRaw:topMikDeg>0?km/topMikDeg*100:undefined, destek:fmt2(km), destekRaw:km, dBirim:"kg/gün"},
-    "Kaba Yem":   {birim:"%",       km:fmt2(yuz.kaba), kmRaw:yuz.kaba,             destek:fmt2(r.kabaKM||0), destekRaw:r.kabaKM||0,   dBirim:"kg KM", min:40, max:60},
-    "Kesif Yem":  {birim:"%",       km:fmt2(yuz.konsan), kmRaw:yuz.konsan,           destek:fmt2(r.konsanKM||0), destekRaw:r.konsanKM||0, dBirim:"kg KM", min:40, max:60},
+    "Kaba Yem":   {birim:"%",       km:fmt2(yuz.kaba), kmRaw:yuz.kaba,             destek:fmt2(r.kabaKM||0), destekRaw:r.kabaKM||0,   dBirim:"kg KM", min:ESIKLER.KabaYem.min, max:ESIKLER.KabaYem.max},
+    "Kesif Yem":  {birim:"%",       km:fmt2(yuz.konsan), kmRaw:yuz.konsan,           destek:fmt2(r.konsanKM||0), destekRaw:r.konsanKM||0, dBirim:"kg KM", min:ESIKLER.KesifYem.min, max:ESIKLER.KesifYem.max},
     "Kaba:Kesif": {birim:"",        km:fmt2(yuz.kabaKonsan), kmRaw:yuz.kabaKonsan,       destek:"—", destekRaw:undefined,               dBirim:""},
-    "HP":         {birim:"%",       km:fmt2(yuz.HP), kmRaw:yuz.HP,               destek:fmt2(r.HP*1000), destekRaw:r.HP*1000,   dBirim:"g/gün", min:14, max:18},
+    "HP":         {birim:"%",       km:fmt2(yuz.HP), kmRaw:yuz.HP,               destek:fmt2(r.HP*1000), destekRaw:r.HP*1000,   dBirim:"g/gün", min:ESIKLER.HP.min, max:ESIKLER.HP.max},
     "Sol Prot/CP":{birim:"%",       km:km>0?fmt2(r.HP*1000*0.65/km/10):"—", kmRaw:km>0?r.HP*1000*0.65/km/10:undefined, destek:"—", destekRaw:undefined, dBirim:""},
-    "NEL 3x NRC": {birim:"Mcal/kg", km:fmt2(yuz.NEL_yog), kmRaw:yuz.NEL_yog,         destek:fmt2(r.NEL||0), destekRaw:r.NEL||0,    dBirim:"Mcal/gün", min:1.55, max:1.80},
-    "Nişasta":    {birim:"%",       km:fmt2(yuz.nisasta), kmRaw:yuz.nisasta,          destek:fmt2(r.nist||0), destekRaw:r.nist||0, dBirim:"kg/gün", min:20, max:30},
-    "aNDFom":     {birim:"%",       km:fmt2(yuz.NDF), kmRaw:yuz.NDF,              destek:fmt2(r.NDF||0), destekRaw:r.NDF||0,    dBirim:"kg/gün", min:28, max:40},
-    "Kaba Yem NDF":{birim:"%",      km:fmt2(yuz.kabaNDF), kmRaw:yuz.kabaNDF,          destek:fmt2(r.kabaNDF||0), destekRaw:r.kabaNDF||0, dBirim:"kg/gün", min:19, max:26},
+    "NEL 3x NRC": {birim:"Mcal/kg", km:fmt2(yuz.NEL_yog), kmRaw:yuz.NEL_yog,         destek:fmt2(r.NEL||0), destekRaw:r.NEL||0,    dBirim:"Mcal/gün", min:ESIKLER.NEL_yog.min, max:ESIKLER.NEL_yog.max},
+    "Nişasta":    {birim:"%",       km:fmt2(yuz.nisasta), kmRaw:yuz.nisasta,          destek:fmt2(r.nist||0), destekRaw:r.nist||0, dBirim:"kg/gün", min:ESIKLER.Nisasta.min, max:ESIKLER.Nisasta.max},
+    "aNDFom":     {birim:"%",       km:fmt2(yuz.NDF), kmRaw:yuz.NDF,              destek:fmt2(r.NDF||0), destekRaw:r.NDF||0,    dBirim:"kg/gün", min:ESIKLER.NDF.min, max:ESIKLER.NDF.max},
+    "Kaba Yem NDF":{birim:"%",      km:fmt2(yuz.kabaNDF), kmRaw:yuz.kabaNDF,          destek:fmt2(r.kabaNDF||0), destekRaw:r.kabaNDF||0, dBirim:"kg/gün", min:ESIKLER.KabaYemNDF.min, max:ESIKLER.KabaYemNDF.max},
     "Kesif NDF":  {birim:"%",       km:fmt2(yuz.konsanNDF), kmRaw:yuz.konsanNDF,        destek:fmt2(r.konsanNDF||0), destekRaw:r.konsanNDF||0, dBirim:"kg/gün"},
-    "NDF Kaba Payı":{birim:"%NDF",  km:fmt2(yuz.kabaNDF_pay), kmRaw:yuz.kabaNDF_pay,      destek:"—", destekRaw:undefined,             dBirim:"", min:60},
-    "peNDF":      {birim:"%",       km:fmt2(yuz.peNDF), kmRaw:yuz.peNDF,            destek:fmt2(r.peNDF||0), destekRaw:r.peNDF||0,  dBirim:"kg/gün", min:22, max:35},
+    "NDF Kaba Payı":{birim:"%NDF",  km:fmt2(yuz.kabaNDF_pay), kmRaw:yuz.kabaNDF_pay,      destek:"—", destekRaw:undefined,             dBirim:"", min:ESIKLER.NDFKabaPayi.min},
+    "peNDF":      {birim:"%",       km:fmt2(yuz.peNDF), kmRaw:yuz.peNDF,            destek:fmt2(r.peNDF||0), destekRaw:r.peNDF||0,  dBirim:"kg/gün", min:ESIKLER.peNDF.min, max:ESIKLER.peNDF.max},
     "RDP 3X 1.Dz":{birim:"%",      km:km>0?fmt2(r.HP*1000*0.65/km/10):"—", kmRaw:km>0?r.HP*1000*0.65/km/10:undefined,   destek:fmt2(r.HP*1000*0.65), destekRaw:r.HP*1000*0.65, dBirim:"g/gün"},
-    "Ham Yağ (EE)":{birim:"%",     km:fmt2(yuz.HY), kmRaw:yuz.HY,               destek:fmt2(r.HY||0), destekRaw:r.HY||0,     dBirim:"kg/gün", min:3, max:6},
-    "ADF":        {birim:"%",       km:fmt2(yuz.ADF), kmRaw:yuz.ADF,              destek:fmt2(r.ADF||0), destekRaw:r.ADF||0,    dBirim:"kg/gün", min:17, max:24},
+    "Ham Yağ (EE)":{birim:"%",     km:fmt2(yuz.HY), kmRaw:yuz.HY,               destek:fmt2(r.HY||0), destekRaw:r.HY||0,     dBirim:"kg/gün", min:ESIKLER.HamYag.min, max:ESIKLER.HamYag.max},
+    "ADF":        {birim:"%",       km:fmt2(yuz.ADF), kmRaw:yuz.ADF,              destek:fmt2(r.ADF||0), destekRaw:r.ADF||0,    dBirim:"kg/gün", min:ESIKLER.ADF.min, max:ESIKLER.ADF.max},
     "Lignin (ADL)":{birim:"%",      km:fmt2(yuz.ADL), kmRaw:yuz.ADL,              destek:fmt2(r.ADL||0), destekRaw:r.ADL||0,    dBirim:"kg/gün"},
-    "NFC":        {birim:"%",       km:fmt2(yuz.NFC), kmRaw:yuz.NFC,              destek:"—", destekRaw:undefined,             dBirim:""},
+    "NFC":        {birim:"%",       km:fmt2(yuz.NFC), kmRaw:yuz.NFC,              destek:"—", destekRaw:undefined,             dBirim:"", min:ESIKLER.NFC.min, max:ESIKLER.NFC.max},
     "Ca":         {birim:"%",       km:km>0?fmt2(r.Ca/km*100):"—", kmRaw:km>0?r.Ca/km*100:undefined,             destek:fmt2(r.Ca*1000), destekRaw:r.Ca*1000,   dBirim:"g/gün", hedef:ih3.min&&ih3.min.Ca},
     "P":          {birim:"%",       km:km>0?fmt2(r.P/km*100):"—", kmRaw:km>0?r.P/km*100:undefined,              destek:fmt2(r.P*1000), destekRaw:r.P*1000,    dBirim:"g/gün", hedef:ih3.min&&ih3.min.P},
     "Mg":         {birim:"%",       km:km>0?fmt2(r.Mg/km*100):"—", kmRaw:km>0?r.Mg/km*100:undefined,             destek:fmt2(r.Mg*1000), destekRaw:r.Mg*1000,   dBirim:"g/gün", hedef:ih3.min&&ih3.min.Mg},
     "K":          {birim:"%",       km:km>0?fmt2(r.K/km*100):"—", kmRaw:km>0?r.K/km*100:undefined,              destek:fmt2(r.K*1000), destekRaw:r.K*1000,    dBirim:"g/gün"},
     "Na":         {birim:"%",       km:km>0?fmt2(r.Na/km*100):"—", kmRaw:km>0?r.Na/km*100:undefined,             destek:fmt2(r.Na*1000), destekRaw:r.Na*1000,   dBirim:"g/gün"},
     "S":          {birim:"%",       km:km>0?fmt2(r.S/km*100):"—", kmRaw:km>0?r.S/km*100:undefined,              destek:fmt2(r.S*1000), destekRaw:r.S*1000,    dBirim:"g/gün", max:0.4},
-    "Ca:P":       {birim:"",        km:fmt2(yuz.CaP), kmRaw:yuz.CaP,              destek:"—", destekRaw:undefined,             dBirim:"", min:1.5, max:2.5},
+    "Ca:P":       {birim:"",        km:fmt2(yuz.CaP), kmRaw:yuz.CaP,              destek:"—", destekRaw:undefined,             dBirim:"", min:ESIKLER.CaP.min, max:ESIKLER.CaP.max},
     "Toplam KM":  {birim:"kg/gün",  km:"—", kmRaw:undefined,                                   destek:fmt2(km), destekRaw:km,          dBirim:"kg/gün"},
     "Maliyet":    {birim:"₺/gün",   km:"—", kmRaw:undefined,                                   destek:fmt2(r.maliyet||0), destekRaw:r.maliyet||0, dBirim:"₺/gün", maliyetSatiri:true},
   };
@@ -6097,12 +6229,12 @@ Mevcut rasyon değiştirilecek.`)) return;
   if (isBesi) {
     // Besi profilini yükle
     Object.assign(besiProfil, kayit.profil);
-    const bIrk = document.getElementById('b-irk'); if (bIrk) bIrk.value = besiProfil.irk || 'charolais';
+    const bIrk = document.getElementById('b-irk'); if (bIrk) bIrk.value = besiProfil.irk || 'simental';
     const bCa = document.getElementById('b-ca'); if (bCa) bCa.value = besiProfil.ca || '';
     const bCaHedef = document.getElementById('b-ca-hedef'); if (bCaHedef) bCaHedef.value = besiProfil.caHedef || '';
     const bGcaa = document.getElementById('b-gcaa'); if (bGcaa) bGcaa.value = besiProfil.gcaa || '';
     const bCinsiyet = document.getElementById('b-cinsiyet'); if (bCinsiyet) bCinsiyet.value = besiProfil.cinsiyet || 'erkek';
-    const bpIrk = document.getElementById('bp-irk'); if (bpIrk) bpIrk.value = besiProfil.irk || 'charolais';
+    const bpIrk = document.getElementById('bp-irk'); if (bpIrk) bpIrk.value = besiProfil.irk || 'simental';
     const bpCa = document.getElementById('bp-ca'); if (bpCa) bpCa.value = besiProfil.ca || '';
     const bpCaHedef = document.getElementById('bp-ca-hedef'); if (bpCaHedef) bpCaHedef.value = besiProfil.caHedef || '';
     const bpGcaa = document.getElementById('bp-gcaa'); if (bpGcaa) bpGcaa.value = besiProfil.gcaa || '';
@@ -6549,12 +6681,12 @@ function mobilRender(rasyon, ihtiyac, profil, asidoz) {
   const profilEl = document.getElementById('profil-kartlar');
   if (profilEl) {
     const profilVeri = [
-      {l:"HP",v:ry.HP||0,u:"%KM",c:"var(--pink)",min:14,max:18},
-      {l:"NDF",v:ry.NDF||0,u:"%KM",c:"var(--green)",min:28,max:40},
-      {l:"peNDF",v:ry.peNDF||0,u:"%KM",c:"var(--teal)",min:22,max:35},
-      {l:"Nişasta",v:ry.nisasta||0,u:"%KM",c:"var(--yellow)",max:30},
-      {l:"NEL",v:ry.NEL_yog||0,u:"Mcal/kg",c:"var(--blue2)",min:1.55,max:1.80},
-      {l:"Ca:P",v:ry.CaP||0,u:":1",c:"var(--purple)",min:1.5,max:2.5},
+      {l:"HP",v:ry.HP||0,u:"%KM",c:"var(--pink)",min:ESIKLER.HP.min,max:ESIKLER.HP.max},
+      {l:"NDF",v:ry.NDF||0,u:"%KM",c:"var(--green)",min:ESIKLER.NDF.min,max:ESIKLER.NDF.max},
+      {l:"peNDF",v:ry.peNDF||0,u:"%KM",c:"var(--teal)",min:ESIKLER.peNDF.min,max:ESIKLER.peNDF.max},
+      {l:"Nişasta",v:ry.nisasta||0,u:"%KM",c:"var(--yellow)",max:ESIKLER.Nisasta.max},
+      {l:"NEL",v:ry.NEL_yog||0,u:"Mcal/kg",c:"var(--blue2)",min:ESIKLER.NEL_yog.min,max:ESIKLER.NEL_yog.max},
+      {l:"Ca:P",v:ry.CaP||0,u:":1",c:"var(--purple)",min:ESIKLER.CaP.min,max:ESIKLER.CaP.max},
       {l:"Maliyet",v:rt.maliyet||0,u:"₺/gün",c:"var(--teal)"},
       {l:"₺/kg Süt",v:profil.sutVerimi>0?r2((rt.maliyet||0)/profil.sutVerimi):0,u:"₺",c:"var(--green)"},
     ];
