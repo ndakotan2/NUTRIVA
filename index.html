@@ -1216,9 +1216,10 @@ select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
         <div class="card" style="padding-bottom:0;border:1.5px solid var(--purple)">
           <div class="flex-between mb8">
             <div class="card-title" style="margin:0;color:var(--purple)">💡 Rasyon B (Tavsiye/Öneri)</div>
-            <div style="display:flex;gap:6px">
+            <div style="display:flex;gap:6px;flex-wrap:wrap">
               <button class="btn btn-outline" onclick="besiSatirEkleB()" style="padding:5px 10px;font-size:11px">+ Yem Ekle</button>
               <button class="btn btn-success" onclick="besiOptimizeB()" style="padding:5px 10px;font-size:11px">⚡ Optimize</button>
+              <button onclick="besiBYiMevcutYap()" style="padding:5px 10px;background:var(--purple);border:none;border-radius:7px;color:#fff;font-size:11px;font-weight:700;cursor:pointer">✅ B'yi Mevcut Yap</button>
               <button onclick="besiKarsilastirmaAcKapa()" style="padding:5px 10px;background:var(--bg4);border:1px solid var(--border2);border-radius:7px;color:var(--text3);font-size:11px;cursor:pointer">✕ Kapat</button>
             </div>
           </div>
@@ -1443,9 +1444,13 @@ select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
     <!-- SAĞ: Kayıtlı rasyonlar -->
     <div>
       <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
           <div class="card-title" style="margin:0">📋 Kayıtlı Rasyonlar</div>
           <span id="kayit-sayac" class="fs11 c-text3"></span>
+        </div>
+        <div id="kayit-klasor-satiri" style="display:none;justify-content:space-between;align-items:center;margin-bottom:10px;padding:6px 8px;background:var(--bg2);border-radius:6px">
+          <span id="kayit-klasor-yolu" class="fs10 c-text3" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:75%"></span>
+          <button onclick="kayitKlasorDegistir()" style="padding:3px 8px;background:var(--bg4);border:1px solid var(--border2);border-radius:5px;color:var(--text3);font-size:10px;cursor:pointer;white-space:nowrap">📁 Değiştir</button>
         </div>
         <div id="kayit-listesi" style="max-height:500px;overflow-y:auto"></div>
         <!-- Dışa/içe aktar -->
@@ -1585,6 +1590,24 @@ select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
           ✓ Kapat
         </button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== ÖZEL ONAY MODALI (confirm() yerine) ====================
+     Bazı mobil WebView ortamlarında native confirm()/alert() sessizce çalışmıyor
+     veya hiç görünmüyor olabilir — bu yüzden kritik onaylar (rasyon değiştirme,
+     kayıt silme gibi) için kendi HTML tabanlı onay panelimizi kullanıyoruz. -->
+<div id="onay-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:2000;align-items:center;justify-content:center">
+  <div style="max-width:380px;width:90%;background:var(--bg);border:1px solid var(--border2);border-radius:14px;overflow:hidden;margin:0 16px">
+    <div style="padding:18px 20px 10px">
+      <div id="onay-modal-baslik" style="font-size:14px;font-weight:700;color:var(--blue2);margin-bottom:8px">Onay</div>
+      <div id="onay-modal-mesaj" class="fs12" style="color:var(--text2);line-height:1.5"></div>
+      <input type="text" id="onay-modal-giris" style="display:none;width:100%;margin-top:10px;padding:8px 10px;background:var(--bg4);border:1px solid var(--border2);border-radius:7px;color:var(--text);font-size:13px;box-sizing:border-box">
+    </div>
+    <div style="padding:14px 20px;background:var(--bg2);display:flex;gap:8px;justify-content:flex-end">
+      <button id="onay-modal-vazgec" style="padding:8px 16px;background:var(--bg4);border:1px solid var(--border2);border-radius:7px;color:var(--text3);font-size:12px;cursor:pointer">Vazgeç</button>
+      <button id="onay-modal-onayla" style="padding:8px 18px;background:var(--purple);border:none;border-radius:7px;color:#fff;font-size:12px;font-weight:700;cursor:pointer">Devam Et</button>
     </div>
   </div>
 </div>
@@ -1967,6 +1990,19 @@ const YEMLER = [
   { id:"TR002", isim:"Fiğ Kuru Otu", kat:"Kaba Yem", alt:"Kuru Ot", KM:90.1, HP:19.7, HY:1.8, HK:10.7, NDF:38.6, ADF:28.7, ADL:6.5, eNDF:0.9, nisasta:0.5, seker:7.0, NFC:29.2, PA:30.0, PB1:46.0, PB2:9.0, PB3:10.0, PC:5.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:48.0, kd_NDF:0.058, iNDF:16.0, NEL:1.243, NEm:1.328, NEg:0.752, UFL:0.78, UFV:0.7, PDIE:108, PDIN:114, Ca:1.45, P:0.29, Mg:0.23, K:2.61, Na:0, Cl:0, S:0, Mn:0, Cu:0, Fe:0, Zn:0, Lys:7.2, Met:1.6, His:2.7, Arg:6.0, Thr:5.2, Ile:5.3, Leu:9.4, Val:7.4, fiyat:6.5 },
   { id:"TR003", isim:"Gazelboynuzu Kuru Otu (Lotus)", kat:"Kaba Yem", alt:"Kuru Ot", KM:91.2, HP:19.2, HY:1.7, HK:11.0, NDF:41.1, ADF:33.9, ADL:9.6, eNDF:0.9, nisasta:0.5, seker:6.0, NFC:27.0, PA:28.0, PB1:45.0, PB2:10.0, PB3:12.0, PC:5.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:48.0, kd_NDF:0.058, iNDF:16.0, NEL:1.056, NEm:1.116, NEg:0.532, UFL:0.647, UFV:0.545, PDIE:106, PDIN:111, Ca:1.34, P:0.27, Mg:0.38, K:3.4, Na:0, Cl:0, S:0, Mn:0, Cu:0, Fe:0, Zn:0, Lys:5.2, Met:1.6, His:2.1, Arg:4.5, Thr:4.1, Ile:4.3, Leu:7.1, Val:5.5, fiyat:7.0 },
   { id:"TR004", isim:"Sorgum-Sudan Otu Silajı", kat:"Kaba Yem", alt:"Silaj", KM:29.5, HP:12.5, HY:2.5, HK:9.0, NDF:61.5, ADF:39.5, ADL:5.8, eNDF:0.85, nisasta:2.8, seker:5.1, NFC:14.5, PA:38.0, PB1:30.0, PB2:10.0, PB3:15.0, PC:7.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:48.0, kd_NDF:0.058, iNDF:16.0, NEL:0.985, NEm:1.02, NEg:0.46, UFL:0.61, UFV:0.51, PDIE:69, PDIN:72, Ca:0.51, P:0.31, Mg:0.33, K:2.61, Na:0.02, Cl:0.56, S:0.15, Mn:76, Cu:11, Fe:748, Zn:38, Lys:3.28, Met:1.21, His:1.66, Arg:3.06, Thr:3.34, Ile:3.57, Leu:6.12, Val:4.89, fiyat:2.5 },
+
+  // ============================================================
+  // NDS 'Feeds into the recipe' ekranından aktarılan ticari besi yemi
+  // (P-Pehlivan Turgutlu Ocak 2025). Protein fraksiyonları Sol CP/CP
+  // oranından tahmin edilmiştir; mineral/amino asit değerleri kaynak
+  // ekranda gösterilmediği için Karma Yem kategorisi tipik oranlarıdır.
+  // ============================================================
+  { id:"PHL001", isim:"Pehlivan Besi Yemi", kat:"Karma Yem", alt:"Karma", KM:88.36, HP:15.89, HY:3.03, HK:9.51, NDF:29.19, ADF:11.39, ADL:1.77, eNDF:0.1, nisasta:32.66, seker:6.23, NFC:43.48, PA:46.41, PB1:33.22, PB2:10.72, PB3:6.97, PC:2.68, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:50.0, kd_NDF:0.06, iNDF:12.0, NEL:1.671, NEm:1.805, NEg:1.136, UFL:0.977, UFV:0.909, PDIE:98, PDIN:108, Ca:1.879, P:0.769, Mg:0.351, K:1.276, Na:0.3, Cl:0.35, S:0.2, Mn:45, Cu:25, Fe:200, Zn:65, Lys:2.8, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:7.0, Val:4.5, analiz_tarihi:"04.09.2025", analiz_kaynagi:"NDS Professional", fiyat:12.5 },
+
+  // ============================================================
+  // Mısır Kepeği 17-20 — NDS Professional tam analiz (20.08.2026).
+  // ============================================================
+  { id:"NDS034", isim:"Mısır Kepeği 17-20 (NDS)", kat:"Konsantre", alt:"Yan Ürün", KM:91.3, HP:18.6199, HY:3.4502, HK:5.6846, NDF:36.1446, ADF:10.2629, ADL:1.8, eNDF:0.2, nisasta:21.9058, seker:4.0, NFC:36.1008, PA:30.93, PB1:47.67, PB2:9.02, PB3:9.02, PC:3.35, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:50.0, kd_NDF:0.06, iNDF:12.0, NEL:1.7479, NEm:1.8859, NEg:1.2481, UFL:1.0833, UFV:1.0609, PDIE:115, PDIN:127, Ca:0.4, P:0.4, Mg:0.175, K:0.62, Na:0.08, Cl:0.13, S:0.24, Mn:20.4, Cu:5.5, Fe:200, Zn:67.5, Lys:3.6, Met:1.85, His:2.67, Arg:5.0, Thr:3.84, Ile:3.26, Leu:10.12, Val:4.42, analiz_tarihi:"20.08.2026", analiz_kaynagi:"NDS Professional", fiyat:9.5 },
 ];
 
 // ============================================================
@@ -2241,6 +2277,90 @@ function esikModalKapat() {
   if (typeof rasyonSonucGuncelle === 'function' && document.getElementById('deg-tablo')) rasyonSonucGuncelle();
   if (typeof besiSayfasiGuncelle === 'function' && document.getElementById('besi-fraksiyonlar')) besiSayfasiGuncelle();
 }
+
+// Native confirm() bazı mobil WebView ortamlarında sessizce çalışmayabildiği
+// için, kritik onaylarda (rasyon değiştirme, veri silme gibi) bunun yerine
+// kullanılan HTML tabanlı onay paneli. confirm() gibi senkron değil,
+// callback ile çalışır: onayOlursaCagir fonksiyonu "Devam Et"e basılınca çalışır.
+function ozelOnay(mesaj, onayOlursaCagir, baslik) {
+  const modal = document.getElementById('onay-modal');
+  const baslikEl = document.getElementById('onay-modal-baslik');
+  const mesajEl = document.getElementById('onay-modal-mesaj');
+  const onaylaBtn = document.getElementById('onay-modal-onayla');
+  const vazgecBtn = document.getElementById('onay-modal-vazgec');
+  if (!modal || !mesajEl || !onaylaBtn || !vazgecBtn) {
+    // Modal DOM'da yoksa (beklenmedik durum) native confirm'e geri düş
+    if (confirm(mesaj)) onayOlursaCagir();
+    return;
+  }
+  if (baslikEl) baslikEl.textContent = baslik || 'Onay';
+  mesajEl.textContent = mesaj;
+  modal.style.display = 'flex';
+  const girisEl = document.getElementById('onay-modal-giris');
+  if (girisEl) girisEl.style.display = 'none'; // sadece onay, metin girişi yok
+
+  // Önceki tıklama dinleyicilerini temizlemek için butonları klonla
+  const yeniOnayla = onaylaBtn.cloneNode(true);
+  onaylaBtn.parentNode.replaceChild(yeniOnayla, onaylaBtn);
+  const yeniVazgec = vazgecBtn.cloneNode(true);
+  vazgecBtn.parentNode.replaceChild(yeniVazgec, vazgecBtn);
+
+  yeniOnayla.addEventListener('click', function() {
+    modal.style.display = 'none';
+    onayOlursaCagir();
+  });
+  yeniVazgec.addEventListener('click', function() {
+    modal.style.display = 'none';
+  });
+}
+window.ozelOnay = ozelOnay;
+
+// Native prompt() bazı Electron/mobil WebView ortamlarında sessizce
+// çalışmayabildiği için (hep null dönüp fonksiyonu sessizce durdurabiliyor),
+// bunun yerine kullanılan HTML tabanlı metin giriş penceresi. Kullanım:
+// ozelPrompt('Mesaj', 'Varsayılan değer', function(girilenDeger){ ... }, 'Başlık')
+// girilenDeger null olursa kullanıcı Vazgeç'e basmış demektir (prompt() ile aynı davranış).
+function ozelPrompt(mesaj, varsayilanDeger, sonucCagir, baslik) {
+  const modal = document.getElementById('onay-modal');
+  const baslikEl = document.getElementById('onay-modal-baslik');
+  const mesajEl = document.getElementById('onay-modal-mesaj');
+  const girisEl = document.getElementById('onay-modal-giris');
+  const onaylaBtn = document.getElementById('onay-modal-onayla');
+  const vazgecBtn = document.getElementById('onay-modal-vazgec');
+  if (!modal || !mesajEl || !girisEl || !onaylaBtn || !vazgecBtn) {
+    // Modal DOM'da yoksa native prompt'a geri düş
+    sonucCagir(prompt(mesaj, varsayilanDeger || ''));
+    return;
+  }
+  if (baslikEl) baslikEl.textContent = baslik || 'Bilgi Girin';
+  mesajEl.textContent = mesaj;
+  girisEl.style.display = 'block';
+  girisEl.value = varsayilanDeger || '';
+  modal.style.display = 'flex';
+  setTimeout(function() { girisEl.focus(); girisEl.select(); }, 50);
+
+  // Önceki tıklama dinleyicilerini temizlemek için butonları klonla
+  const yeniOnayla = onaylaBtn.cloneNode(true);
+  onaylaBtn.parentNode.replaceChild(yeniOnayla, onaylaBtn);
+  const yeniVazgec = vazgecBtn.cloneNode(true);
+  vazgecBtn.parentNode.replaceChild(yeniVazgec, vazgecBtn);
+
+  function onaylaVeKapat() {
+    modal.style.display = 'none';
+    girisEl.style.display = 'none';
+    sonucCagir(girisEl.value);
+  }
+  yeniOnayla.addEventListener('click', onaylaVeKapat);
+  girisEl.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') onaylaVeKapat();
+  });
+  yeniVazgec.addEventListener('click', function() {
+    modal.style.display = 'none';
+    girisEl.style.display = 'none';
+    sonucCagir(null); // native prompt() iptal davranışıyla aynı: null döner
+  });
+}
+window.ozelPrompt = ozelPrompt;
 
 function esikModalRender() {
   const liste = document.getElementById('esik-modal-liste');
@@ -3299,11 +3419,15 @@ function yemSecPanelAc(satirId, hedefModul) {
 
 function yemSecKategoriSec(kategori) {
   yemSecAktifKategori = kategori;
+  yemSecAramaMetni = '';
+  yemSecAramaOdaktaydi = false;
   yemSecPanelRender();
 }
 
 function yemSecGeriKategoriye() {
   yemSecAktifKategori = null;
+  yemSecAramaMetni = '';
+  yemSecAramaOdaktaydi = false;
   yemSecPanelRender();
 }
 
@@ -3328,6 +3452,8 @@ function yemSecPaneliKapat() {
   if (overlay) overlay.style.display = 'none';
   yemSecAktifSatirId = null;
   yemSecAktifKategori = null;
+  yemSecAramaMetni = '';
+  yemSecAramaOdaktaydi = false;
 }
 
 function yemSecPanelRender() {
@@ -3351,20 +3477,44 @@ function yemSecPanelRender() {
     const satirlar = yemSecBesiModu ? besiRasyonSatirlari : rasyonSatirlari;
     const satir = satirlar.find(s => s.id === yemSecAktifSatirId);
     const seciliYemId = satir ? satir.yemId : null;
-    const yemler = YEMLER.filter(y => yemAnaGrup(y) === yemSecAktifKategori);
+    const aramaMetni = (yemSecAramaMetni || '').toLowerCase();
+    let yemler = YEMLER.filter(y => yemAnaGrup(y) === yemSecAktifKategori);
+    if (aramaMetni) {
+      yemler = yemler.filter(y => y.isim.toLowerCase().includes(aramaMetni) || y.id.toLowerCase().includes(aramaMetni));
+    }
 
     govdeEl.innerHTML =
       `<button onclick="yemSecGeriKategoriye()" style="display:flex;align-items:center;gap:5px;padding:8px 4px;margin-bottom:8px;background:transparent;border:none;color:var(--blue2);font-size:12px;font-weight:600;cursor:pointer">‹ Kategorilere dön</button>` +
+      `<input type="text" id="yemsec-arama-input" placeholder="🔍 İsimle ara..." value="${yemSecAramaMetni ? yemSecAramaMetni.replace(/"/g,'&quot;') : ''}"
+        style="width:100%;padding:8px 10px;margin-bottom:8px;background:var(--bg4);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-size:12px;box-sizing:border-box"
+        oninput="yemSecAramaDegisti(this.value)">` +
       (yemler.length === 0
-        ? '<div style="text-align:center;padding:30px;color:var(--text3);font-size:12px">Bu kategoride yem yok.</div>'
+        ? `<div style="text-align:center;padding:30px;color:var(--text3);font-size:12px">${aramaMetni ? 'Aramayla eşleşen yem yok.' : 'Bu kategoride yem yok.'}</div>`
         : yemler.map(y => `
         <button onclick="yemSecYemSecildi('${y.id}')" style="display:block;width:100%;text-align:left;padding:10px 12px;margin-bottom:5px;
           background:${y.id===seciliYemId?'var(--blue)':'var(--bg3)'};border:1px solid ${y.id===seciliYemId?'var(--blue)':'var(--border2)'};
           border-radius:8px;color:${y.id===seciliYemId?'#fff':'var(--text)'};font-size:12px;cursor:pointer">
           ${y.isim}
         </button>`).join(''));
+
+    // Yazarken imleç konumunu koru (innerHTML her tuşta yeniden yazıldığı için)
+    const aramaInputEl = document.getElementById('yemsec-arama-input');
+    if (aramaInputEl && document.activeElement !== aramaInputEl && yemSecAramaOdaktaydi) {
+      aramaInputEl.focus();
+      const uzunluk = aramaInputEl.value.length;
+      aramaInputEl.setSelectionRange(uzunluk, uzunluk);
+    }
   }
 }
+
+let yemSecAramaMetni = '';
+let yemSecAramaOdaktaydi = false;
+function yemSecAramaDegisti(deger) {
+  yemSecAramaMetni = deger;
+  yemSecAramaOdaktaydi = true;
+  yemSecPanelRender();
+}
+window.yemSecAramaDegisti = yemSecAramaDegisti;
 
 function satirMiktarDegistir(id, val) {
   const s = rasyonSatirlari.find(s=>s.id===id);
@@ -5658,6 +5808,87 @@ function besiKarsilastirmaAcKapa() {
   }
 }
 
+// Karşılaştırma (B) rasyonunu mevcut (A) rasyonunun yerine geçirir.
+// Eski A rasyonu, geri dönülebilmesi için otomatik olarak "Eski Rasyon"
+// adıyla Kayıtlar listesine eklenir — kullanıcıdan müşteri adı istenmez,
+// hızlıca yer değiştirme işlemidir. Native confirm() bazı mobil ortamlarda
+// çalışmayabildiği için, onay ozelOnay() (HTML tabanlı) ile alınır.
+function besiBYiMevcutYap() {
+  const bDoluSatirlar = besiRasyonSatirlariB.filter(s => s.yemId);
+  if (bDoluSatirlar.length === 0) {
+    ozelOnay('B rasyonunda henüz hiç yem yok. Önce Rasyon B\'ye yem ekleyin.', function(){}, 'Uyarı');
+    return;
+  }
+  ozelOnay(
+    'Mevcut rasyon (A) "Eski Rasyon" adıyla kayıtlara eklenecek ve B rasyonu yeni mevcut rasyon olacak. Devam edilsin mi?',
+    function() { besiBYiMevcutYapDevam(bDoluSatirlar); },
+    'B Rasyonunu Uygula'
+  );
+}
+
+async function besiBYiMevcutYapDevam(bDoluSatirlar) {
+  // 1) Eski A rasyonunu otomatik olarak "Eski Rasyon" adıyla kaydet
+  const tarih = new Date().toLocaleDateString('tr-TR', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  const eskiIsim = `Eski Rasyon — Besi ${besiProfil.ca}kg→${besiProfil.caHedef}kg — ${tarih}`;
+  const eskiKayit = {
+    id: Date.now().toString(36),
+    tarih,
+    musteri: '—',
+    isim: eskiIsim,
+    not: 'B rasyonu mevcut rasyon olarak uygulandığında otomatik kaydedildi.',
+    grup: 'besi',
+    profil: Object.assign({}, besiProfil),
+    rasyonSatirlari: besiRasyonSatirlari.map(s => ({id:s.id, yemId:s.yemId, miktar:s.miktar, ozelYem:s.ozelYem||null})),
+    ozet: {
+      toplamKM: r2(besiRasyon.toplamKM||0),
+      ME: r2(besiRasyon.toplam.ME||0),
+      HP: besiRasyon.yuzde.HP||0,
+      NDF: besiRasyon.yuzde.NDF||0,
+      maliyet: r2(besiRasyon.toplam.maliyet||0),
+      sutVerimi: null,
+    }
+  };
+  if (ELECTRON_MODU) {
+    const onerilenDosyaAdi = eskiIsim.replace(/[^a-z0-9ğüşöçıİĞÜŞÖÇ ]/gi, '_');
+    await window.nutrivaDosya.rasyonSessizKaydet(JSON.stringify(eskiKayit, null, 2), onerilenDosyaAdi);
+    await kayitlarCacheYenile();
+  } else {
+    const kayitlar = kayitlariGetir();
+    kayitlar.unshift(eskiKayit);
+    if (kayitlar.length > 50) kayitlar.splice(50);
+    kayitlariYaz(kayitlar);
+  }
+
+  // 2) B rasyonunu A'nın (mevcut/aktif) yerine geçir
+  besiRasyonSatirlari = bDoluSatirlar.map(s => ({
+    id: besiNextSatirId++,
+    yemId: s.yemId,
+    miktar: s.miktar,
+    ozelYem: s.ozelYem ? Object.assign({}, s.ozelYem) : undefined
+  }));
+  besiRasyonSatirlari.push({ id: besiNextSatirId++, yemId: null, miktar: 0 });
+
+  // 3) B rasyonunu sıfırla, karşılaştırma panelini kapat
+  besiRasyonSatirlariB = [{ id: besiNextSatirIdB++, yemId: null, miktar: 0 }];
+  besiKarsilastirmaAcik = false;
+  const blok = document.getElementById('besi-rasyon-b-blok');
+  const acBtn = document.getElementById('besi-karsilastirma-ac-wrap');
+  if (blok) blok.classList.add('hidden');
+  if (acBtn) acBtn.style.display = '';
+
+  besiRasyonHesapla();
+  besiSayfasiRender();
+
+  const b = document.createElement('div');
+  b.style.cssText = 'position:fixed;top:16px;right:16px;z-index:9999;padding:12px 18px;background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.4);border-radius:8px;color:var(--purple);font-size:13px;font-weight:600;max-width:280px';
+  b.innerHTML = '✅ B rasyonu mevcut rasyon oldu<br><span style="font-size:12px;font-weight:400;opacity:0.9">Eski rasyon "Eski Rasyon" adıyla kaydedildi</span>';
+  document.body.appendChild(b);
+  setTimeout(() => b.remove(), 3500);
+}
+window.besiBYiMevcutYap = besiBYiMevcutYap;
+window.besiBYiMevcutYapDevam = besiBYiMevcutYapDevam;
+
+
 function besiSatirEkleB() {
   besiRasyonSatirlariB.push({ id: besiNextSatirIdB++, yemId: null, miktar: 0 });
   besiSayfasiRenderB();
@@ -6079,15 +6310,59 @@ function rasyonBesinTabloGuncelle() {
 }
 
 // ============================================================
-// KAYIT SİSTEMİ — localStorage
+// KAYIT SİSTEMİ — Electron'da gerçek .json dosyaları (Belgelerim/NUTRIVA
+// Rasyonları klasöründe veya kullanıcının seçtiği klasörde), tarayıcıda
+// (test/önizleme amaçlı) localStorage'a düşer.
 // ============================================================
 const KAYIT_ANAHTARI = 'rasyon_kayitlari_v1';
+const ELECTRON_MODU = typeof window.nutrivaDosya !== 'undefined' && window.nutrivaDosya.electronOrtami === true;
+
+// Senkron okuma noktalarının (kayitlariGetir) çalışmaya devam edebilmesi için
+// dosyalardan taranan kayıtlar bu önbellekte tutulur. Sayfa açılışında ve her
+// kaydet/sil sonrası kayitlarCacheYenile() ile güncellenir.
+let _kayitlarCache = [];
+
+async function kayitlarCacheYenile() {
+  if (!ELECTRON_MODU) return;
+  try {
+    const sonuc = await window.nutrivaDosya.rasyonKlasoruTara();
+    if (sonuc && sonuc.basarili) {
+      // En yeni tarih üstte olacak şekilde sırala (tarih alanı yoksa dosya adına göre)
+      _kayitlarCache = (sonuc.kayitlar || []).sort((a, b) => {
+        const ta = a._dosyaAdi || ''; const tb = b._dosyaAdi || '';
+        return tb.localeCompare(ta);
+      });
+      if (typeof kayitListesiGuncelle === 'function') kayitListesiGuncelle();
+      if (typeof girisKayitRozetiGuncelle === 'function') girisKayitRozetiGuncelle();
+      // Klasör yolu satırını göster/güncelle
+      const klasorSatiri = document.getElementById('kayit-klasor-satiri');
+      const klasorYoluEl = document.getElementById('kayit-klasor-yolu');
+      if (klasorSatiri) klasorSatiri.style.display = 'flex';
+      if (klasorYoluEl) klasorYoluEl.textContent = '📁 ' + (sonuc.klasor || '');
+    }
+  } catch (e) { /* sessizce geç */ }
+}
+
+// Kullanıcının rasyon kayıtları klasörünü değiştirmesini sağlar (örn. bir
+// ağ sürücüsü, USB bellek veya paylaşımlı bir klasör kullanmak isterse).
+async function kayitKlasorDegistir() {
+  if (!ELECTRON_MODU) return;
+  const sonuc = await window.nutrivaDosya.rasyonKlasorDegistir();
+  if (sonuc.basarili) {
+    await kayitlarCacheYenile();
+  }
+}
+window.kayitKlasorDegistir = kayitKlasorDegistir;
 
 function hizliKaydet() {
-  const musteri = prompt('Bu rasyon kime ait? (Müşteri / Çiftlik adı)');
-  if (musteri === null) return; // Kullanıcı iptal etti
-  if (!musteri.trim()) { alert('Kayıt için müşteri/çiftlik adı gerekli.'); return; }
+  ozelPrompt('Bu rasyon kime ait? (Müşteri / Çiftlik adı)', '', function(musteri) {
+    if (musteri === null) return; // Kullanıcı iptal etti
+    if (!musteri.trim()) { alert('Kayıt için müşteri/çiftlik adı gerekli.'); return; }
+    hizliKaydetDevam(musteri.trim());
+  }, 'Rasyonu Kaydet');
+}
 
+async function hizliKaydetDevam(musteri) {
   const tarih = new Date().toLocaleDateString('tr-TR', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
   const isBesi = hayvanGrubu === 'besi';
   const isim = isBesi
@@ -6096,7 +6371,7 @@ function hizliKaydet() {
   const kayit = {
     id: Date.now().toString(36),
     tarih,
-    musteri: musteri.trim(),
+    musteri,
     isim,
     not: '',
     grup: hayvanGrubu,
@@ -6120,25 +6395,56 @@ function hizliKaydet() {
       sutVerimi: profil.sutVerimi,
     }
   };
-  const kayitlar = kayitlariGetir();
-  kayitlar.unshift(kayit);
-  if (kayitlar.length > 50) kayitlar.splice(50);
-  if (kayitlariYaz(kayitlar)) {
-    const b = document.createElement('div');
-    b.style.cssText = 'position:fixed;top:16px;right:16px;z-index:9999;padding:12px 18px;background:rgba(52,211,153,0.15);border:1px solid rgba(52,211,153,0.4);border-radius:8px;color:var(--teal);font-size:13px;font-weight:600;max-width:280px';
-    b.innerHTML = '💾 Kaydedildi<br><span style="font-size:12px;font-weight:400;opacity:0.9">' + musteri.trim() + ' — ' + isim + '<br>' + tarih + '</span>';
-    document.body.appendChild(b);
-    setTimeout(() => b.remove(), 3500);
+
+  const onerilenDosyaAdi = musteri.replace(/[^a-z0-9ğüşöçıİĞÜŞÖÇ ]/gi, '_') + ' - ' + isim.replace(/[^a-z0-9ğüşöçıİĞÜŞÖÇ ]/gi, '_');
+
+  await kayitKaydetVeBildir(kayit, onerilenDosyaAdi, musteri, isim, tarih);
+}
+
+// Kaydı Electron'da gerçek dosya olarak (Farklı Kaydet penceresiyle), tarayıcıda
+// localStorage'a yazar. Her iki durumda da işlem bitince bildirim gösterir.
+async function kayitKaydetVeBildir(kayit, onerilenDosyaAdi, musteri, isim, tarih) {
+  if (ELECTRON_MODU) {
+    const veriJson = JSON.stringify(kayit, null, 2);
+    const sonuc = await window.nutrivaDosya.rasyonKaydet(veriJson, onerilenDosyaAdi);
+    if (sonuc.iptalEdildi) return; // kullanıcı Farklı Kaydet penceresini iptal etti
+    if (!sonuc.basarili) { alert('Kayıt hatası: ' + (sonuc.hata || 'Bilinmeyen hata')); return; }
+    await kayitlarCacheYenile();
+    kayitBildirimGoster(musteri, isim, tarih, sonuc.dosyaYolu);
+  } else {
+    // Tarayıcı (test/önizleme) modu — eski localStorage davranışı
+    const kayitlar = kayitlariGetir();
+    kayitlar.unshift(kayit);
+    if (kayitlar.length > 50) kayitlar.splice(50);
+    if (kayitlariYaz(kayitlar)) {
+      kayitBildirimGoster(musteri, isim, tarih);
+    }
   }
 }
 
+function kayitBildirimGoster(musteri, isim, tarih, dosyaYolu) {
+  const b = document.createElement('div');
+  b.style.cssText = 'position:fixed;top:16px;right:16px;z-index:9999;padding:12px 18px;background:rgba(52,211,153,0.15);border:1px solid rgba(52,211,153,0.4);border-radius:8px;color:var(--teal);font-size:13px;font-weight:600;max-width:320px';
+  let icerik = '💾 Kaydedildi<br><span style="font-size:12px;font-weight:400;opacity:0.9">' + musteri + ' — ' + isim + '<br>' + tarih;
+  if (dosyaYolu) icerik += '<br><span style="opacity:0.7;font-size:10px">' + dosyaYolu + '</span>';
+  icerik += '</span>';
+  b.innerHTML = icerik;
+  document.body.appendChild(b);
+  setTimeout(() => b.remove(), 4500);
+}
+
+// Senkron okuma — Electron modunda önbellekten (kayitlarCacheYenile ile
+// doldurulmuş), tarayıcı modunda doğrudan localStorage'dan okur.
 function kayitlariGetir() {
+  if (ELECTRON_MODU) return _kayitlarCache;
   try {
     return JSON.parse(localStorage.getItem(KAYIT_ANAHTARI) || '[]');
   } catch(e) { return []; }
 }
 
 function kayitlariYaz(kayitlar) {
+  // Not: Electron modunda bu fonksiyon artık kullanılmıyor (her kayıt kendi
+  // dosyasında tutuluyor) — sadece tarayıcı/localStorage modunda çalışır.
   try {
     localStorage.setItem(KAYIT_ANAHTARI, JSON.stringify(kayitlar));
     if (typeof girisKayitRozetiGuncelle === 'function') girisKayitRozetiGuncelle();
@@ -6149,7 +6455,7 @@ function kayitlariYaz(kayitlar) {
   }
 }
 
-function rasyonKaydet() {
+async function rasyonKaydet() {
   const musteri = document.getElementById('kayit-musteri').value.trim();
   const isim = document.getElementById('kayit-isim').value.trim();
 
@@ -6187,22 +6493,32 @@ function rasyonKaydet() {
     }
   };
 
-  const kayitlar = kayitlariGetir();
-  kayitlar.unshift(kayit); // En yenisi başa
-  if (kayitlar.length > 50) kayitlar.splice(50); // Max 50 kayıt
+  const onerilenDosyaAdi = musteri.replace(/[^a-z0-9ğüşöçıİĞÜŞÖÇ ]/gi, '_') + ' - ' + isim.replace(/[^a-z0-9ğüşöçıİĞÜŞÖÇ ]/gi, '_');
 
-  if (kayitlariYaz(kayitlar)) {
+  if (ELECTRON_MODU) {
+    const veriJson = JSON.stringify(kayit, null, 2);
+    const sonuc = await window.nutrivaDosya.rasyonKaydet(veriJson, onerilenDosyaAdi);
+    if (sonuc.iptalEdildi) return;
+    if (!sonuc.basarili) { alert('Kayıt hatası: ' + (sonuc.hata || 'Bilinmeyen hata')); return; }
+    await kayitlarCacheYenile();
     document.getElementById('kayit-musteri').value = '';
     document.getElementById('kayit-isim').value = '';
     document.getElementById('kayit-not').value = '';
-    kayitListesiGuncelle();
     kayitTarihBilgiGuncelle();
-    // Bildirim — nereye ve kime kaydedildiği açıkça belirtiliyor
-    const b = document.createElement('div');
-    b.style.cssText = 'position:fixed;top:16px;right:16px;z-index:9999;padding:12px 18px;background:rgba(20,184,166,0.15);border:1px solid rgba(20,184,166,0.4);border-radius:8px;color:var(--blue2);font-size:13px;font-weight:600;max-width:280px';
-    b.innerHTML = '💾 Kaydedildi<br><span style="font-size:12px;font-weight:400;opacity:0.9">' + musteri + ' — ' + isim + '<br>' + tarih + '</span>';
-    document.body.appendChild(b);
-    setTimeout(() => b.remove(), 3500);
+    kayitBildirimGoster(musteri, isim, tarih, sonuc.dosyaYolu);
+  } else {
+    const kayitlar = kayitlariGetir();
+    kayitlar.unshift(kayit); // En yenisi başa
+    if (kayitlar.length > 50) kayitlar.splice(50); // Max 50 kayıt
+
+    if (kayitlariYaz(kayitlar)) {
+      document.getElementById('kayit-musteri').value = '';
+      document.getElementById('kayit-isim').value = '';
+      document.getElementById('kayit-not').value = '';
+      kayitListesiGuncelle();
+      kayitTarihBilgiGuncelle();
+      kayitBildirimGoster(musteri, isim, tarih);
+    }
   }
 }
 
@@ -6221,9 +6537,14 @@ function rasyonYukle(kayitId) {
   const kayit = kayitlar.find(k => k.id === kayitId);
   if (!kayit) return;
 
-  if (!confirm(`"${kayit.isim}" rasyonunu yüklemek istiyor musunuz?
-Mevcut rasyon değiştirilecek.`)) return;
+  ozelOnay(
+    `"${kayit.isim}" rasyonunu yüklemek istiyor musunuz? Mevcut rasyon değiştirilecek.`,
+    function() { rasyonYukleDevam(kayit); },
+    'Rasyon Yükle'
+  );
+}
 
+function rasyonYukleDevam(kayit) {
   const isBesi = kayit.grup === 'besi';
 
   if (isBesi) {
@@ -6274,10 +6595,22 @@ Mevcut rasyon değiştirilecek.`)) return;
 }
 
 function rasyonSil(kayitId, isim) {
-  if (!confirm(`"${isim}" kaydını silmek istiyor musunuz?`)) return;
-  const kayitlar = kayitlariGetir().filter(k => k.id !== kayitId);
-  kayitlariYaz(kayitlar);
-  kayitListesiGuncelle();
+  ozelOnay(`"${isim}" kaydını silmek istiyor musunuz?`, function() { rasyonSilDevam(kayitId); }, 'Kaydı Sil');
+}
+
+async function rasyonSilDevam(kayitId) {
+  if (ELECTRON_MODU) {
+    const kayit = _kayitlarCache.find(k => k.id === kayitId);
+    if (kayit && kayit._dosyaYolu) {
+      const sonuc = await window.nutrivaDosya.rasyonSil(kayit._dosyaYolu);
+      if (!sonuc.basarili) { alert('Silme hatası: ' + (sonuc.hata || 'Bilinmeyen hata')); return; }
+    }
+    await kayitlarCacheYenile();
+  } else {
+    const kayitlar = kayitlariGetir().filter(k => k.id !== kayitId);
+    kayitlariYaz(kayitlar);
+    kayitListesiGuncelle();
+  }
 }
 
 function rasyonDisa(kayitId) {
@@ -7045,6 +7378,12 @@ window.onload = function() {
   // virgül->nokta dönüşümü artık her input'un kendi oninput'unda satır başında
   // yapılıyor (bkz. "this.value=this.value.replace(',','.')") — daha güvenilir,
   // tarayıcı/cihaz event sıralamasına bağımlı değil.
+
+  // Electron modundaysa (masaüstü uygulaması), rasyon kayıtları klasörünü
+  // tara ve Kayıtlar sekmesini/giriş rozetini güncel tut.
+  if (ELECTRON_MODU) {
+    kayitlarCacheYenile();
+  }
 };
 
 // Sıfırla düğmesi
