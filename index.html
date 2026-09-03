@@ -1218,20 +1218,21 @@ select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
             <div class="card-title" style="margin:0;color:var(--purple)">💡 Rasyon B (Tavsiye/Öneri)</div>
             <div style="display:flex;gap:6px;flex-wrap:wrap">
               <button class="btn btn-outline" onclick="besiSatirEkleB()" style="padding:5px 10px;font-size:11px">+ Yem Ekle</button>
-              <button class="btn btn-success" onclick="besiOptimizeB()" style="padding:5px 10px;font-size:11px">⚡ Optimize</button>
+              <button onclick="besiKarsilastirmaGuncelle()" style="padding:5px 10px;background:var(--bg4);border:1px solid var(--blue);border-radius:7px;color:var(--blue2);font-size:11px;font-weight:600;cursor:pointer" title="A rasyonunda değişiklik yaptıysanız, hem A hem B'yi ve karşılaştırma tablosunu güncel verilerle yeniden hesaplar">🔄 Güncelle</button>
               <button onclick="besiBYiMevcutYap()" style="padding:5px 10px;background:var(--purple);border:none;border-radius:7px;color:#fff;font-size:11px;font-weight:700;cursor:pointer">✅ B'yi Mevcut Yap</button>
               <button onclick="besiKarsilastirmaAcKapa()" style="padding:5px 10px;background:var(--bg4);border:1px solid var(--border2);border-radius:7px;color:var(--text3);font-size:11px;cursor:pointer">✕ Kapat</button>
             </div>
           </div>
-          <div style="display:grid;grid-template-columns:minmax(0,1fr) 58px 62px 46px 22px;gap:4px;padding:6px 8px;background:var(--bg4);align-items:center">
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) 58px 62px 46px 26px 22px;gap:4px;padding:6px 8px;background:var(--bg4);align-items:center">
             <div class="fs10 fw7" style="color:var(--purple)">Yemler</div>
             <div class="fs10 fw7" style="color:var(--purple);text-align:right">DH kg</div>
             <div class="fs10 fw7" style="color:var(--purple);text-align:right">KM kg</div>
             <div class="fs10 fw7" style="color:var(--purple);text-align:right">₺/kg</div>
             <div></div>
+            <div></div>
           </div>
           <div id="besi-rasyon-satirlar-b"></div>
-          <div id="besi-rasyon-toplam-b" style="display:grid;grid-template-columns:minmax(0,1fr) 58px 62px 46px 22px;gap:4px;padding:6px 8px;background:var(--bg4);border-top:1px solid var(--border)"></div>
+          <div id="besi-rasyon-toplam-b" style="display:grid;grid-template-columns:minmax(0,1fr) 58px 62px 46px 26px 22px;gap:4px;padding:6px 8px;background:var(--bg4);border-top:1px solid var(--border)"></div>
         </div>
 
         <!-- Karşılaştırma özeti -->
@@ -1478,6 +1479,14 @@ select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
         <div class="flex-gap mb8">
           <input type="text" id="yem-ara" placeholder="🔍 İsimle veya besin değeriyle ara... (ör. HP>20, NEL>1.6, nişasta<10)" style="flex:1;padding:7px 10px;background:var(--bg4);border:1px solid var(--border2);border-radius:7px;color:var(--text)" oninput="yemListesiGuncelle()">
         </div>
+        <div class="flex-gap mb8" style="align-items:center">
+          <span class="fs10 c-text3">Göster:</span>
+          <div style="display:flex;background:var(--bg4);border-radius:7px;padding:2px;gap:2px">
+            <button id="km-mod-btn" onclick="yemGosterimModuDegistir('km')" style="padding:4px 12px;border:none;border-radius:5px;font-size:11px;font-weight:600;cursor:pointer">KM (Kuru Madde)</button>
+            <button id="af-mod-btn" onclick="yemGosterimModuDegistir('af')" style="padding:4px 12px;border:none;border-radius:5px;font-size:11px;font-weight:600;cursor:pointer">AF (Yaş/Taze)</button>
+          </div>
+          <span class="fs9 c-text4" title="Rasyon hesapları her zaman KM (Kuru Madde) bazında yapılır — bu sadece ekrandaki gösterimi değiştirir">ⓘ</span>
+        </div>
         <div class="flex-gap mb8" style="flex-wrap:wrap;align-items:center">
           <select id="yem-sirala" onchange="yemListesiGuncelle()" style="padding:5px 8px;background:var(--bg4);border:1px solid var(--border2);border-radius:6px;color:var(--text2);font-size:11px">
             <option value="isim">Sırala: İsim (A-Z)</option>
@@ -1619,6 +1628,30 @@ select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
 // YEM KÜTÜPHANESİ VERİSİ
 // ============================================================
 const YEMLER = [
+  // ============================================================
+  // TİCARİ FABRİKA KARMA YEMLERİ — Kod adlarıyla (KOD ADI) kaydedildi.
+  // HP ve Nişasta kullanıcı tarafından AS-FED (yaş/taze) olarak verildi,
+  // programın standart kaydı KM (kuru madde) bazında olduğu için burada
+  // KM'ye çevrilmiştir: KM_değer = AF_değer / (KM% / 100). UFV (besi
+  // grubu) ve UFL (süt grubu) kullanıcının verdiği kuru madde değerleridir,
+  // NEL/UFL veya NEL/UFV diğer değer bunlardan türetilmiştir. Mineral/
+  // amino asit değerleri kaynak veride yoktu, kategori tipik değerleridir.
+  // ============================================================
+  { id:"KOD001", isim:"BESİ 14530", kat:"Karma Yem", alt:"Karma", KM:88.85, HP:16.3196, HY:3.0, HK:6.5, NDF:23.12, ADF:9.71, ADL:1.55, eNDF:0.1, nisasta:33.7648, seker:17.3, NFC:51.06, PA:30.0, PB1:47.0, PB2:10.0, PB3:9.0, PC:4.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:50.0, kd_NDF:0.06, iNDF:12.0, NEL:1.654, NEm:1.786, NEg:1.125, UFL:0.954, UFV:0.926, PDIE:98, PDIN:108, Ca:1.0, P:0.55, Mg:0.3, K:1.1, Na:0.3, Cl:0.35, S:0.2, Mn:45, Cu:25, Fe:200, Zn:65, Lys:2.8, Met:1.5, His:2.0, Arg:4.5, Thr:3.1, Ile:3.2, Leu:6.8, Val:4.4, fiyat:12.0 },
+  { id:"KOD002", isim:"BUZAĞI 18521", kat:"Karma Yem", alt:"Karma", KM:88.85, HP:20.8216, HY:3.0, HK:6.5, NDF:28.18, ADF:11.84, ADL:1.89, eNDF:0.1, nisasta:23.6353, seker:17.86, NFC:41.5, PA:30.0, PB1:47.0, PB2:10.0, PB3:9.0, PC:4.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:50.0, kd_NDF:0.06, iNDF:12.0, NEL:1.652, NEm:1.784, NEg:1.123, UFL:0.953, UFV:0.925, PDIE:125, PDIN:137, Ca:1.0, P:0.55, Mg:0.3, K:1.1, Na:0.3, Cl:0.35, S:0.2, Mn:45, Cu:25, Fe:200, Zn:65, Lys:2.8, Met:1.5, His:2.0, Arg:4.5, Thr:3.1, Ile:3.2, Leu:6.8, Val:4.4, fiyat:12.0 },
+  { id:"KOD003", isim:"BESİ 1436", kat:"Karma Yem", alt:"Karma", KM:88.85, HP:15.7569, HY:3.0, HK:6.5, NDF:19.74, ADF:8.29, ADL:1.33, eNDF:0.1, nisasta:40.5177, seker:14.48, NFC:55.0, PA:30.0, PB1:47.0, PB2:10.0, PB3:9.0, PC:4.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:50.0, kd_NDF:0.06, iNDF:12.0, NEL:1.736, NEm:1.875, NEg:1.18, UFL:1.001, UFV:0.972, PDIE:95, PDIN:104, Ca:1.0, P:0.55, Mg:0.3, K:1.1, Na:0.3, Cl:0.35, S:0.2, Mn:45, Cu:25, Fe:200, Zn:65, Lys:2.8, Met:1.5, His:2.0, Arg:4.5, Thr:3.1, Ile:3.2, Leu:6.8, Val:4.4, fiyat:12.0 },
+  { id:"KOD004", isim:"BESİ 1630", kat:"Karma Yem", alt:"Karma", KM:88.85, HP:18.0079, HY:3.0, HK:6.5, NDF:23.12, ADF:9.71, ADL:1.55, eNDF:0.1, nisasta:33.7648, seker:15.61, NFC:49.37, PA:30.0, PB1:47.0, PB2:10.0, PB3:9.0, PC:4.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:50.0, kd_NDF:0.06, iNDF:12.0, NEL:1.634, NEm:1.765, NEg:1.111, UFL:0.942, UFV:0.915, PDIE:108, PDIN:119, Ca:1.0, P:0.55, Mg:0.3, K:1.1, Na:0.3, Cl:0.35, S:0.2, Mn:45, Cu:25, Fe:200, Zn:65, Lys:2.8, Met:1.5, His:2.0, Arg:4.5, Thr:3.1, Ile:3.2, Leu:6.8, Val:4.4, fiyat:12.0 },
+  { id:"KOD005", isim:"BESİ 2801", kat:"Karma Yem", alt:"Karma", KM:88.85, HP:31.5138, HY:2.0, HK:6.5, NDF:39.44, ADF:16.56, ADL:2.65, eNDF:0.1, nisasta:1.1255, seker:19.42, NFC:20.55, PA:30.0, PB1:47.0, PB2:10.0, PB3:9.0, PC:4.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:50.0, kd_NDF:0.06, iNDF:12.0, NEL:1.232, NEm:1.331, NEg:0.838, UFL:0.711, UFV:0.69, PDIE:189, PDIN:208, Ca:1.0, P:0.55, Mg:0.3, K:1.1, Na:0.3, Cl:0.35, S:0.2, Mn:45, Cu:25, Fe:200, Zn:65, Lys:2.8, Met:1.5, His:2.0, Arg:4.5, Thr:3.1, Ile:3.2, Leu:6.8, Val:4.4, fiyat:12.0 },
+  { id:"KOD006", isim:"BESİ 2004", kat:"Karma Yem", alt:"Karma", KM:88.85, HP:22.5098, HY:2.0, HK:6.5, NDF:37.75, ADF:15.85, ADL:2.54, eNDF:0.1, nisasta:4.502, seker:26.74, NFC:31.24, PA:30.0, PB1:47.0, PB2:10.0, PB3:9.0, PC:4.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:50.0, kd_NDF:0.06, iNDF:12.0, NEL:1.352, NEm:1.46, NEg:0.919, UFL:0.78, UFV:0.757, PDIE:135, PDIN:149, Ca:1.0, P:0.55, Mg:0.3, K:1.1, Na:0.3, Cl:0.35, S:0.2, Mn:45, Cu:25, Fe:200, Zn:65, Lys:2.8, Met:1.5, His:2.0, Arg:4.5, Thr:3.1, Ile:3.2, Leu:6.8, Val:4.4, fiyat:12.0 },
+  { id:"KOD007", isim:"BESİ TOZ 14530", kat:"Karma Yem", alt:"Karma", KM:88.85, HP:16.3196, HY:3.0, HK:6.5, NDF:23.12, ADF:9.71, ADL:1.55, eNDF:0.1, nisasta:33.7648, seker:17.3, NFC:51.06, PA:30.0, PB1:47.0, PB2:10.0, PB3:9.0, PC:4.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:50.0, kd_NDF:0.06, iNDF:12.0, NEL:1.664, NEm:1.797, NEg:1.132, UFL:0.96, UFV:0.932, PDIE:98, PDIN:108, Ca:1.0, P:0.55, Mg:0.3, K:1.1, Na:0.3, Cl:0.35, S:0.2, Mn:45, Cu:25, Fe:200, Zn:65, Lys:2.8, Met:1.5, His:2.0, Arg:4.5, Thr:3.1, Ile:3.2, Leu:6.8, Val:4.4, fiyat:12.0 },
+  { id:"KOD008", isim:"BESİ 1320", kat:"Karma Yem", alt:"Karma", KM:88.85, HP:14.6314, HY:3.0, HK:6.5, NDF:28.75, ADF:12.07, ADL:1.93, eNDF:0.1, nisasta:22.5098, seker:24.61, NFC:47.12, PA:30.0, PB1:47.0, PB2:10.0, PB3:9.0, PC:4.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:50.0, kd_NDF:0.06, iNDF:12.0, NEL:1.464, NEm:1.581, NEg:0.996, UFL:0.845, UFV:0.82, PDIE:88, PDIN:97, Ca:1.0, P:0.55, Mg:0.3, K:1.1, Na:0.3, Cl:0.35, S:0.2, Mn:45, Cu:25, Fe:200, Zn:65, Lys:2.8, Met:1.5, His:2.0, Arg:4.5, Thr:3.1, Ile:3.2, Leu:6.8, Val:4.4, fiyat:12.0 },
+  { id:"KOD009", isim:"BESİ TOZ 13521", kat:"Karma Yem", alt:"Karma", KM:88.85, HP:15.1941, HY:3.0, HK:6.5, NDF:28.18, ADF:11.84, ADL:1.89, eNDF:0.1, nisasta:23.6353, seker:23.49, NFC:47.13, PA:30.0, PB1:47.0, PB2:10.0, PB3:9.0, PC:4.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:50.0, kd_NDF:0.06, iNDF:12.0, NEL:1.589, NEm:1.716, NEg:1.081, UFL:0.917, UFV:0.89, PDIE:91, PDIN:100, Ca:1.0, P:0.55, Mg:0.3, K:1.1, Na:0.3, Cl:0.35, S:0.2, Mn:45, Cu:25, Fe:200, Zn:65, Lys:2.8, Met:1.5, His:2.0, Arg:4.5, Thr:3.1, Ile:3.2, Leu:6.8, Val:4.4, fiyat:12.0 },
+  { id:"KOD010", isim:"SÜT 1926", kat:"Karma Yem", alt:"Karma", KM:88.85, HP:21.3844, HY:3.0, HK:6.5, NDF:24.83, ADF:10.43, ADL:1.67, eNDF:0.1, nisasta:29.2628, seker:15.03, NFC:44.29, PA:28.0, PB1:48.0, PB2:10.0, PB3:10.0, PC:4.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:50.0, kd_NDF:0.06, iNDF:12.0, NEL:1.521, NEm:1.643, NEg:1.034, UFL:0.89, UFV:0.828, PDIE:128, PDIN:141, Ca:1.2, P:0.6, Mg:0.32, K:1.15, Na:0.3, Cl:0.35, S:0.22, Mn:45, Cu:25, Fe:200, Zn:65, Lys:2.9, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:6.9, Val:4.5, fiyat:12.0 },
+  { id:"KOD011", isim:"SÜT 1825+", kat:"Karma Yem", alt:"Karma", KM:88.85, HP:20.2589, HY:3.0, HK:6.5, NDF:25.34, ADF:10.64, ADL:1.7, eNDF:0.1, nisasta:28.1373, seker:16.76, NFC:44.9, PA:28.0, PB1:48.0, PB2:10.0, PB3:10.0, PC:4.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:50.0, kd_NDF:0.06, iNDF:12.0, NEL:1.573, NEm:1.699, NEg:1.07, UFL:0.92, UFV:0.856, PDIE:122, PDIN:134, Ca:1.2, P:0.6, Mg:0.32, K:1.15, Na:0.3, Cl:0.35, S:0.22, Mn:45, Cu:25, Fe:200, Zn:65, Lys:2.9, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:6.9, Val:4.5, fiyat:12.0 },
+  { id:"KOD012", isim:"SÜT 2125+", kat:"Karma Yem", alt:"Karma", KM:88.85, HP:23.6353, HY:3.0, HK:6.5, NDF:25.34, ADF:10.64, ADL:1.7, eNDF:0.1, nisasta:28.1373, seker:13.38, NFC:41.52, PA:28.0, PB1:48.0, PB2:10.0, PB3:10.0, PC:4.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:50.0, kd_NDF:0.06, iNDF:12.0, NEL:1.573, NEm:1.699, NEg:1.07, UFL:0.92, UFV:0.856, PDIE:142, PDIN:156, Ca:1.2, P:0.6, Mg:0.32, K:1.15, Na:0.3, Cl:0.35, S:0.22, Mn:45, Cu:25, Fe:200, Zn:65, Lys:2.9, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:6.9, Val:4.5, fiyat:12.0 },
+  { id:"KOD013", isim:"SÜT 1925+", kat:"Karma Yem", alt:"Karma", KM:88.85, HP:21.3844, HY:3.0, HK:6.5, NDF:25.34, ADF:10.64, ADL:1.7, eNDF:0.1, nisasta:28.1373, seker:15.64, NFC:43.78, PA:28.0, PB1:48.0, PB2:10.0, PB3:10.0, PC:4.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:50.0, kd_NDF:0.06, iNDF:12.0, NEL:1.607, NEm:1.736, NEg:1.093, UFL:0.94, UFV:0.874, PDIE:128, PDIN:141, Ca:1.2, P:0.6, Mg:0.32, K:1.15, Na:0.3, Cl:0.35, S:0.22, Mn:45, Cu:25, Fe:200, Zn:65, Lys:2.9, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:6.9, Val:4.5, fiyat:12.0 },
+  { id:"KOD014", isim:"SÜT 2425+", kat:"Karma Yem", alt:"Karma", KM:88.85, HP:27.0118, HY:3.0, HK:6.5, NDF:25.34, ADF:10.64, ADL:1.7, eNDF:0.1, nisasta:28.1373, seker:10.01, NFC:38.15, PA:28.0, PB1:48.0, PB2:10.0, PB3:10.0, PC:4.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:50.0, kd_NDF:0.06, iNDF:12.0, NEL:1.573, NEm:1.699, NEg:1.07, UFL:0.92, UFV:0.856, PDIE:162, PDIN:178, Ca:1.2, P:0.6, Mg:0.32, K:1.15, Na:0.3, Cl:0.35, S:0.22, Mn:45, Cu:25, Fe:200, Zn:65, Lys:2.9, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:6.9, Val:4.5, fiyat:12.0 },
+  { id:"KOD015", isim:"SÜT 2032+", kat:"Karma Yem", alt:"Karma", KM:88.85, HP:22.5098, HY:3.0, HK:6.5, NDF:21.79, ADF:9.15, ADL:1.46, eNDF:0.1, nisasta:36.0158, seker:10.18, NFC:46.2, PA:28.0, PB1:48.0, PB2:10.0, PB3:10.0, PC:4.0, kd_PB2:0.15, kd_PB3:0.045, kp:0.05, dRUP:0.72, NDFD30:50.0, kd_NDF:0.06, iNDF:12.0, NEL:1.59, NEm:1.717, NEg:1.081, UFL:0.93, UFV:0.865, PDIE:135, PDIN:149, Ca:1.2, P:0.6, Mg:0.32, K:1.15, Na:0.3, Cl:0.35, S:0.22, Mn:45, Cu:25, Fe:200, Zn:65, Lys:2.9, Met:1.6, His:2.1, Arg:4.6, Thr:3.2, Ile:3.3, Leu:6.9, Val:4.5, fiyat:12.0 },
   { id:"CS001", isim:"Mısır Silajı — İşl. %35KM %45NDF Orta", kat:"Kaba Yem", alt:"Silaj", KM:35.0, HP:9.2, HY:3.19, HK:4.85, NDF:45.0, ADF:27.0, ADL:3.26, eNDF:0.65, nisasta:28.32, seker:0.80, NFC:37.76, PA:57.61, PB1:29.59, PB2:6.52, PB3:14.56, PC:8.04, kd_PB2:0.20, kd_PB3:0.038, kp:0.045, dRUP:0.75, NDFD30:55.0, kd_NDF:0.055, iNDF:12.0, NEL:1.411, NEm:1.52, NEg:0.93, UFL:0.83, UFV:0.73, PDIE:68, PDIN:62, Ca:0.31, P:0.27, Mg:0.22, K:1.22, Na:0.01, Cl:0.32, S:0.12, Mn:31, Cu:7, Fe:184, Zn:25, Lys:2.80, Met:1.59, His:1.71, Arg:2.32, Thr:3.41, Ile:3.41, Leu:8.54, Val:4.51, fiyat:3.5 },
   { id:"CS002", isim:"Mısır Silajı — İşl. %35KM %49NDF Kaba", kat:"Kaba Yem", alt:"Silaj", KM:35.0, HP:9.5, HY:3.19, HK:4.0, NDF:49.0, ADF:29.7, ADL:3.53, eNDF:0.72, nisasta:23.13, seker:1.79, NFC:34.31, PA:55.32, PB1:29.51, PB2:6.89, PB3:15.28, PC:8.38, kd_PB2:0.20, kd_PB3:0.039, kp:0.042, dRUP:0.75, NDFD30:52.0, kd_NDF:0.050, iNDF:14.0, NEL:1.401, NEm:1.51, NEg:0.92, UFL:0.824, UFV:0.725, PDIE:66, PDIN:60, Ca:0.23, P:0.21, Mg:0.13, K:0.95, Na:0.01, Cl:0.32, S:0.12, Mn:31, Cu:7, Fe:184, Zn:25, Lys:2.80, Met:1.59, His:1.71, Arg:2.32, Thr:3.41, Ile:3.41, Leu:8.54, Val:4.51, fiyat:3.3 },
   { id:"CS003", isim:"Mısır Silajı — İşl. %35KM %49NDF Orta", kat:"Kaba Yem", alt:"Silaj", KM:35.0, HP:9.5, HY:3.19, HK:4.0, NDF:49.0, ADF:29.7, ADL:3.53, eNDF:0.68, nisasta:23.13, seker:1.43, NFC:34.31, PA:55.32, PB1:29.51, PB2:6.89, PB3:15.28, PC:8.38, kd_PB2:0.20, kd_PB3:0.041, kp:0.045, dRUP:0.75, NDFD30:53.0, kd_NDF:0.052, iNDF:13.5, NEL:1.401, NEm:1.51, NEg:0.92, UFL:0.824, UFV:0.725, PDIE:66, PDIN:60, Ca:0.23, P:0.21, Mg:0.13, K:0.95, Na:0.01, Cl:0.32, S:0.12, Mn:31, Cu:7, Fe:184, Zn:25, Lys:2.80, Met:1.59, His:1.71, Arg:2.32, Thr:3.41, Ile:3.41, Leu:8.54, Val:4.51, fiyat:3.3 },
@@ -2409,6 +2442,36 @@ const pct = (v,km) => km>0 ? Math.round(v/km*1000)/10 : 0;
 // Geçersiz/eksik değerlerde "—" döner — ekranda çirkin "NaN" veya kayan nokta
 // hatası (9.3159999999999...) hiç görünmez.
 const fmt2 = v => (v === null || v === undefined || isNaN(v)) ? '—' : v.toFixed(2).replace('.', ',');
+
+// ============================================================
+// KM / AS-FED (AF) GÖRÜNTÜ MODU — Yem Kütüphanesi ve Yem Seç panelindeki
+// besin değerleri kayıtta hep KM (Kuru Madde) bazında tutulur; rasyon
+// hesapları da hep KM üzerinden çalışır (bu asla değişmez). Bu bölüm
+// sadece EKRANDA gösterilen sayıyı, kullanıcının seçtiği moda göre
+// KM'den AF'e çevirir — hesap motoruna dokunmaz.
+// AF (as-fed, yaş/taze haldeki) değeri = KM_değeri × (yemin KM% / 100)
+let yemGosterimModu = localStorage.getItem('nutriva_yem_gosterim_modu') || 'km'; // 'km' | 'af'
+
+function yemDegerGoster(yem, alan) {
+  const kmDeger = yem[alan];
+  if (kmDeger === undefined || kmDeger === null) return undefined;
+  if (yemGosterimModu === 'af') {
+    // KM alanının kendisi AF görünümünde her zaman yemin KM% değeridir (değişmez referans)
+    if (alan === 'KM') return kmDeger;
+    const kmOrani = (yem.KM || 100) / 100;
+    return kmDeger * kmOrani;
+  }
+  return kmDeger;
+}
+
+function yemGosterimModuDegistir(mod) {
+  yemGosterimModu = mod;
+  localStorage.setItem('nutriva_yem_gosterim_modu', mod);
+  if (document.getElementById('yem-listesi')) yemListesiGuncelle();
+  if (document.getElementById('yemsec-govde')) yemSecPanelRender();
+}
+window.yemGosterimModuDegistir = yemGosterimModuDegistir;
+
 // Bir input elementinin değerini virgül/nokta ayracı fark etmeksizin sayıya çevirir.
 // parseFloat("1,3") = 1 döndürür (virgülü tanımaz, sessizce yarım okur) — bu yüzden
 // ondalık girişi olan TÜM alanlarda doğrudan parseFloat yerine bu kullanılmalı.
@@ -4151,14 +4214,14 @@ function yemListesiGuncelle() {
         <div class="alt" style="margin-bottom:5px">${y.id} · ${y.kat} · ${y.alt}${y.analiz_tarihi?' · 📋 '+y.analiz_tarihi:''}</div>
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:3px">
           ${[
-            {l:'KM',v:y.KM,u:'%',c:'var(--blue2)'},
-            {l:'HP',v:y.HP,u:'%',c:'var(--pink)'},
-            {l:'NEL',v:y.NEL,u:'Mcal',c:'var(--yellow)'},
-            {l:'NDF',v:y.NDF,u:'%',c:'var(--green)'},
-            {l:'Nişasta',v:y.nisasta,u:'%',c:'var(--orange)'},
-            {l:'HY',v:y.HY,u:'%',c:'var(--purple)'},
-            {l:'Ca',v:y.Ca,u:'%',c:'var(--teal)'},
-            {l:'P',v:y.P,u:'%',c:'var(--teal)'},
+            {l:'KM',v:yemDegerGoster(y,'KM'),u:'%',c:'var(--blue2)'},
+            {l:'HP',v:yemDegerGoster(y,'HP'),u:'%',c:'var(--pink)'},
+            {l:'NEL',v:yemDegerGoster(y,'NEL'),u:'Mcal',c:'var(--yellow)'},
+            {l:'NDF',v:yemDegerGoster(y,'NDF'),u:'%',c:'var(--green)'},
+            {l:'Nişasta',v:yemDegerGoster(y,'nisasta'),u:'%',c:'var(--orange)'},
+            {l:'HY',v:yemDegerGoster(y,'HY'),u:'%',c:'var(--purple)'},
+            {l:'Ca',v:yemDegerGoster(y,'Ca'),u:'%',c:'var(--teal)'},
+            {l:'P',v:yemDegerGoster(y,'P'),u:'%',c:'var(--teal)'},
           ].map(it=>`<div style="background:var(--bg2);border-radius:4px;padding:3px 5px;text-align:center">
             <div style="font-size:9px;color:var(--text4)">${it.l}</div>
             <div style="font-size:11px;font-weight:700;color:${it.c}">${fmt2(it.v)}</div>
@@ -4168,6 +4231,16 @@ function yemListesiGuncelle() {
     </div>`).join(''));
 
   yemKarsilastirSeciliGuncelle();
+
+  // KM/AF mod butonlarının görsel vurgusu
+  const kmBtn = document.getElementById('km-mod-btn');
+  const afBtn = document.getElementById('af-mod-btn');
+  if (kmBtn && afBtn) {
+    kmBtn.style.background = yemGosterimModu === 'km' ? 'var(--blue)' : 'transparent';
+    kmBtn.style.color = yemGosterimModu === 'km' ? '#fff' : 'var(--text3)';
+    afBtn.style.background = yemGosterimModu === 'af' ? 'var(--blue)' : 'transparent';
+    afBtn.style.color = yemGosterimModu === 'af' ? '#fff' : 'var(--text3)';
+  }
 }
 
 function katFiltreAyarla(k) { yemKatFilt=k; yemListesiGuncelle(); }
@@ -4528,15 +4601,24 @@ const MODAL_PANELLER = {
 let modalSatirId = null;
 let modalAktifPanel = 'temel';
 let modalTaslak = {};
-let modalBesiModu = false; // true: besiRasyonSatirlari üzerinde çalışır, false: rasyonSatirlari
+let modalBesiModu = 'sagmal'; // 'sagmal' | 'besiA' | 'besiB' — hangi rasyon listesi düzenleniyor
 
-// Düzenlenmekte olan satırın ait olduğu listeyi döndürür (sağmal veya besi)
+// Düzenlenmekte olan satırın ait olduğu listeyi döndürür (sağmal, besi A veya besi B)
 function modalHedefListe() {
-  return modalBesiModu ? besiRasyonSatirlari : rasyonSatirlari;
+  if (modalBesiModu === 'besiB') return besiRasyonSatirlariB;
+  if (modalBesiModu === 'besiA') return besiRasyonSatirlari;
+  return rasyonSatirlari;
+}
+
+// Düzenleme sonrası ilgili rasyonun ekranını yeniden çizer
+function modalDegisiklikSonrasiRenderEt() {
+  if (modalBesiModu === 'besiB') { besiRasyonHesapla(besiRasyonSatirlariB, besiRasyonB); besiSayfasiRenderB(); besiKarsilastirmaTabloRender(); }
+  else if (modalBesiModu === 'besiA') { besiRasyonHesapla(); besiSayfasiRender(); }
+  else { tumHesapla(); rasyonSayfasiRender(); }
 }
 
 function satirDuzenle(satirId, besiModu) {
-  modalBesiModu = !!besiModu;
+  modalBesiModu = besiModu === 'besiB' ? 'besiB' : (besiModu ? 'besiA' : 'sagmal');
   const satir = modalHedefListe().find(s=>s.id===satirId);
   if(!satir || !satir.yemId) return;
   modalSatirId = satirId;
@@ -4602,8 +4684,7 @@ function modalSifirla() {
   modalPanelRender();
   // Ozel yemi de sifirla
   satir.ozelYem = null;
-  if (modalBesiModu) { besiRasyonHesapla(); besiSayfasiRender(); }
-  else { tumHesapla(); rasyonSayfasiRender(); }
+  modalDegisiklikSonrasiRenderEt();
 }
 
 function modalKaydet() {
@@ -4614,8 +4695,7 @@ function modalKaydet() {
   modalTaslak.isim = document.getElementById('modal-isim').value || modalTaslak.isim;
   // Satıra özel yem olarak ata
   satir.ozelYem = Object.assign({}, modalTaslak);
-  if (modalBesiModu) { besiRasyonHesapla(); besiSayfasiRender(); }
-  else { tumHesapla(); rasyonSayfasiRender(); }
+  modalDegisiklikSonrasiRenderEt();
   modalKapat();
   // Bildirim
   const b = document.createElement('div');
@@ -4642,7 +4722,8 @@ function modalKutuphaneyeEkle() {
     satir.yemId = yeniId;
     satir.ozelYem = null; // artık kütüphanede var
   }
-  if (modalBesiModu) { besiRasyonHesapla(); besiSayfasiRender(); }
+  if (modalBesiModu === 'besiB') { besiRasyonHesapla(besiRasyonSatirlariB, besiRasyonB); besiSayfasiRenderB(); besiKarsilastirmaTabloRender(); }
+  else if (modalBesiModu === 'besiA') { besiRasyonHesapla(); besiSayfasiRender(); }
   else { tumHesapla(); rasyonSayfasiRender(); }
   modalKapat();
   // Bildirim
@@ -5734,6 +5815,53 @@ function besiToplamDHDegistir(val) {
 }
 window.besiToplamDHDegistir = besiToplamDHDegistir;
 
+// B (Karşılaştırma/Öneri) rasyonu için TOPLAM DH satırının elle değiştirme
+// karşılığı — A rasyonundaki besiToplamDHDegistir() ile aynı mantık, sadece
+// besiRasyonSatirlariB üzerinde çalışır.
+function besiToplamDHDegistirB(val) {
+  const yeniToplam = sayiOku(val, 0);
+  if (yeniToplam <= 0) return;
+
+  const mevcutToplam = besiRasyonSatirlariB.reduce((a,s) => a + (s.miktar || 0), 0);
+  if (mevcutToplam <= 0) { alert('Ölçekleme için önce en az bir yem miktarı girilmiş olmalı.'); return; }
+
+  const olcekKatsayisi = yeniToplam / mevcutToplam;
+  besiRasyonSatirlariB.forEach(s => {
+    if (s.miktar > 0) s.miktar = r3(s.miktar * olcekKatsayisi);
+  });
+
+  besiSayfasiRenderB();
+}
+window.besiToplamDHDegistirB = besiToplamDHDegistirB;
+
+// A/B Karşılaştırma tablosundaki "Toplam KM" satırı elle değiştirildiğinde
+// çağrılır. hangiTaraf: 'a' (mevcut rasyon) veya 'b' (öneri rasyonu).
+// İlgili rasyondaki tüm yem oranları korunarak, yeni toplam KM'ye göre
+// orantılı olarak ölçeklenir — karışım aynı kalır, sadece miktar değişir.
+function besiKarsilastirmaKMDegistir(hangiTaraf, val) {
+  const yeniToplamKM = sayiOku(val, 0);
+  if (yeniToplamKM <= 0) return;
+
+  const satirlar = hangiTaraf === 'a' ? besiRasyonSatirlari : besiRasyonSatirlariB;
+  const mevcutToplamKM = satirlar.reduce((toplam, s) => {
+    if (!s.yemId || s.miktar <= 0) return toplam;
+    const y = s.ozelYem || YEMLER.find(yt => yt.id === s.yemId);
+    if (!y) return toplam;
+    return toplam + s.miktar * (y.KM / 100);
+  }, 0);
+  if (mevcutToplamKM <= 0) { alert('Ölçekleme için önce en az bir yem miktarı girilmiş olmalı.'); return; }
+
+  const olcekKatsayisi = yeniToplamKM / mevcutToplamKM;
+  satirlar.forEach(s => {
+    if (s.miktar > 0) s.miktar = r3(s.miktar * olcekKatsayisi);
+  });
+
+  if (hangiTaraf === 'a') { besiRasyonHesapla(); besiSayfasiRender(); }
+  else { besiRasyonHesapla(besiRasyonSatirlariB, besiRasyonB); besiSayfasiRenderB(); }
+  besiKarsilastirmaTabloRender();
+}
+window.besiKarsilastirmaKMDegistir = besiKarsilastirmaKMDegistir;
+
 // --- Tam sayfa render (sekme açılışı) ---
 function besiSayfasiRender() {
   besiRasyonHesapla();
@@ -5916,6 +6044,46 @@ function besiSatirFiyatDegistirB(id, val) {
   besiSayfasiGuncelleB();
 }
 
+// "🔄 Güncelle" butonu — A rasyonunda (Rasyon A / mevcut rasyon) yapılan
+// değişikliklerin karşılaştırma tablosuna yansıması için hem A hem B
+// rasyonunu zorla yeniden hesaplar ve tüm ilgili görünümleri tazeler.
+// "🔄 Güncelle" butonu — A rasyonunda (Rasyon A / mevcut rasyon) yapılan
+// değişikliklerin karşılaştırma tablosuna yansıması için hem A hem B
+// rasyonunu zorla yeniden hesaplar ve tüm ilgili görünümleri tazeler.
+// Ayrıca: A'da bir yemin hammadde analizi (satirDuzenle ile ozelYem olarak)
+// değiştirilmişse, B'de AYNI orijinal yemi (aynı yemId) kullanan satırlara
+// da bu analiz değişikliği otomatik uygulanır — böylece "A'da düzelttiğim
+// analiz B'ye de yansısın" beklentisi karşılanır. B'de zaten kendine özgü,
+// A'dan bağımsız bir düzenleme yapılmışsa (B satırının kendi ozelYem'i A'daki
+// düzenlemeden SONRA/ayrıca elle değiştirilmişse) o satıra dokunulmaz —
+// sadece A'nın orijinal yemiyle eşleşen ve henüz kendi özel düzenlemesi
+// olmayan B satırları güncellenir.
+function besiKarsilastirmaGuncelle() {
+  // A'daki her özelleştirilmiş (ozelYem'i olan) satır için, B'deki aynı
+  // orijinal yemi kullanan satırlara aynı analiz değerlerini uygula.
+  besiRasyonSatirlari.forEach(satirA => {
+    if (!satirA.ozelYem || !satirA.yemId) return;
+    besiRasyonSatirlariB.forEach(satirB => {
+      if (satirB.yemId === satirA.yemId) {
+        satirB.ozelYem = Object.assign({}, satirA.ozelYem);
+      }
+    });
+  });
+
+  besiRasyonHesapla(); // A
+  besiRasyonHesapla(besiRasyonSatirlariB, besiRasyonB); // B
+  besiSayfasiRender(); // A tarafının yem listesi, denge tablosu, fraksiyonlar
+  besiSayfasiRenderB(); // B tarafının yem listesi
+  besiKarsilastirmaTabloRender(); // karşılaştırma tablosunun kendisi
+
+  const b = document.createElement('div');
+  b.style.cssText = 'position:fixed;top:16px;right:16px;z-index:9999;padding:10px 18px;background:rgba(20,184,166,0.15);border:1px solid rgba(20,184,166,0.4);border-radius:8px;color:var(--blue2);font-size:13px;font-weight:600';
+  b.textContent = '🔄 Karşılaştırma güncellendi';
+  document.body.appendChild(b);
+  setTimeout(() => b.remove(), 2000);
+}
+window.besiKarsilastirmaGuncelle = besiKarsilastirmaGuncelle;
+
 function besiSayfasiRenderB() {
   besiRasyonHesapla(besiRasyonSatirlariB, besiRasyonB);
 
@@ -5928,7 +6096,7 @@ function besiSayfasiRenderB() {
       const kmKg = y && dhKg>0 ? r2(dhKg*(y.KM/100)) : 0;
 
       const row = document.createElement('div');
-      row.style.cssText = 'display:grid;grid-template-columns:minmax(0,1fr) 58px 62px 46px 22px;gap:4px;padding:4px 8px;border-bottom:1px solid #d9c8f5;align-items:center;overflow:hidden';
+      row.style.cssText = 'display:grid;grid-template-columns:minmax(0,1fr) 58px 62px 46px 26px 22px;gap:4px;padding:4px 8px;border-bottom:1px solid #d9c8f5;align-items:center;overflow:hidden';
 
       const gosterilenIsim = satir.ozelYem ? `[Özel] ${satir.ozelYem.isim}` : (y ? y.isim : '— Yem seç —');
 
@@ -5943,6 +6111,7 @@ function besiSayfasiRenderB() {
         `<input type="number" value="${y?y.fiyat:''}" min="0" step="0.1" placeholder="₺" class="fiyat-input" ` +
           `style="text-align:center;padding:5px 3px;background:var(--bg4);border:1px solid rgba(167,139,250,0.3);border-radius:6px;color:var(--purple);width:100%;font-size:11px;font-weight:700" ` +
           `onchange="besiSatirFiyatDegistirB(${satir.id},this.value)" onblur="besiSatirFiyatDegistirB(${satir.id},this.value)" onfocus="this.select()">` +
+        `<button onclick="satirDuzenle(${satir.id},'besiB')" style="background:var(--bg4);border:1px solid var(--border2);color:var(--text3);border-radius:5px;padding:2px 4px;font-size:10px;cursor:pointer;width:100%">✏</button>` +
         `<button onclick="besiSatirSilB(${satir.id})" style="background:transparent;border:none;color:var(--red);cursor:pointer;font-size:12px;padding:0;width:100%">✕</button>`;
       wrap.appendChild(row);
     });
@@ -5960,10 +6129,13 @@ function besiSayfasiGuncelleB() {
   if (toplamEl) {
     toplamEl.innerHTML =
       `<div class="fs10 fw7" style="color:var(--purple)">TOPLAM</div>` +
-      `<div style="text-align:right;font-size:10px;font-weight:700;color:var(--text)">${r2(besiRasyonB.toplamDH||0)}</div>` +
+      `<input type="number" id="besi-toplam-dh-input-b" value="${r2(besiRasyonB.toplamDH||0)||''}" min="0" step="0.1" ` +
+        `title="Toplam DH kg'ı değiştirirseniz B rasyonundaki tüm yem oranları korunarak orantılı ölçeklenir" ` +
+        `style="width:100%;text-align:right;font-size:10px;font-weight:700;color:var(--text);background:var(--bg3);border:1px solid var(--border2);border-radius:5px;padding:2px 4px" ` +
+        `onchange="besiToplamDHDegistirB(this.value)" onfocus="this.select()">` +
       `<div style="text-align:right;font-size:10px;font-weight:700;color:var(--green)">${r2(km)}</div>` +
       `<div style="text-align:right;font-size:9px;color:var(--teal)">₺${km>0?r2(rt.maliyet/Math.max(besiRasyonB.toplamDH,0.01)):'—'}</div>` +
-      `<div></div>`;
+      `<div></div><div></div>`;
   }
 
   besiKarsilastirmaTabloRender();
@@ -5974,15 +6146,20 @@ function besiKarsilastirmaTabloRender() {
   const el = document.getElementById('besi-karsilastirma-tablo');
   if (!el) return;
   besiRasyonHesapla(); // A rasyonu güncel olsun
+  besiRasyonHesapla(besiRasyonSatirlariB, besiRasyonB); // B rasyonu da güncel olsun
   const ih = besiIhtiyacHesapla();
   const a = besiRasyon, b = besiRasyonB;
 
   const satirlar = [
     { l:'Toplam KM',  av:a.toplamKM, bv:b.toplamKM, u:'kg', hedef:ih.DMI },
     { l:'ME Yoğunluğu', av:a.yuzde.ME_yog, bv:b.yuzde.ME_yog, u:'Mcal/kg', hedef:ih.ME_yogunluk_hedef },
+    { l:'UFV Yoğunluğu', av:a.yuzde.UFV_yog, bv:b.yuzde.UFV_yog, u:'UFV/kg' },
+    { l:'UFV Toplam', av:a.toplam.UFV, bv:b.toplam.UFV, u:'UFV/gün' },
     { l:'HP', av:a.toplamKM>0?r2(a.toplam.HP/a.toplamKM*100):0, bv:b.toplamKM>0?r2(b.toplam.HP/b.toplamKM*100):0, u:'%' },
+    { l:'HP Toplam', av:(a.toplam.HP||0)*1000, bv:(b.toplam.HP||0)*1000, u:'g' },
     { l:'NDF', av:a.yuzde.NDF, bv:b.yuzde.NDF, u:'%' },
     { l:'Nişasta', av:a.yuzde.nisasta, bv:b.yuzde.nisasta, u:'%' },
+    { l:'Nişasta Toplam', av:(a.toplam.nist||0)*1000, bv:(b.toplam.nist||0)*1000, u:'g' },
     { l:'Maliyet/gün', av:a.toplam.maliyet, bv:b.toplam.maliyet, u:'₺' },
   ];
 
@@ -5992,10 +6169,20 @@ function besiKarsilastirmaTabloRender() {
     satirlar.map((s,i) => {
       const fark = (s.bv||0) - (s.av||0);
       const farkRenk = Math.abs(fark) < 0.01 ? 'var(--text3)' : (fark > 0 ? 'var(--orange)' : 'var(--green)');
+      const avGosterim = s.l === 'Toplam KM'
+        ? `<input type="number" value="${r2(s.av)||''}" min="0" step="0.1" title="Toplam KM'ı değiştirirseniz A rasyonundaki tüm yem oranları korunarak orantılı ölçeklenir"
+            style="width:100%;text-align:right;font-size:11px;font-weight:700;color:var(--blue2);background:var(--bg3);border:1px solid var(--border2);border-radius:5px;padding:2px 4px"
+            onchange="besiKarsilastirmaKMDegistir('a',this.value)" onfocus="this.select()">`
+        : `<div style="text-align:right;font-size:11px;font-weight:700;color:var(--blue2)">${fmt2(s.av)} ${s.u}</div>`;
+      const bvGosterim = s.l === 'Toplam KM'
+        ? `<input type="number" value="${r2(s.bv)||''}" min="0" step="0.1" title="Toplam KM'ı değiştirirseniz B rasyonundaki tüm yem oranları korunarak orantılı ölçeklenir"
+            style="width:100%;text-align:right;font-size:11px;font-weight:700;color:var(--purple);background:var(--bg3);border:1px solid var(--border2);border-radius:5px;padding:2px 4px"
+            onchange="besiKarsilastirmaKMDegistir('b',this.value)" onfocus="this.select()">`
+        : `<div style="text-align:right;font-size:11px;font-weight:700;color:var(--purple)">${fmt2(s.bv)} ${s.u}</div>`;
       return `<div style="display:grid;grid-template-columns:1fr 70px 70px;gap:4px;padding:5px 0;background:${i%2===0?'var(--bg2)':'transparent'};border-radius:5px;align-items:center">
         <div class="fs11 c-text2">${s.l}</div>
-        <div style="text-align:right;font-size:11px;font-weight:700;color:var(--blue2)">${fmt2(s.av)} ${s.u}</div>
-        <div style="text-align:right;font-size:11px;font-weight:700;color:var(--purple)">${fmt2(s.bv)} ${s.u}</div>
+        ${avGosterim}
+        ${bvGosterim}
       </div>
       <div style="text-align:right;font-size:9px;color:${farkRenk};padding:0 0 4px;grid-column:3/4">${fark>0?'+':''}${fmt2(fark)} fark</div>`;
     }).join('');
@@ -6110,11 +6297,12 @@ function besiSayfasiGuncelle() {
   // Kaba/Kesif + rasyon özellikleri
   const kkEl = document.getElementById('besi-kaba-kesif');
   if (kkEl) {
+    const rasyonKM_yuzde = besiRasyon.toplamDH > 0 ? r2(besiRasyon.toplamKM / besiRasyon.toplamDH * 100) : undefined;
     const satirlar = [
       { l:'Kaba Yem', v:ry.kaba, u:'%KM', c:'var(--green)', min:ESIKLER.KabaYem.min, max:ESIKLER.KabaYem.max },
       { l:'Kesif Yem', v:ry.konsan, u:'%KM', c:'var(--orange)', min:ESIKLER.KesifYem.min, max:ESIKLER.KesifYem.max },
       { l:'Kaba:Kesif Oranı', v:ry.kabaKonsan, u:'', c:'var(--blue2)' },
-      { l:'Rasyon Nemi', v:ry.nem, u:'%', c:'var(--teal)' },
+      { l:'Rasyon %Kuru Madde', v:rasyonKM_yuzde, u:'%', c:'var(--teal)' },
     ];
     kkEl.innerHTML = satirlar.map((s,i) => {
       let renk = s.c;
@@ -6131,8 +6319,11 @@ function besiSayfasiGuncelle() {
   // Fraksiyon değerleri
   const frEl = document.getElementById('besi-fraksiyonlar');
   if (frEl) {
+    const nisastaGram = (besiRasyon.toplam.nist||0) * 1000; // kg -> g
+    const hpGram = (besiRasyon.toplam.HP||0) * 1000; // kg -> g
     const satirlar = [
-      { l:'Nişasta',    v:ry.nisasta,   u:'%KM', min:ESIKLER.Nisasta.min, max:ESIKLER.Nisasta.max },
+      { l:'Ham Protein', v:ry.HP,        u:'%KM', min:ESIKLER.HP.min, max:ESIKLER.HP.max, ekBilgi:fmt2(hpGram)+' g/gün' },
+      { l:'Nişasta',    v:ry.nisasta,   u:'%KM', min:ESIKLER.Nisasta.min, max:ESIKLER.Nisasta.max, ekBilgi:fmt2(nisastaGram)+' g/gün' },
       { l:'peNDF',       v:ry.peNDF,     u:'%KM', min:ESIKLER.peNDF.min, max:ESIKLER.peNDF.max },
       { l:'NFC',        v:ry.NFC,       u:'%KM', min:ESIKLER.NFC.min, max:ESIKLER.NFC.max },
       { l:'NDF',        v:ry.NDF,       u:'%KM', min:ESIKLER.NDF.min, max:ESIKLER.NDF.max },
@@ -6144,7 +6335,7 @@ function besiSayfasiGuncelle() {
       let renk = 'var(--text2)';
       if (s.v!==undefined) renk = s.v<s.min ? 'var(--red)' : s.v>s.max ? 'var(--yellow)' : 'var(--green)';
       return `<div style="display:grid;grid-template-columns:1fr 60px 70px;gap:3px;padding:5px 6px;background:${i%2===0?'var(--bg2)':'transparent'};border-radius:5px;align-items:center">
-        <div class="fs12 c-text2">${s.l}</div>
+        <div class="fs12 c-text2">${s.l}${s.ekBilgi?`<div class="fs9 c-text4">${s.ekBilgi}</div>`:''}</div>
         <div style="text-align:right;font-size:12px;font-weight:700;color:${renk}">${s.v!==undefined?fmt2(s.v):'—'}</div>
         <div style="text-align:right;font-size:9px;color:var(--text4)">${s.min}–${s.max}%</div>
       </div>`;
