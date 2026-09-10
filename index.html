@@ -4716,6 +4716,13 @@ function modalKutuphaneyeEkle() {
     alt: modalTaslak.alt || 'Ozel'
   });
   YEMLER.push(yeniYem);
+  // Electron modunda: bu özel yemi kalıcı dosyaya da yaz, aksi halde
+  // uygulama kapatılıp açıldığında YEMLER listesi programın kod içindeki
+  // sabit haline döner ve bu yem (dolayısıyla ona bağlı rasyon satırları)
+  // kaybolur.
+  if (ELECTRON_MODU) {
+    window.nutrivaDosya.ozelYemEkle(yeniYem).catch(() => {});
+  }
   // Satırı da yeni yeme bağla
   const satir = modalHedefListe().find(s=>s.id===modalSatirId);
   if(satir) {
@@ -7570,10 +7577,25 @@ window.onload = function() {
   // yapılıyor (bkz. "this.value=this.value.replace(',','.')") — daha güvenilir,
   // tarayıcı/cihaz event sıralamasına bağımlı değil.
 
-  // Electron modundaysa (masaüstü uygulaması), rasyon kayıtları klasörünü
-  // tara ve Kayıtlar sekmesini/giriş rozetini güncel tut.
+  // Electron modundaysa (masaüstü uygulaması): önce kullanıcının kalıcı
+  // olarak kütüphaneye eklediği özel yemleri (varsa) YEMLER listesine
+  // geri yükle — bu olmadan, önceki bir oturumda "📚 Kütüphaneye Ekle"
+  // ile eklenen yemler ve onlara bağlı rasyon satırları uygulama yeniden
+  // başlatıldığında kaybolur/boş görünür. Ardından rasyon kayıtları
+  // klasörünü tara ve Kayıtlar sekmesini/giriş rozetini güncel tut.
   if (ELECTRON_MODU) {
-    kayitlarCacheYenile();
+    window.nutrivaDosya.ozelYemleriOku().then(function(sonuc) {
+      if (sonuc && sonuc.basarili && sonuc.yemler && sonuc.yemler.length) {
+        sonuc.yemler.forEach(function(ozelYem) {
+          if (!YEMLER.find(function(y) { return y.id === ozelYem.id; })) {
+            YEMLER.push(ozelYem);
+          }
+        });
+      }
+      kayitlarCacheYenile();
+    }).catch(function() {
+      kayitlarCacheYenile();
+    });
   }
 };
 
